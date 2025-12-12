@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model WorkSection {
+  id         Int        @id @default(autoincrement())
+  slug       String     @unique
+  name       String
+  position   Int        @default(0)
+  visible    Boolean    @default(true)
+  seoTitle   String?
+  seoDescription String?
+  seoKeywords String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  items      WorkItem[]
+}
+
+model WorkItem {
+  id            Int         @id @default(autoincrement())
+  sectionId     Int
+  section       WorkSection @relation(fields: [sectionId], references: [id])
+  slug          String      @unique
+  title         String
+  location      String?
+  description   String?
+  year          Int?
+  type          String?
+  collaborators String?
+  position      Int         @default(0)
+  published     Boolean     @default(true)
+  seoTitle      String?
+  seoDescription String?
+  seoKeywords   String?
+  canonicalUrl  String?
+  ogImageUrl    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  media         WorkMedia[]
+  tags          WorkItemTag[]
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model WorkMedia {
+  id         Int       @id @default(autoincrement())
+  itemId     Int
+  item       WorkItem  @relation(fields: [itemId], references: [id])
+  type       MediaType
+  url        String
+  thumbnail  String?
+  caption    String?
+  alt        String?
+  position   Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model WorkTag {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  items WorkItemTag[]
+}
+
+model WorkItemTag {
+  itemId Int
+  tagId  Int
+  item   WorkItem @relation(fields: [itemId], references: [id])
+  tag    WorkTag  @relation(fields: [tagId], references: [id])
+
+  @@id([itemId, tagId])
+}

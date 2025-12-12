@@ -1,0 +1,49 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    platform: linux/arm64/v8
+    container_name: mariadb_local
+    environment:
+      MARIADB_ROOT_PASSWORD: Hslhvhkd22
+      MARIADB_DATABASE: olk_db
+      MARIADB_USER: olk_usr
+      MARIADB_PASSWORD: hsldhvhkd22
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--innodb-use-native-aio=0"
+      - "--log-output=FILE"
+      - "--log-error=/var/log/mysql/mariadb.err"
+      - "--slow-query-log=1"
+      - "--slow-query-log-file=/var/log/mysql/mariadb-slow.log"
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/mariadb/data:/var/lib/mysql
+      - ./docker/mariadb/init:/docker-entrypoint-initdb.d
+      - ./docker/mariadb/logs:/var/log/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb -h 127.0.0.1 -uroot -p$MARIADB_ROOT_PASSWORD --protocol=TCP --connect-timeout=3 -e 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 120s
+    restart: unless-stopped
+    ulimits:
+      memlock: 262144
+      nproc: 262144
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    platform: linux/amd64
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+      UPLOAD_LIMIT: 256M
+    ports:
+      - "9090:80"
+    restart: unless-stopped
