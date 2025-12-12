@@ -31,16 +31,33 @@ export async function PUT(req: Request) {
   try {
     if (!requireAdmin(req)) return fail(req, 401, "UNAUTHORIZED", "Unauthorized", { type: "AuthenticationError" })
     const body = await req.json()
-    const schema = z.object({ text: z.string().default("") })
+    const schema = z.object({ text: z.string().max(200000).default("") })
     const parsed = schema.safeParse(body)
     if (!parsed.success) return fail(req, 400, "VALIDATION_ERROR", "Invalid input", { type: "ValidationError", details: parsed.error.flatten() })
     const { text } = parsed.data
+    const sanitize = (html: string) => {
+      let s = String(html || "")
+      s = s.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+      s = s.replace(/on\w+="[^"]*"/gi, "")
+      s = s.replace(/on\w+='[^']*'/gi, "")
+      s = s.replace(/\s(href|src)\s*=\s*"(javascript:[^"]*)"/gi, ' $1="#"')
+      s = s.replace(/\s(href|src)\s*=\s*'(javascript:[^']*)'/gi, " $1='#'")
+      s = s.replace(/<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi, "")
+      s = s.replace(/<object[\s\S]*?>[\s\S]*?<\/object>/gi, "")
+      return s
+    }
+    const safeText = sanitize(text)
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text TEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text MEDIUMTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
-      await conn.query("INSERT INTO InformationAbout (id, text, updatedAt) VALUES (1, ?, NOW()) ON DUPLICATE KEY UPDATE text = VALUES(text), updatedAt = NOW()", [text])
+      await conn.query("CREATE TABLE IF NOT EXISTS InformationAboutRevisions (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      const [rows]: any = await conn.query("SELECT text FROM InformationAbout WHERE id = 1")
+      if (rows?.length && typeof rows[0]?.text === "string") {
+        await conn.query("INSERT INTO InformationAboutRevisions (text, createdAt) VALUES (?, NOW())", [rows[0].text])
+      }
+      await conn.query("INSERT INTO InformationAbout (id, text, updatedAt) VALUES (1, ?, NOW()) ON DUPLICATE KEY UPDATE text = VALUES(text), updatedAt = NOW()", [safeText])
       return ok(req, { saved: true }, "Updated")
     } finally {
       conn.release()
@@ -49,4 +66,3 @@ export async function PUT(req: Request) {
     return fail(req, 500, "INTERNAL_ERROR", e?.message || "Internal error", { type: "InternalError" })
   }
 }
-

@@ -108,6 +108,7 @@ export default function WorkPage() {
   const [projects, setProjects] = useState<WorkItem[]>([])
   const [selectedProject, setSelectedProject] = useState(0)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<"work" | "information">("work")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -142,11 +143,75 @@ export default function WorkPage() {
   const [selectedNewsIndex, setSelectedNewsIndex] = useState<number | null>(null)
   const [visibleNewsCount, setVisibleNewsCount] = useState(6)
   const newsSentinelRef = useRef<HTMLDivElement | null>(null)
+  const [newsItems, setNewsItems] = useState<{ id: number; title: string; date: string; text: string; summary: string; content: string; previewUrl?: string }[]>([])
+  const [newsLoading, setNewsLoading] = useState(false)
+  const [newsError, setNewsError] = useState<string | null>(null)
   const [fairs, setFairs] = useState<{ year: number | null; title: string }[]>([])
   const [awards, setAwards] = useState<{ year: number | null; title: string }[]>([])
   const [solo, setSolo] = useState<{ year: number | null; title: string }[]>([])
   const [group, setGroup] = useState<{ year: number | null; title: string }[]>([])
   const [websites, setWebsites] = useState<{ url: string; label: string }[]>([])
+  const [websitesLoading, setWebsitesLoading] = useState(false)
+  const [websitesError, setWebsitesError] = useState<string | null>(null)
+  const [websitesRefreshTick, setWebsitesRefreshTick] = useState(0)
+  const [contactsLoading, setContactsLoading] = useState(false)
+  const [contactsError, setContactsError] = useState<string | null>(null)
+  const [contactsEmail, setContactsEmail] = useState("")
+  const [contactsPhone, setContactsPhone] = useState("")
+  const [contactsAddressLine1, setContactsAddressLine1] = useState("")
+  const [contactsAddressLine2, setContactsAddressLine2] = useState("")
+  const [contactsAddressLine3, setContactsAddressLine3] = useState("")
+  const [contactsInstagram, setContactsInstagram] = useState("")
+  const [contactsFacebook, setContactsFacebook] = useState("")
+  const [contactsWebsite, setContactsWebsite] = useState("")
+  const [aboutHtml, setAboutHtml] = useState("")
+  const [aboutLoading, setAboutLoading] = useState(false)
+  const [aboutError, setAboutError] = useState<string | null>(null)
+
+  const fetchWebsites = async () => {
+    setWebsitesLoading(true)
+    setWebsitesError(null)
+    try {
+      const r = await fetch("/api/information/websites?sort=position", { cache: "no-store" })
+      if (!r.ok) {
+        const t = await r.text().catch(() => "")
+        throw new Error(t || "Ошибка загрузки")
+      }
+      const j = await r.json().catch(() => ({}))
+      const arr = j?.data?.websites || j?.websites || []
+      setWebsites(arr.map((it: any) => ({ url: String(it.url || ""), label: String(it.label || "") })))
+      setWebsitesRefreshTick((x) => x + 1)
+    } catch (e: any) {
+      setWebsitesError(typeof e?.message === "string" ? e.message : "Ошибка загрузки")
+    } finally {
+      setWebsitesLoading(false)
+    }
+  }
+  const fetchContacts = async () => {
+    setContactsLoading(true)
+    setContactsError(null)
+    try {
+      const r = await fetch("/api/information/contacts", { cache: "no-store" })
+      if (!r.ok) {
+        const t = await r.text().catch(() => "")
+        throw new Error(t || "Ошибка загрузки")
+      }
+      const j = await r.json().catch(() => ({}))
+      const c = j?.data?.contacts || j?.contacts || {}
+      setContactsEmail(String(c.email || ""))
+      setContactsPhone(String(c.phone || ""))
+      setContactsAddressLine1(String(c.addressLine1 || ""))
+      setContactsAddressLine2(String(c.addressLine2 || ""))
+      setContactsAddressLine3(String(c.addressLine3 || ""))
+      setContactsInstagram(String(c.instagram || ""))
+      setContactsFacebook(String(c.facebook || ""))
+      setContactsWebsite(String(c.website || ""))
+    } catch (e: any) {
+      setContactsError(typeof e?.message === "string" ? e.message : "Ошибка загрузки")
+    } finally {
+      setContactsLoading(false)
+    }
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -187,7 +252,18 @@ export default function WorkPage() {
     const load = async () => {
       const r = await fetch("/api/work/sections")
       const data = r.ok ? await r.json() : { sections: [] }
-      const arr: Section[] = (data.sections || []).filter((s: any) => s && s.slug)
+      const arr: Section[] = (data.sections || [])
+        .filter((s: any) => s && s.slug)
+        .map((s: any) => ({
+          id: Number(s.id ?? 0),
+          slug: String(s.slug || ""),
+          name: String(s.name || ""),
+          position: Number(s.position ?? 0),
+          visible: Boolean(s.visible),
+          seoTitle: typeof s.seoTitle === "string" ? s.seoTitle : null,
+          seoDescription: typeof s.seoDescription === "string" ? s.seoDescription : null,
+          seoKeywords: typeof s.seoKeywords === "string" ? s.seoKeywords : null,
+        }))
       setSections(arr)
       const slugs = arr.map((s) => s.slug)
       if (!slugs.includes(activeWorkSubcategory)) {
@@ -219,9 +295,57 @@ export default function WorkPage() {
         const arr = r?.data?.group || r?.group || []
         setGroup(arr.map((it: any) => ({ year: typeof it.year === "number" ? it.year : null, title: String(it.title || "") })))
       } else if (infoCategory === "websites" && websites.length === 0) {
-        const r = await fetch("/api/information/websites").then((x) => x.json()).catch(() => null)
-        const arr = r?.data?.websites || r?.websites || []
-        setWebsites(arr.map((it: any) => ({ url: String(it.url || ""), label: String(it.label || "") })))
+        await fetchWebsites()
+      } else if (infoCategory === "contacts" && contactsEmail === "" && contactsPhone === "" && contactsAddressLine1 === "" && contactsInstagram === "" && contactsWebsite === "") {
+        await fetchContacts()
+      } else if (infoCategory === "about" && aboutHtml === "") {
+        setAboutLoading(true)
+        setAboutError(null)
+        try {
+          const r = await fetch("/api/information/about", { cache: "no-store" })
+          if (!r.ok) {
+            const t = await r.text().catch(() => "")
+            throw new Error(t || "Ошибка загрузки")
+          }
+          const j = await r.json().catch(() => ({}))
+          const t = j?.data?.about?.text || j?.about?.text || ""
+          setAboutHtml(String(t))
+        } catch (e: any) {
+          setAboutError(typeof e?.message === "string" ? e.message : "Ошибка загрузки")
+        } finally {
+          setAboutLoading(false)
+        }
+      } else if (infoCategory === "news" && newsItems.length === 0) {
+        setNewsLoading(true)
+        setNewsError(null)
+        try {
+          const r = await fetch("/api/information/news?sort=date&limit=100&nocache=1", { cache: "no-store" })
+          if (!r.ok) {
+            const t = await r.text().catch(() => "")
+            throw new Error(t || "Ошибка загрузки")
+          }
+          const j = await r.json().catch(() => ({}))
+          const arr = j?.data?.news || j?.news || []
+          const mapped = arr.map((n: any) => {
+            const id = Number(n.id || 0)
+            const title = String(n.title || "")
+            const date = String(n.date || "")
+            const text = String(n.text || "")
+            const summary = String(n.summary || "")
+            const content = String(n.content || "")
+            const previewUrl = String(n.previewUrl || "")
+            const m = content.match(/<img[^>]*src=["']([^"']+)["'][^>]*>/i)
+            const contentImg = m?.[1] || ""
+            const tileUrl = previewUrl || contentImg || ""
+            return { id, title, date, text, summary, content, previewUrl: tileUrl }
+          })
+          setNewsItems(mapped)
+          setVisibleNewsCount(6)
+        } catch (e: any) {
+          setNewsError(typeof e?.message === "string" ? e.message : "Ошибка загрузки")
+        } finally {
+          setNewsLoading(false)
+        }
       }
     }
     loadInfo()
@@ -268,13 +392,20 @@ export default function WorkPage() {
       const res = await fetch(`/api/work/items?section=${activeWorkSubcategory}`)
       const data = await res.json()
       const normalized: WorkItem[] = (data.items || []).map((i: any) => ({
-        ...i,
-        media: (i.media || []).map((m: any) => ({
-          id: m.id,
-          type: String(m.type).toLowerCase() === "video" ? "video" : "image",
-          url: m.url,
-          thumbnail: m.thumbnail ?? null,
-          alt: m.alt ?? null,
+        id: Number(i?.id ?? 0),
+        title: String(i?.title || ""),
+        slug: String(i?.slug || ""),
+        location: typeof i?.location === "string" ? i.location : null,
+        description: typeof i?.description === "string" ? i.description : null,
+        year: typeof i?.year === "number" ? i.year : null,
+        type: typeof i?.type === "string" ? i.type : null,
+        collaborators: typeof i?.collaborators === "string" ? i.collaborators : null,
+        media: (i?.media || []).map((m: any) => ({
+          id: Number(m?.id ?? 0),
+          type: String(m?.type).toLowerCase() === "video" ? "video" : "image",
+          url: String(m?.url || ""),
+          thumbnail: typeof m?.thumbnail === "string" ? m.thumbnail : null,
+          alt: typeof m?.alt === "string" ? m.alt : null,
         })),
       }))
       setProjects(normalized)
@@ -283,6 +414,10 @@ export default function WorkPage() {
     }
     load()
   }, [activeWorkSubcategory])
+
+  const filteredProjects = projects
+    .map((p, idx) => ({ p, idx }))
+    .filter(({ p }) => (searchQuery ? p.title.toLowerCase().includes(searchQuery.toLowerCase()) : true))
 
   const openFullscreen = (mediaIndex: number) => {
     setCurrentMediaIndex(mediaIndex)
@@ -358,13 +493,13 @@ export default function WorkPage() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setVisibleNewsCount((prev) => Math.min(prev + 6, newsData.length))
+          setVisibleNewsCount((prev) => Math.min(prev + 6, newsItems.length))
         }
       })
     })
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [infoCategory])
+  }, [infoCategory, newsItems.length])
 
   useEffect(() => {
     if (infoCategory !== "news") {
@@ -425,9 +560,38 @@ export default function WorkPage() {
       {mobileMenuOpen && activeSection === "information" && (
         <div className="md:hidden bg-white border-b border-neutral-200 p-4">
           <div className="flex flex-wrap gap-2">
-            <Link href="/about" className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100" onClick={() => setMobileMenuOpen(false)}>ABOUT</Link>
-            <Link href="/news" className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100" onClick={() => setMobileMenuOpen(false)}>NEWS</Link>
-            <Link href="/contacts" className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100" onClick={() => setMobileMenuOpen(false)}>CONTACTS</Link>
+            <button
+              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
+              onClick={async () => {
+                setActiveSection("information")
+                setInfoCategory("about")
+                setMobileMenuOpen(false)
+                await fetchContacts()
+              }}
+            >
+              ABOUT
+            </button>
+            <button
+              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
+              onClick={async () => {
+                setActiveSection("information")
+                setInfoCategory("news")
+                setMobileMenuOpen(false)
+              }}
+            >
+              NEWS
+            </button>
+            <button
+              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
+              onClick={async () => {
+                setActiveSection("information")
+                setInfoCategory("contacts")
+                setMobileMenuOpen(false)
+                await fetchContacts()
+              }}
+            >
+              CONTACTS
+            </button>
           </div>
         </div>
       )}
@@ -453,13 +617,18 @@ export default function WorkPage() {
           >
             INFORMATION
           </button>
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="w-full text-left px-4 py-3 text-xs text-neutral-400 hover:text-neutral-600 transition-colors flex items-center gap-2 border-t border-neutral-200"
-          >
-            <Search className="w-3 h-3" />
-            SEARCH
-          </button>
+          <div className="w-full px-4 py-3 border-t border-neutral-200">
+            <div className="flex items-center gap-2">
+              <Search className="w-3 h-3 text-neutral-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="SEARCH"
+                className="w-full bg-transparent text-xs text-neutral-700 placeholder:text-neutral-400 outline-none"
+              />
+            </div>
+          </div>
         </div>
         <nav className="flex-1 overflow-y-auto">
           {activeSection === "work" && (
@@ -473,7 +642,7 @@ export default function WorkPage() {
               {activeWorkSubcategory === "paint" ? (
                 showThumbs ? (
                   <div className="p-2 grid grid-cols-1 gap-2">
-                    {projects.map((project, idx) => (
+                    {filteredProjects.map(({ p: project, idx }) => (
                       <button
                         key={idx}
                         onClick={() => setSelectedProject(idx)}
@@ -499,7 +668,7 @@ export default function WorkPage() {
                   </div>
                 ) : (
                   <div className="mt-1">
-                    {projects.map((project, idx) => (
+                    {filteredProjects.map(({ p: project, idx }) => (
                       <button
                         key={idx}
                         onClick={() => setSelectedProject(idx)}
@@ -533,11 +702,11 @@ export default function WorkPage() {
                   <button
                     key={s.slug}
                     onClick={() => setActiveWorkSubcategory(s.slug)}
-                    className={`px-3 py-1 text-[11px] rounded-sm border ${
+                className={`px-3 py-1 text-[11px] rounded-sm border ${
                       activeWorkSubcategory === s.slug ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"
                     }`}
                   >
-                    {(s.name || s.slug).toUpperCase()}
+                    {String(s.name || s.slug).toUpperCase()}
                   </button>
                 ))}
               </div>
@@ -710,7 +879,14 @@ export default function WorkPage() {
                 {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (
                   <button
                     key={cat}
-                    onClick={() => setInfoCategory(cat as any)}
+                    onClick={async () => {
+                      setInfoCategory(cat as any)
+                      if (cat === "websites") {
+                        await fetchWebsites()
+                      } else if (cat === "contacts") {
+                        await fetchContacts()
+                      }
+                    }}
                     className={
                       "px-3 py-1 text-[11px] rounded-sm border " +
                       (infoCategory === cat ? "bg-yellow-400" : "bg-white hover:bg-neutral-100")
@@ -744,62 +920,97 @@ export default function WorkPage() {
               )}
               {infoCategory === "about" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-4">
-                  <h3 className="text-lg font-medium mb-4">Oksana Levchenya-Konstantinovska</h3>
-                  <div className="space-y-6 text-sm leading-relaxed text-neutral-700">
-                    <p>
-                      Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.
-                    </p>
-                    <p>
-                      From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.
-                    </p>
-                    <p>
-                      A turning point in Levchenya’s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.
-                    </p>
-                    <p>
-                      In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska & Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya’s talent and has included her work to the exhibition Torn World that, later the same year, has been also exhibited in Ukrainian House in Kyiv, Ukraine. Since then, Levchenya’s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska & Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.
-                    </p>
-                    <p>
-                      In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist’s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people’s eagerness to classify themselves as a specific group member and to be equated to a particular nation, occupation and gender.
-                    </p>
-                    <p>
-                      For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK’s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.
-                    </p>
-                    <p>
-                      As well as earlier photography exhibition Find your tribe and love them hard, Levchenya’s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of a person who doesn’t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.
-                    </p>
-                    <p>
-                      In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya’s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.
-                    </p>
-                    <p>
-                      The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.
-                    </p>
-                  </div>
+                  {aboutLoading && <div className="text-xs text-neutral-500">Loading…</div>}
+                  {aboutError && <div className="text-xs text-red-600">{aboutError}</div>}
+                  {!aboutLoading && !aboutError && (
+                    <div className="prose prose-sm max-w-none text-neutral-700" dangerouslySetInnerHTML={{ __html: aboutHtml }} />
+                  )}
                 </div>
               )}
               {infoCategory === "contacts" && (
-                <div className="bg-white border border-neutral-200 rounded-sm p-4 text-sm text-neutral-500">No data yet</div>
+                <div className="bg-white border border-neutral-200 rounded-sm p-4 text-sm">
+                  {contactsLoading && <div className="text-xs text-neutral-500 animate-in fade-in duration-200">Loading…</div>}
+                  {contactsError && <div className="text-xs text-red-600 animate-in fade-in duration-200">{contactsError}</div>}
+                  {!contactsLoading && !contactsError && (
+                    <div className="text-neutral-700 space-y-4 animate-in fade-in duration-200">
+                      <div>
+                        <div className="text-xs text-neutral-500">Address</div>
+                        <address className="not-italic leading-5">
+                          {contactsAddressLine1 && <div>{contactsAddressLine1}</div>}
+                          {contactsAddressLine2 && <div>{contactsAddressLine2}</div>}
+                          {contactsAddressLine3 && <div>{contactsAddressLine3}</div>}
+                        </address>
+                      </div>
+                      <div>
+                        <div className="text-xs text-neutral-500">Phone</div>
+                        <div className="text-sm">{contactsPhone}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-neutral-500">Email</div>
+                        <div className="text-sm">{contactsEmail}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-neutral-500">Social</div>
+                        <div className="flex items-center gap-4">
+                          {contactsInstagram && (
+                            <a
+                              href={contactsInstagram.startsWith("http") ? contactsInstagram : `https://${contactsInstagram}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Instagram"
+                              className="inline-flex items-center justify-center rounded-sm hover:scale-[1.05] transition-transform"
+                            >
+                              <svg className="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z" stroke="#16a34a" strokeWidth="2"/>
+                                <circle cx="12" cy="12" r="3.5" stroke="#16a34a" strokeWidth="2"/>
+                                <circle cx="17.5" cy="6.5" r="1.5" fill="#16a34a"/>
+                              </svg>
+                            </a>
+                          )}
+                          {contactsFacebook && (
+                            <a
+                              href={contactsFacebook.startsWith("http") ? contactsFacebook : `https://${contactsFacebook}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="Facebook"
+                              className="inline-flex items-center justify-center rounded-sm hover:scale-[1.05] transition-transform"
+                            >
+                              <svg className="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.5 10H16l.5-3h-3V5.5c0-.8.2-1.5 1.5-1.5H16V1.2S14.8 1 13.7 1C11.3 1 10 2.7 10 5.2V7H7v3h3v9h3.5v-9Z" fill="#16a34a"/>
+                              </svg>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
               {infoCategory === "news" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-4">
+                  {newsLoading && <div className="text-xs text-neutral-500">Loading…</div>}
+                  {newsError && <div className="text-xs text-red-600">{newsError}</div>}
+                  {!newsLoading && !newsError && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {newsData.slice(0, visibleNewsCount).map((item, idx) => (
+                    {newsItems.slice(0, visibleNewsCount).map((item, idx) => (
                       <div
                         key={idx}
                         className="group border rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow animate-in fade-in duration-200"
                       >
                         <div className="p-3">
                           <div className="text-xs text-neutral-500 mb-1">{new Date(item.date).toLocaleDateString()}</div>
-                          <div className="text-sm font-medium mb-2">{item.title}</div>
-                        </div>
-                        {item.image ? (
+                          <div className="text-sm font-medium mb-1">{item.title}</div>
+                          <div className="text-sm text-neutral-700 mb-2">{clampText(item.text, 150)}</div>
+                      </div>
+                        {item.previewUrl ? (
                           <img
-                            src={item.image}
+                            src={item.previewUrl}
                             alt={item.title}
                             loading="lazy"
                             className="w-full aspect-[4/3] object-cover"
                           />
                         ) : (
-                          <div className="px-3 pb-3 text-sm text-neutral-700">{clampText(item.text || "")}</div>
+                          <div className="px-3 pb-3 text-sm text-neutral-700">{clampText(item.text || "", 150)}</div>
                         )}
                         <div className="p-3">
                           <button
@@ -815,19 +1026,24 @@ export default function WorkPage() {
                       </div>
                     ))}
                   </div>
+                  )}
                   <div ref={newsSentinelRef} className="h-8" />
                 </div>
               )}
 
               {infoCategory === "websites" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-4 text-sm">
-                  <ul className="list-disc pl-5 space-y-2">
-                    {websites.map((w, idx) => (
-                      <li key={idx}>
-                        <a href={w.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline break-all">{w.label}</a>
-                      </li>
-                    ))}
-                  </ul>
+                  {websitesLoading && <div className="text-xs text-neutral-500 animate-in fade-in duration-200">Loading…</div>}
+                  {websitesError && <div className="text-xs text-red-600 animate-in fade-in duration-200">{websitesError}</div>}
+                  {!websitesLoading && !websitesError && (
+                    <ul className={`list-disc pl-5 space-y-2 transition-opacity duration-200 ${websitesRefreshTick ? "opacity-100" : "opacity-100"}`}>
+                      {websites.map((w, idx) => (
+                        <li key={`${w.url}-${idx}`} className="animate-in fade-in duration-200">
+                          <a href={w.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline break-all">{w.label || w.url}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
 
@@ -998,12 +1214,13 @@ export default function WorkPage() {
         </div>
       )}
       {newsModalOpen && selectedNewsIndex !== null && infoCategory === "news" && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-sm max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between p-4 border-b">
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-5">
+          <div className="bg-white rounded-sm w-full max-w-2xl max-h-[calc(100vh-40px)] overflow-hidden flex flex-col shadow-lg animate-in fade-in zoom-in-95">
+            <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b bg-white">
               <div>
-                <div className="text-xs text-neutral-500">{new Date(newsData[selectedNewsIndex].date).toLocaleDateString()}</div>
-                <div className="text-sm font-medium">{newsData[selectedNewsIndex].title}</div>
+                <div className="text-xs text-neutral-500">{new Date(newsItems[selectedNewsIndex].date).toLocaleDateString()}</div>
+                <div className="text-sm font-medium">{newsItems[selectedNewsIndex].title}</div>
+                <div className="text-xs text-neutral-700 mt-1">{newsItems[selectedNewsIndex].text}</div>
               </div>
               <button
                 onClick={() => setNewsModalOpen(false)}
@@ -1012,16 +1229,18 @@ export default function WorkPage() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            {newsData[selectedNewsIndex].image && (
-              <img
-                src={newsData[selectedNewsIndex].image}
-                alt={newsData[selectedNewsIndex].title}
-                loading="lazy"
-                className="w-full object-cover"
-              />
-            )}
-            <div className="p-4 text-sm text-neutral-700">
-              {newsData[selectedNewsIndex].text}
+            <div className="flex-1 overflow-auto">
+              {newsItems[selectedNewsIndex].previewUrl && (
+                <img
+                  src={newsItems[selectedNewsIndex].previewUrl}
+                  alt={newsItems[selectedNewsIndex].title}
+                  loading="lazy"
+                  className="w-full object-cover"
+                />
+              )}
+              <div className="p-4 text-sm text-neutral-700">
+                <div dangerouslySetInnerHTML={{ __html: newsItems[selectedNewsIndex].content || newsItems[selectedNewsIndex].summary }} />
+              </div>
             </div>
           </div>
         </div>

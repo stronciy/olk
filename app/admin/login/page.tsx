@@ -20,7 +20,8 @@ export default function AdminLoginPage() {
       router.push("/admin")
     } else {
       const e = await r.json().catch(() => ({}))
-      setError(e?.error || "Login failed")
+      const raw = (e?.error ?? e?.message)
+      setError(typeof raw === "string" ? raw : "Login failed")
     }
   }
 
@@ -34,4 +35,3 @@ export default function AdminLoginPage() {
     </div>
   )
 }
-

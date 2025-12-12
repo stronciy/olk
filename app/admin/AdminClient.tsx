@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { GripVertical, CheckCircle, AlertCircle } from "lucide-react"
+import { Editor } from "@tinymce/tinymce-react"
+import { GripVertical, CheckCircle, AlertCircle, Pencil, Trash } from "lucide-react"
+import * as Accordion from "@radix-ui/react-accordion"
 
 type Section = { id: number; slug: string; name: string; seoTitle?: string | null; seoDescription?: string | null; seoKeywords?: string | null }
 type Item = { id: number; title: string; slug: string; published?: number; position?: number }
@@ -42,20 +44,36 @@ export default function AdminClient() {
   const [sectionSeoKeywords, setSectionSeoKeywords] = useState("")
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [passwordMessage, setPasswordMessage] = useState("")
+  const [changingPassword, setChangingPassword] = useState(false)
   const [deleteItemId, setDeleteItemId] = useState<number | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [aboutText, setAboutText] = useState("")
   const [contactsEmail, setContactsEmail] = useState("")
   const [contactsPhone, setContactsPhone] = useState("")
-  const [contactsAddress, setContactsAddress] = useState("")
+  const [contactsAddressLine1, setContactsAddressLine1] = useState("")
+  const [contactsAddressLine2, setContactsAddressLine2] = useState("")
+  const [contactsAddressLine3, setContactsAddressLine3] = useState("")
   const [contactsInstagram, setContactsInstagram] = useState("")
   const [contactsFacebook, setContactsFacebook] = useState("")
   const [contactsWebsite, setContactsWebsite] = useState("")
-  const [news, setNews] = useState<{ title: string; date: string; text: string }[]>([])
+  const [news, setNews] = useState<{ id?: number; title: string; date: string; text: string; summary: string; content: string; draft?: boolean; coverUrl?: string; previewUrl?: string }[]>([])
   const [newNewsTitle, setNewNewsTitle] = useState("")
   const [newNewsDate, setNewNewsDate] = useState("")
+  const [newNewsSummary, setNewNewsSummary] = useState("")
+  const [newNewsContent, setNewNewsContent] = useState("")
   const [newNewsText, setNewNewsText] = useState("")
+  const [newNewsDraft, setNewNewsDraft] = useState(false)
+  const [newNewsCoverUrl, setNewNewsCoverUrl] = useState<string | undefined>(undefined)
+  const [newNewsPreviewUrl, setNewNewsPreviewUrl] = useState<string | undefined>(undefined)
+  const [editNewsIndex, setEditNewsIndex] = useState<number | null>(null)
+  const [newsTrashMode, setNewsTrashMode] = useState(false)
+  const [newsModalOpen, setNewsModalOpen] = useState(false)
+  const [newsModalSaving, setNewsModalSaving] = useState(false)
+  const [newsModalError, setNewsModalError] = useState("")
+  const [newsModalMode, setNewsModalMode] = useState<"add" | "edit">("add")
+  const [newNewsDateTime, setNewNewsDateTime] = useState("")
   const [fairs, setFairs] = useState<{ year: string; title: string }[]>([])
   const [fairDragIndex, setFairDragIndex] = useState<number | null>(null)
   const [newFairYear, setNewFairYear] = useState<string>("")
@@ -72,13 +90,24 @@ export default function AdminClient() {
   const [websites, setWebsites] = useState<{ url: string; label: string }[]>([])
   const [newWebsiteUrl, setNewWebsiteUrl] = useState("")
   const [newWebsiteLabel, setNewWebsiteLabel] = useState("")
+  const [websiteDragIndex, setWebsiteDragIndex] = useState<number | null>(null)
+  const [websiteFilter, setWebsiteFilter] = useState("")
+  const [websitePage, setWebsitePage] = useState(1)
+  const [websitePageSize, setWebsitePageSize] = useState(10)
   const [noticeOpen, setNoticeOpen] = useState(false)
   const [noticeType, setNoticeType] = useState<"success" | "error" | null>(null)
   const [noticeMessage, setNoticeMessage] = useState("")
   const noticeTimerRef = useRef<number | null>(null)
+  const debounceRef = useRef<number | null>(null)
   const [awardDragIndex, setAwardDragIndex] = useState<number | null>(null)
   const [soloDragIndex, setSoloDragIndex] = useState<number | null>(null)
   const [groupDragIndex, setGroupDragIndex] = useState<number | null>(null)
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false)
+  const [manageAccordionOpen, setManageAccordionOpen] = useState(false)
+
+  const tinyApiKey = process.env.NEXT_PUBLIC_TINYMCE_API_KEY || ""
+
+ 
 
   const showSuccess = (message = "Данные успешно сохранены") => {
     if (noticeTimerRef.current) {
@@ -109,6 +138,32 @@ export default function AdminClient() {
       setNoticeMessage("")
       noticeTimerRef.current = null
     }, 4500)
+  }
+
+  const formatDateForView = (s: string) => {
+    const v = s?.includes("T") ? s : s?.replace(" ", "T")
+    const d = v ? new Date(v) : null
+    if (!d || Number.isNaN(d.getTime())) return s || ""
+    const dd = String(d.getDate()).padStart(2, "0")
+    const mm = String(d.getMonth() + 1).padStart(2, "0")
+    const yyyy = String(d.getFullYear())
+    const hh = String(d.getHours()).padStart(2, "0")
+    const mi = String(d.getMinutes()).padStart(2, "0")
+    return `${dd}.${mm}.${yyyy} ${hh}:${mi}`
+  }
+  const nowLocalDateTime = () => {
+    const d = new Date()
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, "0")
+    const dd = String(d.getDate()).padStart(2, "0")
+    const hh = String(d.getHours()).padStart(2, "0")
+    const mi = String(d.getMinutes()).padStart(2, "0")
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`
+  }
+  const toSqlDateTime = (dt: string) => {
+    if (!dt) return ""
+    const base = dt.replace("T", " ")
+    return base.length === 16 ? `${base}:00` : base
   }
 
   useEffect(() => {
@@ -157,13 +212,22 @@ export default function AdminClient() {
         const c = r?.data?.contacts || {}
         setContactsEmail(c.email || "")
         setContactsPhone(c.phone || "")
-        setContactsAddress(c.address || "")
+        if (typeof c.addressLine1 === "string" || typeof c.addressLine2 === "string" || typeof c.addressLine3 === "string") {
+          setContactsAddressLine1(c.addressLine1 || "")
+          setContactsAddressLine2(c.addressLine2 || "")
+          setContactsAddressLine3(c.addressLine3 || "")
+        } else {
+          const lines = String(c.address || "").split(/\r?\n/)
+          setContactsAddressLine1(lines[0] || "")
+          setContactsAddressLine2(lines[1] || "")
+          setContactsAddressLine3(lines[2] || "")
+        }
         setContactsInstagram(c.instagram || "")
         setContactsFacebook(c.facebook || "")
         setContactsWebsite(c.website || "")
       } else if (infoMenu === "news") {
-        const r = await fetch("/api/information/news").then((x) => x.json()).catch(() => null)
-        setNews(r?.data?.news?.map((n: any) => ({ title: String(n.title || ""), date: String(n.date || ""), text: String(n.text || "") })) || [])
+        const r = await fetch("/api/information/news?sort=date&nocache=1", { cache: "no-store" }).then((x) => x.json()).catch(() => null)
+        setNews(r?.data?.news?.map((n: any) => ({ id: Number(n.id || 0), title: String(n.title || ""), date: String(n.date || ""), text: String(n.text || ""), summary: String(n.summary || ""), content: String(n.content || ""), draft: Boolean(n.draft), coverUrl: String(n.coverUrl || ""), previewUrl: String(n.previewUrl || "") })) || [])
       } else if (infoMenu === "fairs") {
         const r = await fetch("/api/information/fairs").then((x) => x.json()).catch(() => null)
         setFairs(r?.data?.fairs?.map((n: any) => ({ year: String(n.year ?? ""), title: String(n.title || "") })) || [])
@@ -212,7 +276,9 @@ export default function AdminClient() {
         body: JSON.stringify({
           email: contactsEmail,
           phone: contactsPhone,
-          address: contactsAddress,
+          addressLine1: contactsAddressLine1,
+          addressLine2: contactsAddressLine2,
+          addressLine3: contactsAddressLine3,
           instagram: contactsInstagram,
           facebook: contactsFacebook,
           website: contactsWebsite,
@@ -234,35 +300,187 @@ export default function AdminClient() {
       showError("Ошибка сети")
     }
   }
-
-  const addNews = () => {
-    if (!newNewsTitle.trim() || !newNewsDate.trim()) return
-    setNews((prev) => [...prev, { title: newNewsTitle.trim(), date: newNewsDate.trim(), text: newNewsText.trim() }])
-    setNewNewsTitle("")
-    setNewNewsDate("")
-    setNewNewsText("")
+  const refreshNews = async (includeTrash = false) => {
+    const r = await fetch(`/api/information/news${includeTrash ? "?include=trash&sort=date&nocache=1" : "?sort=date&nocache=1"}`, { cache: "no-store" }).then((x) => x.json()).catch(() => null)
+    setNews(r?.data?.news?.map((n: any) => ({ id: Number(n.id || 0), title: String(n.title || ""), date: String(n.date || ""), summary: String(n.summary || n.text || ""), content: String(n.content || ""), draft: Boolean(n.draft), coverUrl: String(n.coverUrl || ""), previewUrl: String(n.previewUrl || "") })) || [])
   }
-  const saveNews = async () => {
+  const toggleNewsDraft = async (id?: number, current?: boolean) => {
+    if (!id) return
+    const ok = window.confirm(current ? "Снять статус черновик?" : "Поставить статус черновик?")
+    if (!ok) return
+    const r = await fetch("/api/information/news", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, update: { draft: !current } }),
+    })
+    if (r.ok) {
+      await refreshNews(newsTrashMode)
+      showSuccess()
+    } else {
+      const t = await r.text().catch(() => "")
+      showError(t || "Ошибка обновления")
+    }
+  }
+  const trashNews = async (id?: number) => {
+    if (!id) return
+    const ok = window.confirm("Переместить в корзину?")
+    if (!ok) return
+    const r = await fetch(`/api/information/news?id=${id}`, { method: "DELETE" })
+    if (r.ok) {
+      await refreshNews(newsTrashMode)
+      showSuccess()
+    } else {
+      const t = await r.text().catch(() => "")
+      showError(t || "Ошибка удаления")
+    }
+  }
+  const restoreNews = async (id?: number) => {
+    if (!id) return
+    const r = await fetch("/api/information/news/restore", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+    if (r.ok) {
+      await refreshNews(true)
+      showSuccess()
+    } else {
+      const t = await r.text().catch(() => "")
+      showError(t || "Ошибка восстановления")
+    }
+  }
+  const startEditNews = (idx: number) => {
+    const n = news[idx]
+    setNewNewsTitle(n.title)
+    setNewNewsDate(n.date)
+    setNewNewsDateTime((n.date && n.date.includes("T")) ? n.date.slice(0, 16) : nowLocalDateTime())
+    setNewNewsSummary(n.summary)
+    setNewNewsText(n.text)
+    setNewNewsContent(n.content)
+    setNewNewsDraft(!!n.draft)
+    setNewNewsCoverUrl(n.coverUrl)
+    setNewNewsPreviewUrl(n.previewUrl)
+    setEditNewsIndex(idx)
+    setNewsModalMode("edit")
+    setNewsModalOpen(true)
+  }
+  const saveEditedNews = async () => {
+    if (editNewsIndex === null) return
+    const n = news[editNewsIndex]
+    if (!n?.id) {
+      setEditNewsIndex(null)
+      return
+    }
+    const ok = window.confirm("Подтвердить изменения?")
+    if (!ok) return
+    const shortText = newNewsText.trim()
+    if (!shortText) {
+      setNewsModalError("Краткий текст обязателен")
+      return
+    }
+    if (shortText.length > 250) {
+      setNewsModalError("Краткий текст не должен превышать 250 символов")
+      return
+    }
+    setNewsModalSaving(true)
+    const r = await fetch("/api/information/news", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: n.id,
+        update: {
+          title: newNewsTitle.trim(),
+          date: toSqlDateTime(newNewsDateTime.trim() || newNewsDate.trim()),
+          text: shortText,
+          summary: newNewsSummary.trim(),
+          content: newNewsContent.trim(),
+          draft: newNewsDraft,
+          coverUrl: newNewsCoverUrl,
+          previewUrl: newNewsPreviewUrl,
+        },
+      }),
+    })
+    if (r.ok) {
+      setEditNewsIndex(null)
+      setNewsModalOpen(false)
+      setNewNewsTitle("")
+      setNewNewsDate("")
+      setNewNewsDateTime("")
+      setNewNewsSummary("")
+      setNewNewsContent("")
+      setNewNewsDraft(false)
+      setNewNewsCoverUrl(undefined)
+      setNewNewsPreviewUrl(undefined)
+      await refreshNews(newsTrashMode)
+      showSuccess()
+    } else {
+      const t = await r.text().catch(() => "")
+      setNewsModalError(t || "Ошибка обновления")
+      showError(t || "Ошибка обновления")
+    }
+    setNewsModalSaving(false)
+  }
+
+  const openAddNewsModal = () => {
+    setNewsModalMode("add")
+    setNewNewsTitle("")
+    setNewNewsSummary("")
+    setNewNewsText("")
+    setNewNewsContent("")
+    setNewNewsDate("")
+    setNewNewsDateTime(nowLocalDateTime())
+    setNewNewsCoverUrl(undefined)
+    setNewNewsPreviewUrl(undefined)
+    setNewsModalError("")
+    setNewsModalOpen(true)
+  }
+  const cancelNewsModal = () => {
+    setNewsModalOpen(false)
+    setNewsModalError("")
+    setNewsModalSaving(false)
+    setNewNewsTitle("")
+    setNewNewsSummary("")
+    setNewNewsText("")
+    setNewNewsContent("")
+    setNewNewsDate("")
+    setNewNewsDateTime("")
+    setNewNewsCoverUrl(undefined)
+    setNewNewsPreviewUrl(undefined)
+  }
+  const saveNewNews = async () => {
+    const title = newNewsTitle.trim()
+    const content = newNewsContent.trim()
+    const shortText = newNewsText.trim()
+    const dt = toSqlDateTime((newNewsDateTime || "").trim())
+    if (!title || !content || !dt || !shortText) {
+      setNewsModalError("Заполните обязательные поля")
+      return
+    }
+    if (shortText.length > 250) {
+      setNewsModalError("Краткий текст не должен превышать 250 символов")
+      return
+    }
+    setNewsModalSaving(true)
     try {
       const res = await fetch("/api/information/news", {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ news: news.map((n, i) => ({ ...n, position: i })) }),
+        body: JSON.stringify({ title, date: dt, text: shortText, summary: newNewsSummary.trim(), content, draft: false, coverUrl: newNewsCoverUrl, previewUrl: newNewsPreviewUrl }),
       })
       if (!res.ok) {
-        let msg = "Ошибка сохранения"
-        try {
-          const e = await res.json()
-          msg = String(e?.error || e?.message || msg)
-        } catch {
-          msg = await res.text().catch(() => msg)
-        }
-        showError(msg)
-        return
+        const t = await res.text().catch(() => "")
+        setNewsModalError(t || "Ошибка создания")
+        showError(t || "Ошибка создания")
+      } else {
+        cancelNewsModal()
+        await refreshNews(false)
+        showSuccess()
       }
-      showSuccess()
     } catch {
+      setNewsModalError("Ошибка сети")
       showError("Ошибка сети")
+    } finally {
+      setNewsModalSaving(false)
     }
   }
 
@@ -483,13 +701,37 @@ export default function AdminClient() {
       showError("Ошибка сети")
     }
   }
+  const persistWebsitesOrder = async (arr: { url: string; label: string }[]) => {
+    await fetch("/api/information/websites", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ websites: arr.map((w, i) => ({ ...w, position: i })) }),
+    })
+  }
+  const handleWebsiteDropAt = async (targetIdx: number) => {
+    if (websiteDragIndex === null || websiteDragIndex === targetIdx) return
+    const arr = [...websites]
+    const [it] = arr.splice(websiteDragIndex, 1)
+    arr.splice(targetIdx, 0, it)
+    setWebsites(arr)
+    setWebsiteDragIndex(null)
+    await persistWebsitesOrder(arr)
+  }
 
   useEffect(() => {
     const load = async () => {
       const sRes = await fetch("/api/work/sections")
       const s = sRes.ok ? await sRes.json() : { sections: [] }
-      setSections(s.sections || [])
-      const activeSection = (s.sections || []).find((x: Section) => x.slug === active)
+      const list = (s.sections || []).map((x: any) => ({
+        id: Number(x?.id ?? 0),
+        slug: String(x?.slug || ""),
+        name: String(x?.name || ""),
+        seoTitle: typeof x?.seoTitle === "string" ? x.seoTitle : null,
+        seoDescription: typeof x?.seoDescription === "string" ? x.seoDescription : null,
+        seoKeywords: typeof x?.seoKeywords === "string" ? x.seoKeywords : null,
+      }))
+      setSections(list)
+      const activeSection = list.find((x: Section) => x.slug === active)
       if (activeSection) {
         setSectionSeoTitle(activeSection.seoTitle || "")
         setSectionSeoDescription(activeSection.seoDescription || "")
@@ -503,7 +745,14 @@ export default function AdminClient() {
     const load = async () => {
       const rRes = await fetch(`/api/work/items?section=${active}`)
       const r = rRes.ok ? await rRes.json() : { items: [] }
-      setItems(r.items || [])
+      const list = (r.items || []).map((x: any) => ({
+        id: Number(x?.id ?? 0),
+        title: String(x?.title || ""),
+        slug: String(x?.slug || ""),
+        published: typeof x?.published === "number" ? x.published : (x?.published ? 1 : 0),
+        position: typeof x?.position === "number" ? x.position : undefined,
+      }))
+      setItems(list)
       setSelectedItem(null)
       setDescription("")
       setYear("")
@@ -781,37 +1030,75 @@ export default function AdminClient() {
 
   const changePassword = async () => {
     setPasswordMessage("")
-    const r = await fetch(`/api/admin/password`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currentPassword, newPassword }),
-    })
-    if (r.ok) {
-      setPasswordMessage("Password updated")
-      setCurrentPassword("")
-      setNewPassword("")
-    } else {
-      const e = await r.json().catch(() => ({}))
-      setPasswordMessage(e?.error ? String(e.error) : "Update failed")
+    const msg = validatePassword(newPassword, confirmPassword)
+    if (msg) {
+      setPasswordMessage(msg)
+      return
     }
+    setChangingPassword(true)
+    try {
+      const csrf = (document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/)?.[1] && decodeURIComponent(document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/)![1])) || ""
+      const r = await fetch(`/api/admin/password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf },
+        body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+      })
+      if (r.ok) {
+        setPasswordMessage("Password updated")
+        setCurrentPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
+        setPasswordModalOpen(false)
+      } else {
+        const e = await r.json().catch(() => ({}))
+        setPasswordMessage(e?.message ? String(e.message) : "Update failed")
+      }
+    } finally {
+      setChangingPassword(false)
+    }
+  }
+
+  const validatePassword = (pw: string, confirm: string) => {
+    if (!pw || pw.length < 8) return "Пароль должен быть не менее 8 символов"
+    if (!/[A-Z]/.test(pw)) return "Пароль должен содержать заглавную букву"
+    if (!/[a-z]/.test(pw)) return "Пароль должен содержать строчную букву"
+    if (!/\d/.test(pw)) return "Пароль должен содержать цифру"
+    if (pw !== confirm) return "Пароли не совпадают"
+    return ""
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-xl font-medium tracking-wide mb-4">Admin</h2>
-      <div className="flex items-center gap-2 border-b border-neutral-200 pb-2 mb-4">
-        <button
-          onClick={() => switchTab("work")}
-          className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "work" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
-        >
-          WORK
-        </button>
-        <button
-          onClick={() => switchTab("information")}
-          className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "information" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
-        >
-          INFORMATION
-        </button>
+      <div className="flex items-center justify-between border-b border-neutral-200 pb-2 mb-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => switchTab("work")}
+            className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "work" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
+          >
+            WORK
+          </button>
+          <button
+            onClick={() => switchTab("information")}
+            className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "information" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
+          >
+            INFORMATION
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              try {
+                await fetch("/api/admin/csrf", { method: "GET", cache: "no-store" })
+              } catch {}
+              setPasswordModalOpen(true)
+            }}
+            className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+          >
+            Change Password
+          </button>
+          <button onClick={logout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Logout</button>
+        </div>
       </div>
       {adminTab === "information" ? (
         <div>
@@ -830,21 +1117,163 @@ export default function AdminClient() {
           {infoMenu === "about" && (
             <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
               <h3 className="text-sm font-medium mb-2">Edit About</h3>
-              <textarea value={aboutText} onChange={(e) => setAboutText(e.target.value)} placeholder="About text" className="border rounded-sm px-2 py-1 text-sm w-full h-48 mb-2" />
-              <button onClick={saveAbout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
+              <div className="mb-2">
+                <Editor
+                  tinymceScriptSrc="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
+                  apiKey={tinyApiKey || undefined}
+                  value={aboutText}
+                  onEditorChange={(val) => {
+                    setAboutText(val)
+                    setNoticeType("success")
+                    setNoticeMessage("Saving…")
+                    setNoticeOpen(true)
+                    window.clearTimeout(debounceRef.current || undefined as unknown as number)
+                    debounceRef.current = window.setTimeout(async () => {
+                      try {
+                        const r = await fetch("/api/information/about", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: val }) })
+                        if (!r.ok) {
+                          const t = await r.text().catch(() => "")
+                          setNoticeType("error")
+                          setNoticeMessage(t || "Ошибка сохранения")
+                          return
+                        }
+                        setNoticeType("success")
+                        setNoticeMessage("Saved")
+                      } catch {
+                        setNoticeType("error")
+                        setNoticeMessage("Ошибка сети")
+                      }
+                    }, 1000)
+                  }}
+                  init={{
+                    height: 360,
+                    menubar: false,
+                    plugins: ["link", "image", "lists", "code", "table", "media", "quickbars"],
+                    toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image editimage media | code",
+                    image_advtab: true,
+                    images_upload_handler: async (blobInfo: any) => {
+                      const fd = new FormData()
+                      fd.append("file", blobInfo.blob(), blobInfo.filename() || "image.webp")
+                      const r = await fetch("/api/information/about/upload", { method: "POST", body: fd })
+                      if (!r.ok) {
+                        const t = await r.text().catch(() => "")
+                        throw new Error(t || "Ошибка загрузки")
+                      }
+                      const j = await r.json()
+                      return j?.data?.coverUrl || ""
+                    },
+                    convert_urls: false,
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className={`text-xs ${noticeType === "error" ? "text-red-600" : "text-neutral-500"}`}>{noticeOpen ? noticeMessage : ""}</div>
+                <button onClick={saveAbout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
+              </div>
             </div>
           )}
           {infoMenu === "news" && (
             <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
-              <h3 className="text-sm font-medium mb-2">Manage News</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-                <input value={newNewsTitle} onChange={(e) => setNewNewsTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={newNewsDate} onChange={(e) => setNewNewsDate(e.target.value)} type="date" placeholder="Date" className="border rounded-sm px-2 py-1 text-sm w-full" />
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium">Manage News</h3>
+              <button onClick={openAddNewsModal} className="px-3 py-1 text-[11px] rounded-sm bg-blue-600 text-white hover:bg-blue-700">Add News</button>
+            </div>
+            {newsModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/30" onClick={cancelNewsModal} />
+                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-[95%] max-w-[640px]">
+                  <h4 className="text-sm font-medium mb-2">{newsModalMode === "add" ? "Add News" : "Edit News"}</h4>
+                  {newsModalError && <div className="text-xs text-red-600 mb-2">{newsModalError}</div>}
+                  <div className="mb-2">
+                    <label className="block text-xs mb-1">Заголовок *</label>
+                    <input value={newNewsTitle} onChange={(e) => setNewNewsTitle(e.target.value)} className="border rounded-sm px-2 py-1 text-sm w-full" placeholder="Title" />
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-xs mb-1">Краткий текст *</label>
+                    <textarea
+                      value={newNewsText}
+                      onChange={(e) => setNewNewsText(e.target.value)}
+                      className="border rounded-sm px-2 py-1 text-sm w-full h-24"
+                      placeholder="До 250 символов"
+                      maxLength={250}
+                    />
+                    <div className="text-[11px] text-neutral-500 mt-1">{newNewsText.length}/250</div>
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-xs mb-1">Текст *</label>
+                    <div className="border rounded-sm">
+                      <Editor
+                        tinymceScriptSrc="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
+                        apiKey={tinyApiKey || undefined}
+                        value={newNewsContent}
+                        onEditorChange={(val) => setNewNewsContent(val)}
+                          init={{
+                            height: 300,
+                            menubar: false,
+                            plugins: ["link", "image", "lists", "code", "table", "quickbars"],
+                            toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image editimage | code",
+                            image_advtab: true,
+                            images_upload_handler: async (blobInfo: any) => {
+                              const fd = new FormData()
+                              fd.append("file", blobInfo.blob(), blobInfo.filename() || "image.webp")
+                              const r = await fetch("/api/information/news/upload", { method: "POST", body: fd })
+                              if (!r.ok) {
+                              const t = await r.text().catch(() => "")
+                              throw new Error(t || "Ошибка загрузки")
+                            }
+                            const j = await r.json()
+                            return j?.data?.coverUrl || ""
+                          },
+                          convert_urls: false,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label className="block text-xs mb-1">Дата публикации *</label>
+                    <input type="datetime-local" value={newNewsDateTime} onChange={(e) => setNewNewsDateTime(e.target.value)} className="border rounded-sm px-2 py-1 text-sm w-full" />
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <button onClick={cancelNewsModal} className="px-3 py-1 text-[11px] rounded-sm border bg-neutral-100 hover:bg-neutral-200" disabled={newsModalSaving}>Cancel</button>
+                    <button onClick={newsModalMode === "add" ? saveNewNews : saveEditedNews} className={`px-3 py-1 text-[11px] rounded-sm ${newsModalSaving ? "bg-green-500/60 text-white" : "bg-green-600 text-white hover:bg-green-700"}`} disabled={newsModalSaving}>
+                      {newsModalSaving ? "Saving…" : "Save"}
+                    </button>
+                  </div>
+                </div>
               </div>
-              <textarea value={newNewsText} onChange={(e) => setNewNewsText(e.target.value)} placeholder="Text" className="border rounded-sm px-2 py-1 text-sm w-full h-32 mb-2" />
-              <div className="flex items-center gap-2">
-                <button onClick={addNews} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add</button>
-                <button onClick={saveNews} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+            )}
+              <div className="flex items-center gap-2 mb-2">
+                <button onClick={() => refreshNews(newsTrashMode)} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Refresh</button>
+                <button onClick={async () => { setNewsTrashMode((v) => !v); await refreshNews(!newsTrashMode) }} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">{newsTrashMode ? "Show Active" : "Show Trash"}</button>
+              </div>
+              <div className="overflow-x-auto mt-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-52 px-2 py-1 border-b">Дата</th>
+                      <th className="text-left px-2 py-1 border-b">Заголовок</th>
+                      <th className="text-right w-32 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {news.map((n, idx) => (
+                      <tr key={n.id ? n.id : `${n.title}-${idx}`} className="align-top">
+                        <td className="px-2 py-1">{formatDateForView(n.date)}</td>
+                        <td className="px-2 py-1">{n.title.length > 100 ? `${n.title.slice(0, 100)}…` : n.title}</td>
+                        <td className="px-2 py-1 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button onClick={() => startEditNews(idx)} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100" title="Редактировать">
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => trashNews(n.id)} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100" title="Удалить">
+                              <Trash className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
@@ -855,7 +1284,11 @@ export default function AdminClient() {
                 <input value={contactsEmail} onChange={(e) => setContactsEmail(e.target.value)} placeholder="Email" className="border rounded-sm px-2 py-1 text-sm w-full" />
                 <input value={contactsPhone} onChange={(e) => setContactsPhone(e.target.value)} placeholder="Phone" className="border rounded-sm px-2 py-1 text-sm w-full" />
               </div>
-              <input value={contactsAddress} onChange={(e) => setContactsAddress(e.target.value)} placeholder="Address" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={contactsAddressLine1} onChange={(e) => setContactsAddressLine1(e.target.value)} placeholder="Улица и дом" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={contactsAddressLine2} onChange={(e) => setContactsAddressLine2(e.target.value)} placeholder="Квартира/офис" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={contactsAddressLine3} onChange={(e) => setContactsAddressLine3(e.target.value)} placeholder="Доп. информация" className="border rounded-sm px-2 py-1 text-sm w-full" />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                 <input value={contactsInstagram} onChange={(e) => setContactsInstagram(e.target.value)} placeholder="Instagram" className="border rounded-sm px-2 py-1 text-sm w-full" />
                 <input value={contactsFacebook} onChange={(e) => setContactsFacebook(e.target.value)} placeholder="Facebook" className="border rounded-sm px-2 py-1 text-sm w-full" />
@@ -1167,12 +1600,105 @@ export default function AdminClient() {
           {infoMenu === "websites" && (
             <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
               <h3 className="text-sm font-medium mb-2">Edit Websites</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
                 <input value={newWebsiteUrl} onChange={(e) => setNewWebsiteUrl(e.target.value)} placeholder="URL" className="border rounded-sm px-2 py-1 text-sm w-full" />
                 <input value={newWebsiteLabel} onChange={(e) => setNewWebsiteLabel(e.target.value)} placeholder="Label" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <button onClick={addWebsite} disabled={!newWebsiteUrl.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${!newWebsiteUrl.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
               </div>
-              <div className="flex items-center gap-2">
-                <button onClick={addWebsite} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add</button>
+              <div className="flex items-center gap-2 mb-2">
+                <input value={websiteFilter} onChange={(e) => { setWebsiteFilter(e.target.value); setWebsitePage(1) }} placeholder="Фильтр по URL/Label" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <select value={websitePageSize} onChange={(e) => { setWebsitePageSize(Number(e.target.value)); setWebsitePage(1) }} className="border rounded-sm px-2 py-1 text-sm">
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                </select>
+              </div>
+              <div className="overflow-x-auto mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-10 px-2 py-1 border-b"></th>
+                      <th className="text-left w-72 px-2 py-1 border-b">URL</th>
+                      <th className="text-left px-2 py-1 border-b">Label</th>
+                      <th className="text-right w-24 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(() => {
+                      const filtered = websites.filter((w) => {
+                        const q = websiteFilter.trim().toLowerCase()
+                        if (!q) return true
+                        return w.url.toLowerCase().includes(q) || w.label.toLowerCase().includes(q)
+                      })
+                      const start = (websitePage - 1) * websitePageSize
+                      const pageRows = filtered.slice(start, start + websitePageSize)
+                      return pageRows.map((row, idxOnPage) => {
+                        const idx = start + idxOnPage
+                        return (
+                          <tr
+                            key={`${row.url}-${idx}`}
+                            className="align-top"
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={() => handleWebsiteDropAt(idx)}
+                          >
+                            <td className="px-2 py-1">
+                              <button
+                                draggable
+                                onDragStart={() => setWebsiteDragIndex(idx)}
+                                className="px-1 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                                title="Drag"
+                              >
+                                <GripVertical className="w-4 h-4 text-neutral-400" />
+                              </button>
+                            </td>
+                            <td className="px-2 py-1">
+                              <input
+                                value={row.url}
+                                onChange={(e) =>
+                                  setWebsites((prev) => prev.map((x, j) => (j === idx ? { ...x, url: e.target.value } : x)))
+                                }
+                                placeholder="URL"
+                                className="border rounded-sm px-2 py-1 text-sm w-full"
+                              />
+                            </td>
+                            <td className="px-2 py-1">
+                              <input
+                                value={row.label}
+                                onChange={(e) =>
+                                  setWebsites((prev) => prev.map((x, j) => (j === idx ? { ...x, label: e.target.value } : x)))
+                                }
+                                placeholder="Label"
+                                className="border rounded-sm px-2 py-1 text-sm w-full"
+                              />
+                            </td>
+                            <td className="px-2 py-1 text-right">
+                              <button
+                                onClick={() => setWebsites((prev) => prev.filter((_, j) => j !== idx))}
+                                className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    })()}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-neutral-600">Всего: {websites.filter((w) => w.url.toLowerCase().includes(websiteFilter.trim().toLowerCase()) || w.label.toLowerCase().includes(websiteFilter.trim().toLowerCase())).length}</div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setWebsitePage((p) => Math.max(1, p - 1))} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Prev</button>
+                  <div className="text-xs">Page {websitePage}</div>
+                  <button onClick={() => {
+                    const total = websites.filter((w) => w.url.toLowerCase().includes(websiteFilter.trim().toLowerCase()) || w.label.toLowerCase().includes(websiteFilter.trim().toLowerCase())).length
+                    const maxPage = Math.max(1, Math.ceil(total / websitePageSize))
+                    setWebsitePage((p) => Math.min(maxPage, p + 1))
+                  }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Next</button>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mt-3">
                 <button onClick={saveWebsites} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
               </div>
             </div>
@@ -1199,35 +1725,43 @@ export default function AdminClient() {
                 onClick={() => setActive(s.slug)}
                 className={`px-3 py-1 text-[11px] rounded-sm border ${active === s.slug ? "bg-yellow-400" : "bg-white"}`}
               >
-                {s.name}
+                {String(s.name)}
               </button>
             ))}
           </div>
           <div className="bg-white border border-neutral-200 rounded-sm p-4 mb-4">
             <h3 className="text-sm font-medium mb-2">Account</h3>
-            <div className="flex items-center gap-2 mb-2">
-              <button onClick={logout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Logout</button>
-            </div>
-            <div className="mt-2">
-              <p className="text-xs text-neutral-500 mb-2">Change password</p>
-              {passwordMessage && <div className="text-xs mb-2">{passwordMessage}</div>}
-              <input value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <input value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <button onClick={changePassword} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Update</button>
-            </div>
-            <h3 className="text-sm font-medium mb-2">Manage Sections</h3>
-            <ul className="space-y-2">
-              {sections.map((s, idx) => (
-                <li key={s.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => moveSection(s.id, -1)} className="px-2 py-1 text-[11px] rounded-sm border">Up</button>
-                    <button onClick={() => moveSection(s.id, 1)} className="px-2 py-1 text-[11px] rounded-sm border">Down</button>
-                    <span className="text-sm">{idx + 1}. {s.name}</span>
-                  </div>
-                  <button onClick={() => deleteSection(s.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
-                </li>
-              ))}
-            </ul>
+            <Accordion.Root
+              type="single"
+              collapsible
+              value={manageAccordionOpen ? "manage-sections" : undefined}
+              onValueChange={(v) => setManageAccordionOpen(!!v)}
+              className="w-full"
+            >
+              <Accordion.Item value="manage-sections">
+                <Accordion.Header>
+                  <Accordion.Trigger className="w-full text-left px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">
+                    Manage Sections
+                  </Accordion.Trigger>
+                </Accordion.Header>
+                {manageAccordionOpen && (
+                  <Accordion.Content className="mt-2">
+                    <ul className="space-y-2">
+                      {sections.map((s, idx) => (
+                        <li key={s.id} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => moveSection(s.id, -1)} className="px-2 py-1 text-[11px] rounded-sm border">Up</button>
+                            <button onClick={() => moveSection(s.id, 1)} className="px-2 py-1 text-[11px] rounded-sm border">Down</button>
+                            <span className="text-sm">{idx + 1}. {s.name}</span>
+                          </div>
+                          <button onClick={() => deleteSection(s.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </Accordion.Content>
+                )}
+              </Accordion.Item>
+            </Accordion.Root>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
@@ -1240,15 +1774,16 @@ export default function AdminClient() {
               {items.map((i, idx) => (
                 <li
                   key={i.id}
-                  className={`text-sm flex items-center justify-between ${i.published ? "" : "opacity-60"}`}
+                  className={`text-sm flex items-center justify-between cursor-pointer transition-colors px-2 py-1 rounded-sm ${i.published ? "" : "opacity-60"} ${selectedItem?.id === i.id ? "active bg-yellow-50 border border-yellow-300" : "hover:bg-neutral-50"}`}
                   draggable
                   onDragStart={() => setItemDragIndex(idx)}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => handleItemDropAt(idx)}
+                  onClick={() => { selectedItem?.id === i.id ? setSelectedItem(null) : loadItem(i.id) }}
                 >
                   <div className="flex items-center gap-2">
                     <GripVertical className="w-4 h-4 text-neutral-400" />
-                    <button className={`text-left ${i.published ? "" : "text-neutral-500"}`} onClick={() => loadItem(i.id)}>{i.title}</button>
+                    <button className={`text-left cursor-pointer ${i.published ? "" : "text-neutral-500"}`} onClick={() => loadItem(i.id)}>{String(i.title)}</button>
                   </div>
                   <button onClick={() => setDeleteItemId(i.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
                 </li>
@@ -1395,6 +1930,24 @@ export default function AdminClient() {
               <input value={mediaAlt} onChange={(e) => setMediaAlt(e.target.value)} placeholder="Alt" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
               <input value={mediaCaption} onChange={(e) => setMediaCaption(e.target.value)} placeholder="Caption" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
               <button onClick={addMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add Media</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {passwordModalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium">Change Password</h3>
+              <button onClick={() => setPasswordModalOpen(false)} className="text-neutral-600 hover:text-neutral-900">✕</button>
+            </div>
+            {passwordMessage && <div className="text-[11px] mb-2">{passwordMessage}</div>}
+            <input value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+            <input value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+            <div className="flex items-center justify-end gap-2 mt-2">
+              <button onClick={() => setPasswordModalOpen(false)} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Cancel</button>
+              <button onClick={async () => { await changePassword(); }} disabled={changingPassword} className={`px-3 py-1 text-[11px] rounded-sm border ${changingPassword ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>{changingPassword ? "Updating…" : "Update"}</button>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { createAdminSession } from "@/lib/auth"
 import { pool } from "@/lib/db"
 import bcrypt from "bcryptjs"
 import { ok, fail } from "@/lib/api"
+import crypto from "crypto"
 
 export const runtime = "nodejs"
 
@@ -26,6 +27,14 @@ export async function POST(req: Request) {
       const res = ok(req, { user: { username: user.username, role: user.role } }, "Login successful")
       res.cookies.set("admin_session", token, {
         httpOnly: true,
+        path: "/",
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 24 * 60 * 60,
+      })
+      const csrf = crypto.randomBytes(16).toString("hex")
+      res.cookies.set("csrf_token", csrf, {
+        httpOnly: false,
         path: "/",
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",

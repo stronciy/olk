@@ -10,7 +10,14 @@ export async function POST() {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 0,
+  })
+  res.cookies.set("csrf_token", "", {
+    httpOnly: false,
+    path: "/",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 0,
   })
   return res

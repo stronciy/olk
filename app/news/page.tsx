@@ -4,77 +4,97 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { X } from "lucide-react"
 
-type NewsItem = {
-  title: string
-  date: string
-  image?: string
-  text?: string
-}
+type NewsItem = { id: number; title: string; date: string; text: string; summary: string; content: string; previewUrl?: string }
 
-const newsData: NewsItem[] = [
-  {
-    title: "Totem of Recycling opens at Port Agency",
-    date: "2025-06-12",
-    image: "/architectural-light-installation-art-museum.jpg",
-    text:
-      "The exhibition tackles the problem of over consumption and consumerist lifestyle of the modern society, featuring large-scale installations and performative environments.",
-  },
-  {
-    title: "Non-existent Tribes at BURSA gallery",
-    date: "2018-11-05",
-    text:
-      "Levchenya’s solo exhibition demonstrates continuing interest in exploring the theory of social identity. Costumes and masks embody a mythological image of a person without community.",
-  },
-  {
-    title: "Homo Faber Venice showcase",
-    date: "2022-09-21",
-    image: "/max-richter-concert-stage-design.jpg",
-    text:
-      "Selected works presented in Venice highlighting intricate manual techniques ranging back to the 16th century, blending contemporary design with heritage craftsmanship.",
-  },
-  {
-    title: "Find Your Tribe project — recap",
-    date: "2017-04-10",
-    text:
-      "A manifest of social identity first proposed by Tajfel and Turner. Through photographs with ritual makeup, Levchenya explores people’s eagerness to classify themselves into groups.",
-  },
-  {
-    title: "Phillips Auction London: Indigo Chief",
-    date: "2022-03-05",
-    text:
-      "Significant placement at Phillips Auction London with the Indigo Chief piece, marking ongoing recognition across international venues.",
-  },
-  {
-    title: "Sotheby’s London: Collider 2011",
-    date: "2022-07-14",
-    image: "/lady-gaga-coachella-stage-design.jpg",
-    text:
-      "A special auction appearance in London reflecting the evolution of the artist’s textile vocabulary and modular spatial forms.",
-  },
-]
+// Loaded from API
 
 const clampText = (text: string, max = 250) =>
   text.length > max ? text.slice(0, max) + "…" : text
+
+const formatDateForView = (s: string) => {
+  const v = s?.includes("T") ? s : s?.replace(" ", "T")
+  const d = v ? new Date(v) : null
+  if (!d || Number.isNaN(d.getTime())) return s || ""
+  const dd = String(d.getDate()).padStart(2, "0")
+  const mm = String(d.getMonth() + 1).padStart(2, "0")
+  const yyyy = String(d.getFullYear())
+  const hh = String(d.getHours()).padStart(2, "0")
+  const mi = String(d.getMinutes()).padStart(2, "0")
+  return `${dd}.${mm}.${yyyy} ${hh}:${mi}`
+}
+
+const extractFirstImageSrc = (html: string) => {
+  if (!html) return undefined
+  try {
+    const m = html.match(/<img[^>]*src=["']([^"']+)["'][^>]*>/i)
+    return m?.[1]
+  } catch {
+    return undefined
+  }
+}
+
+const PLACEHOLDER_IMG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="100%" height="100%" fill="#e5e7eb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="24" font-family="Arial, sans-serif">No image</text></svg>`
+  )
 
 export default function NewsPage() {
   const [newsModalOpen, setNewsModalOpen] = useState(false)
   const [selectedNewsIndex, setSelectedNewsIndex] = useState<number | null>(null)
   const [visibleNewsCount, setVisibleNewsCount] = useState(6)
   const sentinelRef = useRef<HTMLDivElement | null>(null)
+  const [items, setItems] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string>("")
+  const [sortDesc, setSortDesc] = useState(true)
+  const [category, setCategory] = useState<string>("")
+  const [query, setQuery] = useState<string>("")
 
   useEffect(() => {
+    const load = async () => {
+      setLoading(true)
+      setError("")
+      try {
+        const r = await fetch("/api/information/news?sort=date&limit=100&nocache=1", { cache: "no-store" })
+        if (!r.ok) {
+          const t = await r.text().catch(() => "")
+          throw new Error(t || "Failed to load news")
+        }
+        const j = await r.json()
+        const arr = j?.data?.news || []
+        const mapped = arr.map((n: any) => {
+          const id = Number(n.id || 0)
+          const title = String(n.title || "")
+          const date = String(n.date || "")
+          const text = String(n.text || "")
+          const summary = String(n.summary || "")
+          const content = String(n.content || "")
+          const previewUrl = String(n.previewUrl || "")
+          const contentImg = extractFirstImageSrc(content)
+          const tileUrl = previewUrl || contentImg || PLACEHOLDER_IMG
+          return { id, title, date, text, summary, content, previewUrl: tileUrl }
+        })
+        setItems(mapped)
+      } catch (e: any) {
+        setError(typeof e?.message === "string" ? e.message : "Failed to load news")
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
     const sentinel = sentinelRef.current
     if (!sentinel) return
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setVisibleNewsCount((prev) => Math.min(prev + 6, newsData.length))
+          setVisibleNewsCount((prev) => Math.min(prev + 6, items.length))
         }
       })
     })
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [])
+  }, [items.length])
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -94,40 +114,73 @@ export default function NewsPage() {
 
       <main className="max-w-5xl mx-auto p-4 md:p-8 md:ml-48">
         <h2 className="text-xl font-medium tracking-wide mb-4">News</h2>
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <button
+            onClick={() => setSortDesc((v) => !v)}
+            className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+          >
+            {sortDesc ? "Newest first" : "Oldest first"}
+          </button>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search…"
+            className="border rounded-sm px-2 py-1 text-sm"
+          />
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border rounded-sm px-2 py-1 text-sm"
+          >
+            <option value="">All categories</option>
+            {[...new Set(items.map((i: any) => String((i as any).category || "")).filter(Boolean))].map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+        {loading ? (
+          <div className="text-xs text-neutral-500">Loading…</div>
+        ) : error ? (
+          <div className="text-xs text-red-600">{error}</div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {newsData.slice(0, visibleNewsCount).map((item, idx) => (
+          {items
+            .filter((i) => !category || (i as any).category === category)
+            .filter((i) => !query || i.title.toLowerCase().includes(query.toLowerCase()) || i.text.toLowerCase().includes(query.toLowerCase()) || i.summary.toLowerCase().includes(query.toLowerCase()))
+            .sort((a, b) => {
+              const ad = new Date(a.date).getTime()
+              const bd = new Date(b.date).getTime()
+              return sortDesc ? bd - ad : ad - bd
+            })
+            .slice(0, visibleNewsCount)
+            .map((item, idx) => (
             <div
               key={idx}
               className="group border rounded-sm overflow-hidden bg-white hover:shadow-md transition-shadow animate-in fade-in duration-200"
             >
               <div className="p-3">
-                <div className="text-xs text-green-600 mb-1">{new Date(item.date).toLocaleDateString()}</div>
+                <div className="text-xs text-green-600 mb-1">{formatDateForView(item.date)}</div>
                 <div className="text-sm font-medium mb-2 text-green-700">{item.title}</div>
               </div>
-              {item.image ? (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  className="w-full aspect-[4/3] object-cover"
-                />
-              ) : (
-                <div className="px-3 pb-3 text-sm text-green-700">{clampText(item.text || "")}</div>
-              )}
+              <img
+                src={item.previewUrl || PLACEHOLDER_IMG}
+                alt={item.title}
+                loading="lazy"
+                className="w-full aspect-[4/3] object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG
+                }}
+              />
+              <div className="px-3 pb-3 text-sm text-green-700">{clampText(item.text || "", 150)}</div>
               <div className="p-3">
-                <button
-                  onClick={() => {
-                    setSelectedNewsIndex(idx)
-                    setNewsModalOpen(true)
-                  }}
-                  className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100 transition-colors"
-                >
+                <Link href={`/news/${item.id}`} className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100 transition-colors">
                   Read More
-                </button>
+                </Link>
               </div>
             </div>
           ))}
         </div>
+        )}
         <div ref={sentinelRef} className="h-8" />
       </main>
 
@@ -136,8 +189,8 @@ export default function NewsPage() {
           <div className="bg-white rounded-sm max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <div className="text-xs text-green-600">{new Date(newsData[selectedNewsIndex].date).toLocaleDateString()}</div>
-                <div className="text-sm font-medium text-green-700">{newsData[selectedNewsIndex].title}</div>
+                <div className="text-xs text-green-600">{formatDateForView(items[selectedNewsIndex].date)}</div>
+                <div className="text-sm font-medium text-green-700">{items[selectedNewsIndex].title}</div>
               </div>
               <button
                 onClick={() => setNewsModalOpen(false)}
@@ -146,16 +199,17 @@ export default function NewsPage() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            {newsData[selectedNewsIndex].image && (
-              <img
-                src={newsData[selectedNewsIndex].image}
-                alt={newsData[selectedNewsIndex].title}
-                loading="lazy"
-                className="w-full object-cover"
-              />
-            )}
+            <img
+              src={items[selectedNewsIndex].previewUrl || PLACEHOLDER_IMG}
+              alt={items[selectedNewsIndex].title}
+              loading="lazy"
+              className="w-full object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG
+              }}
+            />
             <div className="p-4 text-sm text-green-700">
-              {newsData[selectedNewsIndex].text}
+              <div dangerouslySetInnerHTML={{ __html: items[selectedNewsIndex].content || items[selectedNewsIndex].summary }} />
             </div>
           </div>
         </div>

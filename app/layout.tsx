@@ -35,6 +35,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         {children}
+        <footer className="fixed bottom-0 left-0 right-0 border-t border-neutral-200 bg-white">
+          <div className="mx-auto max-w-5xl px-4 py-3 text-center text-[11px] text-neutral-700">
+            Copyright (c) 2020-2025 Oksana Levchenya. All Rights Reserved.
+          </div>
+        </footer>
         <Analytics />
       </body>
     </html>
