@@ -390,8 +390,9 @@ export default function WorkPage() {
   useEffect(() => {
     const load = async () => {
       const res = await fetch(`/api/work/items?section=${activeWorkSubcategory}`)
-      const data = await res.json()
-      const normalized: WorkItem[] = (data.items || []).map((i: any) => ({
+      const raw = await res.json().catch(() => ({}))
+      const srcItems = Array.isArray(raw?.items) ? raw.items : Array.isArray(raw?.data?.items) ? raw.data.items : []
+      const normalized: WorkItem[] = srcItems.map((i: any) => ({
         id: Number(i?.id ?? 0),
         title: String(i?.title || ""),
         slug: String(i?.slug || ""),
@@ -639,7 +640,7 @@ export default function WorkPage() {
               >
                 00 THUMBS
               </button>
-              {activeWorkSubcategory === "paint" ? (
+              {projects.length > 0 ? (
                 showThumbs ? (
                   <div className="p-2 grid grid-cols-1 gap-2">
                     {filteredProjects.map(({ p: project, idx }) => (
@@ -701,8 +702,12 @@ export default function WorkPage() {
                 {sections.map((s) => (
                   <button
                     key={s.slug}
-                    onClick={() => setActiveWorkSubcategory(s.slug)}
-                className={`px-3 py-1 text-[11px] rounded-sm border ${
+                    onClick={() => {
+                      setActiveWorkSubcategory(s.slug)
+                      setSelectedProject(0)
+                      setSearchQuery("")
+                    }}
+                    className={`px-3 py-1 text-[11px] rounded-sm border ${
                       activeWorkSubcategory === s.slug ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"
                     }`}
                   >
@@ -711,7 +716,7 @@ export default function WorkPage() {
                 ))}
               </div>
             </div>
-            {activeWorkSubcategory === "paint" ? (
+            {projects.length > 0 ? (
               <>
                 <div className="mb-4 md:mb-8">
                   <h2 className="text-xs md:text-sm font-medium tracking-wider mb-1">
