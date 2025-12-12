@@ -50,71 +50,7 @@ const sidebarProjects = [
   "THE WEEKND - EUROPEAN STADI...",
 ]
 
-const fairsData = [
-  { year: "2022", title: "Phillips Auction London (Indigo Chief)" },
-  { year: "2022", title: "Sotheby’s Auction London (Collider 2011)" },
-  { year: "2022", title: "Homo Faber, Venice" },
-  { year: "2019", title: "Revelations, Grand Palais, Paris, France" },
-  { year: "2019", title: "Milan Design Week, “Modernism” (Creative Ukraine), Milan, Italy" },
-  { year: "2018", title: "Dutch Design Week, Eindhoven, Netherlands" },
-]
-
-const websitesData = [
-  { url: "https://www.homofaber.com/en/ecollection/oksana-levchenya-207", label: "www.homofaber.com/en/ecollection/oksana-levchenya-207" },
-  { url: "https://www.1stdibs.com/dealers/olk-manufactory", label: "www.1stdibs.com/dealers/olk-manufactory" },
-  { url: "https://archello.com/olk-manufactory", label: "archello.com/olk-manufactory" },
-  { url: "https://artsy.net/artist/oksana-levchenya", label: "artsy.net/artist/oksana-levchenya" },
-  { url: "https://artsy.net/show/port-agency-totem-of-recycling-show-by-ukrainian-artist-oksana-levchenya", label: "artsy.net/show/port-agency-totem-of-recycling-show-by-ukrainian-artist-oksana-levchenya" },
-]
-
-const awardsData = [
-  { year: "2019", title: "Elle Decoration International Design Award Ukraine – winner — “Floor covering”, Synchronicity carpet" },
-  { year: "2019", title: "Art Laguna Prize – Finalist" },
-  { year: "2017", title: "London Art Biennale – winner" },
-  { year: "2017", title: "Royal Arts Prize, Shortlisted Artists, London, UK – shortlisted" },
-  { year: "2017", title: "Royal Art Prize – shortlisted" },
-  { year: "2017", title: "London Art Biennale – winner" },
-  { year: "—", title: "Art Laguna Prize – finalist" },
-  { year: "—", title: "EDIDA – winner" },
-]
-
-const soloExhibitionsData = [
-  { year: "2020", title: "Solo exhibition, on the occasion of the 27th Aniversary of the Independence of Ukraine. Gothic Hall, Brussel, Belgium" },
-  { year: "2018", title: "Non-existent tribes, Gallery Bursa, Kyiv, Ukraine. Textile sculptures, installations, video art" },
-  { year: "2017", title: "Find Your tribe and love them hard solo exhibition, Invogue Gallery, Odessa, Ukraine. Photo, textile art, tapestries" },
-  { year: "2017", title: "Art Ukraine Gallery “Quasi-Evolution”, Kyiv, Ukraine. Tapestries" },
-  { year: "2016", title: "Soul Searching, Bulgari, Kyiv, Ukraine" },
-  { year: "2016", title: "Soul Searching, Bogomolets National Medical University, Kyiv, Ukraine" },
-  { year: "2012", title: "Great expectations, FineArt Gallery, Kyiv, Ukraine" },
-  { year: "2011", title: "Warlike feminism, FineArt Gallery, Kyiv, Ukraine" },
-  { year: "2010", title: "Schastiye (Happiness) Luxury Gallery SadyPobedy, Odessa, Ukraine" },
-  { year: "2010", title: "Screenshot, Arsenal, Kyiv, Ukraine" },
-  { year: "2009", title: "SotsCapitalism, Ukrainian House, Kyiv, Ukraine" },
-]
-
-const groupExhibitionsData = [
-  { year: "2021", title: "Art Fashion Days, Avant-garden Gallery, Kyiv, Ukraine" },
-  { year: "2019", title: "Milan Design Week, Modern_ism, Milan, Italy. Ukrainian Object Design" },
-  { year: "2019", title: "Revelations, International Fine Craft and Creation Bienale, Grand Paleis, Paris, France. Textile, hand woven tapestry, objects." },
-  { year: "2018", title: "Art Laguna Prize 13th edition, finalists show. \"Space cossaks\", Arsenale, Venice, Italy" },
-  { year: "2018", title: "Modern_ism, Dutch Design week, Eindhoven, Netherlands. Textile, handwoven kilims" },
-  { year: "2017", title: "Royal Arts Prize, Find Your Tribe And Love Them Hard, London, UK" },
-  { year: "2017", title: "Lost&Found at Fondamenta degli Incurabili, Venice, Italy" },
-  { year: "2017", title: "London Art Biennial 2017, Soul Searching, winner. Gagliardi Gallery, London, UK" },
-  { year: "2015", title: "Art Kyiv Contemporary Soul Searching, Mystetskiy Arsenal, Kyiv, Ukraine" },
-  { year: "2014", title: "Art Kyiv Contemporary project Greed, Mystetskiy Arsenal, Kyiv, Ukraine" },
-  { year: "2013", title: "Art Southampton, NY, USA" },
-  { year: "2013", title: "ARTPALMBEACH-2012, Miami, USA" },
-  { year: "2012", title: "Art Kyiv Contemporary, Mystetskiy Arsenal, Kyiv, Ukraine" },
-  { year: "2012", title: "Kyiv Biennial 2012 - Arsenale 2012, Mystetskiy Arsenal, Kyiv, Ukraine" },
-  { year: "2012", title: "Great expectations, FineArt Gallery, Kiev, Ukraine" },
-  { year: "2011", title: "Collider Art-Kiev, Arsenal, Kiev, Ukraine" },
-  { year: "2010", title: "Screenshot Art-Kiev Contemporary Fair, Arsenal, Kiev, Ukraine" },
-  { year: "2010", title: "Diktators for VogdeLenie, Ukrainian House, Kiev, Ukraine" },
-  { year: "2010", title: "Participate of \"Ukrainian paradox\", ArtByGeneva Fair, Geneva, Switzerland" },
-  { year: "2009", title: "Sotscapitalism Art Kiev, Ukrainian House, Kiev, Ukraine" },
-  { year: "2009", title: "Torn World project curated by Adam Nankervis, MuseumMAN, Bereznitska and Partners Gallery, Kiev, Ukraine" },
-]
+ 
 
 type NewsItem = {
   title: string
@@ -206,6 +142,11 @@ export default function WorkPage() {
   const [selectedNewsIndex, setSelectedNewsIndex] = useState<number | null>(null)
   const [visibleNewsCount, setVisibleNewsCount] = useState(6)
   const newsSentinelRef = useRef<HTMLDivElement | null>(null)
+  const [fairs, setFairs] = useState<{ year: number | null; title: string }[]>([])
+  const [awards, setAwards] = useState<{ year: number | null; title: string }[]>([])
+  const [solo, setSolo] = useState<{ year: number | null; title: string }[]>([])
+  const [group, setGroup] = useState<{ year: number | null; title: string }[]>([])
+  const [websites, setWebsites] = useState<{ url: string; label: string }[]>([])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -257,6 +198,34 @@ export default function WorkPage() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    const loadInfo = async () => {
+      if (activeSection !== "information") return
+      if (infoCategory === "fairs" && fairs.length === 0) {
+        const r = await fetch("/api/information/fairs").then((x) => x.json()).catch(() => null)
+        const arr = r?.data?.fairs || r?.fairs || []
+        setFairs(arr.map((it: any) => ({ year: typeof it.year === "number" ? it.year : null, title: String(it.title || "") })))
+      } else if (infoCategory === "awards" && awards.length === 0) {
+        const r = await fetch("/api/information/awards").then((x) => x.json()).catch(() => null)
+        const arr = r?.data?.awards || r?.awards || []
+        setAwards(arr.map((it: any) => ({ year: typeof it.year === "number" ? it.year : null, title: String(it.title || "") })))
+      } else if (infoCategory === "solo" && solo.length === 0) {
+        const r = await fetch("/api/information/solo").then((x) => x.json()).catch(() => null)
+        const arr = r?.data?.solo || r?.solo || []
+        setSolo(arr.map((it: any) => ({ year: typeof it.year === "number" ? it.year : null, title: String(it.title || "") })))
+      } else if (infoCategory === "group" && group.length === 0) {
+        const r = await fetch("/api/information/group").then((x) => x.json()).catch(() => null)
+        const arr = r?.data?.group || r?.group || []
+        setGroup(arr.map((it: any) => ({ year: typeof it.year === "number" ? it.year : null, title: String(it.title || "") })))
+      } else if (infoCategory === "websites" && websites.length === 0) {
+        const r = await fetch("/api/information/websites").then((x) => x.json()).catch(() => null)
+        const arr = r?.data?.websites || r?.websites || []
+        setWebsites(arr.map((it: any) => ({ url: String(it.url || ""), label: String(it.label || "") })))
+      }
+    }
+    loadInfo()
+  }, [activeSection, infoCategory])
 
   useEffect(() => {
     const m = currentMedia[currentMediaIndex]
@@ -763,9 +732,9 @@ export default function WorkPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {fairsData.map((item, idx) => (
+                      {fairs.map((item, idx) => (
                         <TableRow key={idx}>
-                          <TableCell className="text-neutral-900">{item.year}</TableCell>
+                          <TableCell className="text-neutral-900">{item.year ?? "—"}</TableCell>
                           <TableCell className="text-neutral-700">{item.title}</TableCell>
                         </TableRow>
                       ))}
@@ -853,7 +822,7 @@ export default function WorkPage() {
               {infoCategory === "websites" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-4 text-sm">
                   <ul className="list-disc pl-5 space-y-2">
-                    {websitesData.map((w, idx) => (
+                    {websites.map((w, idx) => (
                       <li key={idx}>
                         <a href={w.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline break-all">{w.label}</a>
                       </li>
@@ -872,9 +841,9 @@ export default function WorkPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {awardsData.map((item, idx) => (
+                      {awards.map((item, idx) => (
                         <TableRow key={idx}>
-                          <TableCell className="text-neutral-900">{item.year}</TableCell>
+                          <TableCell className="text-neutral-900">{item.year ?? "—"}</TableCell>
                           <TableCell className="text-neutral-700">{item.title}</TableCell>
                         </TableRow>
                       ))}
@@ -893,9 +862,9 @@ export default function WorkPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {soloExhibitionsData.map((item, idx) => (
+                      {solo.map((item, idx) => (
                         <TableRow key={idx}>
-                          <TableCell className="text-neutral-900">{item.year}</TableCell>
+                          <TableCell className="text-neutral-900">{item.year ?? "—"}</TableCell>
                           <TableCell className="text-neutral-700">{item.title}</TableCell>
                         </TableRow>
                       ))}
@@ -913,9 +882,9 @@ export default function WorkPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {groupExhibitionsData.map((item, idx) => (
+                      {group.map((item, idx) => (
                         <TableRow key={idx}>
-                          <TableCell className="text-neutral-900">{item.year}</TableCell>
+                          <TableCell className="text-neutral-900">{item.year ?? "—"}</TableCell>
                           <TableCell className="text-neutral-700">{item.title}</TableCell>
                         </TableRow>
                       ))}

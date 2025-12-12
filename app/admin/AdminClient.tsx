@@ -1,13 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { GripVertical } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { GripVertical, CheckCircle, AlertCircle } from "lucide-react"
 
 type Section = { id: number; slug: string; name: string; seoTitle?: string | null; seoDescription?: string | null; seoKeywords?: string | null }
 type Item = { id: number; title: string; slug: string; published?: number; position?: number }
 type Media = { id: number; type: "IMAGE" | "VIDEO"; url: string; thumbnail?: string | null; caption?: string | null; alt?: string | null; position?: number }
 
 export default function AdminClient() {
+  const [adminTab, setAdminTab] = useState<"work" | "information">("work")
+  const [infoMenu, setInfoMenu] = useState<"about" | "news" | "contacts" | "fairs" | "awards" | "solo" | "group" | "websites">("about")
+  const [viewLoading, setViewLoading] = useState(false)
   const [sections, setSections] = useState<Section[]>([])
   const [items, setItems] = useState<Item[]>([])
   const [active, setActive] = useState<string>("paint")
@@ -42,6 +45,444 @@ export default function AdminClient() {
   const [passwordMessage, setPasswordMessage] = useState("")
   const [deleteItemId, setDeleteItemId] = useState<number | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [aboutText, setAboutText] = useState("")
+  const [contactsEmail, setContactsEmail] = useState("")
+  const [contactsPhone, setContactsPhone] = useState("")
+  const [contactsAddress, setContactsAddress] = useState("")
+  const [contactsInstagram, setContactsInstagram] = useState("")
+  const [contactsFacebook, setContactsFacebook] = useState("")
+  const [contactsWebsite, setContactsWebsite] = useState("")
+  const [news, setNews] = useState<{ title: string; date: string; text: string }[]>([])
+  const [newNewsTitle, setNewNewsTitle] = useState("")
+  const [newNewsDate, setNewNewsDate] = useState("")
+  const [newNewsText, setNewNewsText] = useState("")
+  const [fairs, setFairs] = useState<{ year: string; title: string }[]>([])
+  const [fairDragIndex, setFairDragIndex] = useState<number | null>(null)
+  const [newFairYear, setNewFairYear] = useState<string>("")
+  const [newFairTitle, setNewFairTitle] = useState("")
+  const [awards, setAwards] = useState<{ year: string; title: string }[]>([])
+  const [newAwardYear, setNewAwardYear] = useState<string>("")
+  const [newAwardTitle, setNewAwardTitle] = useState("")
+  const [solo, setSolo] = useState<{ year: string; title: string }[]>([])
+  const [newSoloYear, setNewSoloYear] = useState<string>("")
+  const [newSoloTitle, setNewSoloTitle] = useState("")
+  const [group, setGroup] = useState<{ year: string; title: string }[]>([])
+  const [newGroupYear, setNewGroupYear] = useState<string>("")
+  const [newGroupTitle, setNewGroupTitle] = useState("")
+  const [websites, setWebsites] = useState<{ url: string; label: string }[]>([])
+  const [newWebsiteUrl, setNewWebsiteUrl] = useState("")
+  const [newWebsiteLabel, setNewWebsiteLabel] = useState("")
+  const [noticeOpen, setNoticeOpen] = useState(false)
+  const [noticeType, setNoticeType] = useState<"success" | "error" | null>(null)
+  const [noticeMessage, setNoticeMessage] = useState("")
+  const noticeTimerRef = useRef<number | null>(null)
+  const [awardDragIndex, setAwardDragIndex] = useState<number | null>(null)
+  const [soloDragIndex, setSoloDragIndex] = useState<number | null>(null)
+  const [groupDragIndex, setGroupDragIndex] = useState<number | null>(null)
+
+  const showSuccess = (message = "Данные успешно сохранены") => {
+    if (noticeTimerRef.current) {
+      window.clearTimeout(noticeTimerRef.current)
+      noticeTimerRef.current = null
+    }
+    setNoticeType("success")
+    setNoticeMessage(message)
+    setNoticeOpen(true)
+    noticeTimerRef.current = window.setTimeout(() => {
+      setNoticeOpen(false)
+      setNoticeType(null)
+      setNoticeMessage("")
+      noticeTimerRef.current = null
+    }, 4000)
+  }
+  const showError = (message = "Ошибка сохранения") => {
+    if (noticeTimerRef.current) {
+      window.clearTimeout(noticeTimerRef.current)
+      noticeTimerRef.current = null
+    }
+    setNoticeType("error")
+    setNoticeMessage(message)
+    setNoticeOpen(true)
+    noticeTimerRef.current = window.setTimeout(() => {
+      setNoticeOpen(false)
+      setNoticeType(null)
+      setNoticeMessage("")
+      noticeTimerRef.current = null
+    }, 4500)
+  }
+
+  useEffect(() => {
+    try {
+      const savedTab = (localStorage.getItem("admin_tab") as "work" | "information") || "work"
+      const savedInfo = (localStorage.getItem("admin_info_menu") as typeof infoMenu) || "about"
+      setAdminTab(savedTab)
+      setInfoMenu(savedInfo)
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("admin_tab", adminTab)
+    } catch {}
+  }, [adminTab])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("admin_info_menu", infoMenu)
+    } catch {}
+  }, [infoMenu])
+
+  const switchTab = (tab: "work" | "information") => {
+    if (adminTab === tab) return
+    setViewLoading(true)
+    setAdminTab(tab)
+    setTimeout(() => setViewLoading(false), 150)
+  }
+
+  const switchInfo = (name: typeof infoMenu) => {
+    if (infoMenu === name) return
+    setViewLoading(true)
+    setInfoMenu(name)
+    setTimeout(() => setViewLoading(false), 150)
+  }
+
+  useEffect(() => {
+    const loadInfo = async () => {
+      if (adminTab !== "information") return
+      if (infoMenu === "about") {
+        const r = await fetch("/api/information/about").then((x) => x.json()).catch(() => null)
+        setAboutText(r?.data?.about?.text || "")
+      } else if (infoMenu === "contacts") {
+        const r = await fetch("/api/information/contacts").then((x) => x.json()).catch(() => null)
+        const c = r?.data?.contacts || {}
+        setContactsEmail(c.email || "")
+        setContactsPhone(c.phone || "")
+        setContactsAddress(c.address || "")
+        setContactsInstagram(c.instagram || "")
+        setContactsFacebook(c.facebook || "")
+        setContactsWebsite(c.website || "")
+      } else if (infoMenu === "news") {
+        const r = await fetch("/api/information/news").then((x) => x.json()).catch(() => null)
+        setNews(r?.data?.news?.map((n: any) => ({ title: String(n.title || ""), date: String(n.date || ""), text: String(n.text || "") })) || [])
+      } else if (infoMenu === "fairs") {
+        const r = await fetch("/api/information/fairs").then((x) => x.json()).catch(() => null)
+        setFairs(r?.data?.fairs?.map((n: any) => ({ year: String(n.year ?? ""), title: String(n.title || "") })) || [])
+      } else if (infoMenu === "awards") {
+        const r = await fetch("/api/information/awards").then((x) => x.json()).catch(() => null)
+        setAwards(r?.data?.awards?.map((n: any) => ({ year: String(n.year ?? ""), title: String(n.title || "") })) || [])
+      } else if (infoMenu === "solo") {
+        const r = await fetch("/api/information/solo").then((x) => x.json()).catch(() => null)
+        setSolo(r?.data?.solo?.map((n: any) => ({ year: String(n.year ?? ""), title: String(n.title || "") })) || [])
+      } else if (infoMenu === "group") {
+        const r = await fetch("/api/information/group").then((x) => x.json()).catch(() => null)
+        setGroup(r?.data?.group?.map((n: any) => ({ year: String(n.year ?? ""), title: String(n.title || "") })) || [])
+      } else if (infoMenu === "websites") {
+        const r = await fetch("/api/information/websites").then((x) => x.json()).catch(() => null)
+        setWebsites(r?.data?.websites?.map((w: any) => ({ url: String(w.url || ""), label: String(w.label || "") })) || [])
+      }
+    }
+    loadInfo()
+  }, [adminTab, infoMenu])
+
+  const saveAbout = async () => {
+    try {
+      const res = await fetch("/api/information/about", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: aboutText }) })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+
+  const saveContacts = async () => {
+    try {
+      const res = await fetch("/api/information/contacts", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: contactsEmail,
+          phone: contactsPhone,
+          address: contactsAddress,
+          instagram: contactsInstagram,
+          facebook: contactsFacebook,
+          website: contactsWebsite,
+        }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+
+  const addNews = () => {
+    if (!newNewsTitle.trim() || !newNewsDate.trim()) return
+    setNews((prev) => [...prev, { title: newNewsTitle.trim(), date: newNewsDate.trim(), text: newNewsText.trim() }])
+    setNewNewsTitle("")
+    setNewNewsDate("")
+    setNewNewsText("")
+  }
+  const saveNews = async () => {
+    try {
+      const res = await fetch("/api/information/news", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ news: news.map((n, i) => ({ ...n, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+
+  const addFair = () => {
+    const y = newFairYear.replace(/\D/g, "")
+    if (y === "" || !newFairTitle.trim()) return
+    setFairs((prev) => [...prev, { year: y, title: newFairTitle.trim() }])
+    setNewFairYear("")
+    setNewFairTitle("")
+  }
+  const saveFairs = async () => {
+    try {
+      const res = await fetch("/api/information/fairs", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fairs: fairs.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+  const persistFairsOrder = async (arr: { year: string; title: string }[]) => {
+    await fetch("/api/information/fairs", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fairs: arr.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+    })
+  }
+  const handleFairDropAt = async (targetIdx: number) => {
+    if (fairDragIndex === null || fairDragIndex === targetIdx) return
+    const arr = [...fairs]
+    const [it] = arr.splice(fairDragIndex, 1)
+    arr.splice(targetIdx, 0, it)
+    setFairs(arr)
+    setFairDragIndex(null)
+    await persistFairsOrder(arr)
+  }
+
+  const addAward = () => {
+    const y = newAwardYear.replace(/\D/g, "")
+    if (y === "" || !newAwardTitle.trim()) return
+    setAwards((prev) => [...prev, { year: y, title: newAwardTitle.trim() }])
+    setNewAwardYear("")
+    setNewAwardTitle("")
+  }
+  const saveAwards = async () => {
+    try {
+      const res = await fetch("/api/information/awards", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ awards: awards.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+  const persistAwardsOrder = async (arr: { year: string; title: string }[]) => {
+    await fetch("/api/information/awards", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ awards: arr.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+    })
+  }
+  const handleAwardDropAt = async (targetIdx: number) => {
+    if (awardDragIndex === null || awardDragIndex === targetIdx) return
+    const arr = [...awards]
+    const [it] = arr.splice(awardDragIndex, 1)
+    arr.splice(targetIdx, 0, it)
+    setAwards(arr)
+    setAwardDragIndex(null)
+    await persistAwardsOrder(arr)
+  }
+
+  const addSolo = () => {
+    const y = newSoloYear.replace(/\D/g, "")
+    if (y === "" || !newSoloTitle.trim()) return
+    setSolo((prev) => [...prev, { year: y, title: newSoloTitle.trim() }])
+    setNewSoloYear("")
+    setNewSoloTitle("")
+  }
+  const saveSolo = async () => {
+    try {
+      const res = await fetch("/api/information/solo", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ solo: solo.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+  const persistSoloOrder = async (arr: { year: string; title: string }[]) => {
+    await fetch("/api/information/solo", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ solo: arr.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+    })
+  }
+  const handleSoloDropAt = async (targetIdx: number) => {
+    if (soloDragIndex === null || soloDragIndex === targetIdx) return
+    const arr = [...solo]
+    const [it] = arr.splice(soloDragIndex, 1)
+    arr.splice(targetIdx, 0, it)
+    setSolo(arr)
+    setSoloDragIndex(null)
+    await persistSoloOrder(arr)
+  }
+
+  const addGroup = () => {
+    const y = newGroupYear.replace(/\D/g, "")
+    if (y === "" || !newGroupTitle.trim()) return
+    setGroup((prev) => [...prev, { year: y, title: newGroupTitle.trim() }])
+    setNewGroupYear("")
+    setNewGroupTitle("")
+  }
+  const saveGroup = async () => {
+    try {
+      const res = await fetch("/api/information/group", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group: group.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
+  const persistGroupOrder = async (arr: { year: string; title: string }[]) => {
+    await fetch("/api/information/group", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ group: arr.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+    })
+  }
+  const handleGroupDropAt = async (targetIdx: number) => {
+    if (groupDragIndex === null || groupDragIndex === targetIdx) return
+    const arr = [...group]
+    const [it] = arr.splice(groupDragIndex, 1)
+    arr.splice(targetIdx, 0, it)
+    setGroup(arr)
+    setGroupDragIndex(null)
+    await persistGroupOrder(arr)
+  }
+
+  const addWebsite = () => {
+    if (!newWebsiteUrl.trim()) return
+    setWebsites((prev) => [...prev, { url: newWebsiteUrl.trim(), label: newWebsiteLabel.trim() }])
+    setNewWebsiteUrl("")
+    setNewWebsiteLabel("")
+  }
+  const saveWebsites = async () => {
+    try {
+      const res = await fetch("/api/information/websites", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ websites: websites.map((w, i) => ({ ...w, position: i })) }),
+      })
+      if (!res.ok) {
+        let msg = "Ошибка сохранения"
+        try {
+          const e = await res.json()
+          msg = String(e?.error || e?.message || msg)
+        } catch {
+          msg = await res.text().catch(() => msg)
+        }
+        showError(msg)
+        return
+      }
+      showSuccess()
+    } catch {
+      showError("Ошибка сети")
+    }
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -358,49 +799,442 @@ export default function AdminClient() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-xl font-medium tracking-wide mb-4">Admin</h2>
-      <div className="flex gap-2 mb-4">
-        {sections.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => setActive(s.slug)}
-            className={`px-3 py-1 text-[11px] rounded-sm border ${active === s.slug ? "bg-yellow-400" : "bg-white"}`}
-          >
-            {s.name}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 border-b border-neutral-200 pb-2 mb-4">
+        <button
+          onClick={() => switchTab("work")}
+          className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "work" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
+        >
+          WORK
+        </button>
+        <button
+          onClick={() => switchTab("information")}
+          className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "information" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
+        >
+          INFORMATION
+        </button>
       </div>
-      <div className="bg-white border border-neutral-200 rounded-sm p-4 mb-4">
-        <h3 className="text-sm font-medium mb-2">Account</h3>
-        <div className="flex items-center gap-2 mb-2">
-          <button onClick={logout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Logout</button>
-        </div>
-        <div className="mt-2">
-          <p className="text-xs text-neutral-500 mb-2">Change password</p>
-          {passwordMessage && <div className="text-xs mb-2">{passwordMessage}</div>}
-          <input value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-          <input value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-          <button onClick={changePassword} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Update</button>
-        </div>
-      <h3 className="text-sm font-medium mb-2">Manage Sections</h3>
-        <ul className="space-y-2">
-          {sections.map((s, idx) => (
-            <li key={s.id} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button onClick={() => moveSection(s.id, -1)} className="px-2 py-1 text-[11px] rounded-sm border">Up</button>
-                <button onClick={() => moveSection(s.id, 1)} className="px-2 py-1 text-[11px] rounded-sm border">Down</button>
-                <span className="text-sm">{idx + 1}. {s.name}</span>
-              </div>
-              <button onClick={() => deleteSection(s.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium">Items</h3>
-            <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
+      {adminTab === "information" ? (
+        <div>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {(["about","news","contacts","fairs","awards","solo","group","websites"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => switchInfo(cat)}
+                className={`px-3 py-1 text-[11px] rounded-sm border ${infoMenu === cat ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
+              >
+                {cat.toUpperCase()}
+              </button>
+            ))}
           </div>
+          {viewLoading && <div className="text-xs text-neutral-500 mb-3 animate-in fade-in duration-150">Loading…</div>}
+          {infoMenu === "about" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit About</h3>
+              <textarea value={aboutText} onChange={(e) => setAboutText(e.target.value)} placeholder="About text" className="border rounded-sm px-2 py-1 text-sm w-full h-48 mb-2" />
+              <button onClick={saveAbout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
+            </div>
+          )}
+          {infoMenu === "news" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Manage News</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                <input value={newNewsTitle} onChange={(e) => setNewNewsTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newNewsDate} onChange={(e) => setNewNewsDate(e.target.value)} type="date" placeholder="Date" className="border rounded-sm px-2 py-1 text-sm w-full" />
+              </div>
+              <textarea value={newNewsText} onChange={(e) => setNewNewsText(e.target.value)} placeholder="Text" className="border rounded-sm px-2 py-1 text-sm w-full h-32 mb-2" />
+              <div className="flex items-center gap-2">
+                <button onClick={addNews} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add</button>
+                <button onClick={saveNews} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {infoMenu === "contacts" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Contacts</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                <input value={contactsEmail} onChange={(e) => setContactsEmail(e.target.value)} placeholder="Email" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={contactsPhone} onChange={(e) => setContactsPhone(e.target.value)} placeholder="Phone" className="border rounded-sm px-2 py-1 text-sm w-full" />
+              </div>
+              <input value={contactsAddress} onChange={(e) => setContactsAddress(e.target.value)} placeholder="Address" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={contactsInstagram} onChange={(e) => setContactsInstagram(e.target.value)} placeholder="Instagram" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={contactsFacebook} onChange={(e) => setContactsFacebook(e.target.value)} placeholder="Facebook" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={contactsWebsite} onChange={(e) => setContactsWebsite(e.target.value)} placeholder="Website" className="border rounded-sm px-2 py-1 text-sm w-full" />
+              </div>
+              <button onClick={saveContacts} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
+            </div>
+          )}
+          {infoMenu === "fairs" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Fairs</h3>
+              <div className="overflow-x-auto mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-10 px-2 py-1 border-b"></th>
+                      <th className="text-left w-24 px-2 py-1 border-b">Year</th>
+                      <th className="text-left px-2 py-1 border-b">Event</th>
+                      <th className="text-right w-24 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fairs.map((row, idx) => (
+                      <tr
+                        key={idx}
+                        className="align-top"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleFairDropAt(idx)}
+                      >
+                        <td className="px-2 py-1">
+                          <button
+                            draggable
+                            onDragStart={() => setFairDragIndex(idx)}
+                            className="px-1 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                            title="Drag"
+                          >
+                            <GripVertical className="w-4 h-4 text-neutral-400" />
+                          </button>
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.year}
+                            onChange={(e) => {
+                              const v = e.target.value.replace(/\D/g, "")
+                              setFairs((prev) => prev.map((x, j) => (j === idx ? { ...x, year: v } : x)))
+                            }}
+                            placeholder="Year"
+                            className="border rounded-sm px-2 py-1 text-sm w-24"
+                          />
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.title}
+                            onChange={(e) =>
+                              setFairs((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
+                            }
+                            placeholder="Event"
+                            className="border rounded-sm px-2 py-1 text-sm w-full"
+                          />
+                        </td>
+                        <td className="px-2 py-1 text-right">
+                          <button
+                            onClick={() => setFairs((prev) => prev.filter((_, j) => j !== idx))}
+                            className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={newFairYear} onChange={(e) => setNewFairYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newFairTitle} onChange={(e) => setNewFairTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={addFair} disabled={newFairYear.trim() === "" || !newFairTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newFairYear.trim() === "" || !newFairTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
+                <button onClick={saveFairs} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {infoMenu === "awards" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Awards</h3>
+              <div className="overflow-x-auto mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-10 px-2 py-1 border-b"></th>
+                      <th className="text-left w-24 px-2 py-1 border-b">Year</th>
+                      <th className="text-left px-2 py-1 border-b">Title</th>
+                      <th className="text-right w-24 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {awards.map((row, idx) => (
+                      <tr
+                        key={idx}
+                        className="align-top"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleAwardDropAt(idx)}
+                      >
+                        <td className="px-2 py-1">
+                          <button
+                            draggable
+                            onDragStart={() => setAwardDragIndex(idx)}
+                            className="px-1 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                            title="Drag"
+                          >
+                            <GripVertical className="w-4 h-4 text-neutral-400" />
+                          </button>
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.year}
+                            onChange={(e) => {
+                              const v = e.target.value.replace(/\D/g, "")
+                              setAwards((prev) => prev.map((x, j) => (j === idx ? { ...x, year: v } : x)))
+                            }}
+                            placeholder="Year"
+                            className="border rounded-sm px-2 py-1 text-sm w-24"
+                          />
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.title}
+                            onChange={(e) =>
+                              setAwards((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
+                            }
+                            placeholder="Title"
+                            className="border rounded-sm px-2 py-1 text-sm w-full"
+                          />
+                        </td>
+                        <td className="px-2 py-1 text-right">
+                          <button
+                            onClick={() => setAwards((prev) => prev.filter((_, j) => j !== idx))}
+                            className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={newAwardYear} onChange={(e) => setNewAwardYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newAwardTitle} onChange={(e) => setNewAwardTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={addAward} disabled={newAwardYear.trim() === "" || !newAwardTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newAwardYear.trim() === "" || !newAwardTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
+                <button onClick={saveAwards} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {infoMenu === "solo" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Solo Exhibitions</h3>
+              <div className="overflow-x-auto mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-10 px-2 py-1 border-b"></th>
+                      <th className="text-left w-24 px-2 py-1 border-b">Year</th>
+                      <th className="text-left px-2 py-1 border-b">Title</th>
+                      <th className="text-right w-24 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {solo.map((row, idx) => (
+                      <tr
+                        key={idx}
+                        className="align-top"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleSoloDropAt(idx)}
+                      >
+                        <td className="px-2 py-1">
+                          <button
+                            draggable
+                            onDragStart={() => setSoloDragIndex(idx)}
+                            className="px-1 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                            title="Drag"
+                          >
+                            <GripVertical className="w-4 h-4 text-neutral-400" />
+                          </button>
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.year}
+                            onChange={(e) => {
+                              const v = e.target.value.replace(/\D/g, "")
+                              setSolo((prev) => prev.map((x, j) => (j === idx ? { ...x, year: v } : x)))
+                            }}
+                            placeholder="Year"
+                            className="border rounded-sm px-2 py-1 text-sm w-24"
+                          />
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.title}
+                            onChange={(e) =>
+                              setSolo((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
+                            }
+                            placeholder="Title"
+                            className="border rounded-sm px-2 py-1 text-sm w-full"
+                          />
+                        </td>
+                        <td className="px-2 py-1 text-right">
+                          <button
+                            onClick={() => setSolo((prev) => prev.filter((_, j) => j !== idx))}
+                            className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={newSoloYear} onChange={(e) => setNewSoloYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newSoloTitle} onChange={(e) => setNewSoloTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={addSolo} disabled={newSoloYear.trim() === "" || !newSoloTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newSoloYear.trim() === "" || !newSoloTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
+                <button onClick={saveSolo} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {infoMenu === "group" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Group Exhibitions</h3>
+              <div className="overflow-x-auto mb-3">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left w-10 px-2 py-1 border-b"></th>
+                      <th className="text-left w-24 px-2 py-1 border-b">Year</th>
+                      <th className="text-left px-2 py-1 border-b">Title</th>
+                      <th className="text-right w-24 px-2 py-1 border-b"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.map((row, idx) => (
+                      <tr
+                        key={idx}
+                        className="align-top"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleGroupDropAt(idx)}
+                      >
+                        <td className="px-2 py-1">
+                          <button
+                            draggable
+                            onDragStart={() => setGroupDragIndex(idx)}
+                            className="px-1 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                            title="Drag"
+                          >
+                            <GripVertical className="w-4 h-4 text-neutral-400" />
+                          </button>
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.year}
+                            onChange={(e) => {
+                              const v = e.target.value.replace(/\D/g, "")
+                              setGroup((prev) => prev.map((x, j) => (j === idx ? { ...x, year: v } : x)))
+                            }}
+                            placeholder="Year"
+                            className="border rounded-sm px-2 py-1 text-sm w-24"
+                          />
+                        </td>
+                        <td className="px-2 py-1">
+                          <input
+                            value={row.title}
+                            onChange={(e) =>
+                              setGroup((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
+                            }
+                            placeholder="Title"
+                            className="border rounded-sm px-2 py-1 text-sm w-full"
+                          />
+                        </td>
+                        <td className="px-2 py-1 text-right">
+                          <button
+                            onClick={() => setGroup((prev) => prev.filter((_, j) => j !== idx))}
+                            className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <input value={newGroupYear} onChange={(e) => setNewGroupYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newGroupTitle} onChange={(e) => setNewGroupTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={addGroup} disabled={newGroupYear.trim() === "" || !newGroupTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newGroupYear.trim() === "" || !newGroupTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
+                <button onClick={saveGroup} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {infoMenu === "websites" && (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-200">
+              <h3 className="text-sm font-medium mb-2">Edit Websites</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                <input value={newWebsiteUrl} onChange={(e) => setNewWebsiteUrl(e.target.value)} placeholder="URL" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                <input value={newWebsiteLabel} onChange={(e) => setNewWebsiteLabel(e.target.value)} placeholder="Label" className="border rounded-sm px-2 py-1 text-sm w-full" />
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={addWebsite} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add</button>
+                <button onClick={saveWebsites} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+          {noticeOpen && noticeType && (
+            <div className={`fixed left-1/2 -translate-x-1/2 bottom-4 z-50 w-[calc(100%-2rem)] max-w-sm sm:max-w-md md:max-w-lg shadow-lg rounded-sm border ${noticeType === "success" ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+              <div className="flex items-center gap-2 px-3 py-2">
+                {noticeType === "success" ? (
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-red-600" />
+                )}
+                <div className={`text-sm ${noticeType === "success" ? "text-green-800" : "text-red-800"}`}>{noticeMessage}</div>
+              </div>
+            </div>
+          )}
+        </div>
+          ) : (
+        <div>
+          <div className="flex gap-2 mb-4">
+            {sections.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setActive(s.slug)}
+                className={`px-3 py-1 text-[11px] rounded-sm border ${active === s.slug ? "bg-yellow-400" : "bg-white"}`}
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
+          <div className="bg-white border border-neutral-200 rounded-sm p-4 mb-4">
+            <h3 className="text-sm font-medium mb-2">Account</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <button onClick={logout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Logout</button>
+            </div>
+            <div className="mt-2">
+              <p className="text-xs text-neutral-500 mb-2">Change password</p>
+              {passwordMessage && <div className="text-xs mb-2">{passwordMessage}</div>}
+              <input value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+              <input value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+              <button onClick={changePassword} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Update</button>
+            </div>
+            <h3 className="text-sm font-medium mb-2">Manage Sections</h3>
+            <ul className="space-y-2">
+              {sections.map((s, idx) => (
+                <li key={s.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => moveSection(s.id, -1)} className="px-2 py-1 text-[11px] rounded-sm border">Up</button>
+                    <button onClick={() => moveSection(s.id, 1)} className="px-2 py-1 text-[11px] rounded-sm border">Down</button>
+                    <span className="text-sm">{idx + 1}. {s.name}</span>
+                  </div>
+                  <button onClick={() => deleteSection(s.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium">Items</h3>
+                <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
+              </div>
           <div className="h-full overflow-y-auto">
             <ul className="space-y-2">
               {items.map((i, idx) => (
@@ -448,7 +1282,9 @@ export default function AdminClient() {
             </div>
           )}
         </div>
-      </div>
+        </div>
+        </div>
+      )}
       {createOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4">
