@@ -20,6 +20,17 @@ type WorkItem = {
   media: Media[]
 }
 
+type Section = {
+  id: number
+  slug: string
+  name: string
+  position: number
+  visible: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+}
+
 const sidebarProjects = [
   "LIBRARY OF LIGHT",
   "LADY GAGA COACHELLA",
@@ -178,6 +189,7 @@ export default function WorkPage() {
   const fullscreenContainerRef = useRef<HTMLDivElement | null>(null)
   const [zoomOverlayColor, setZoomOverlayColor] = useState<"black" | "white">("white")
   const [zoomOverlaySize, setZoomOverlaySize] = useState<number>(0)
+  const [sections, setSections] = useState<Section[]>([])
   const [infoCategory, setInfoCategory] = useState<
     | "about"
     | "news"
@@ -188,9 +200,7 @@ export default function WorkPage() {
     | "fairs"
     | "websites"
   >("about")
-  const [activeWorkSubcategory, setActiveWorkSubcategory] = useState<
-    "paint" | "prints" | "mask" | "carpet" | "spare"
-  >("paint")
+  const [activeWorkSubcategory, setActiveWorkSubcategory] = useState<string>("paint")
   const [showThumbs, setShowThumbs] = useState(false)
   const [newsModalOpen, setNewsModalOpen] = useState(false)
   const [selectedNewsIndex, setSelectedNewsIndex] = useState<number | null>(null)
@@ -230,7 +240,23 @@ export default function WorkPage() {
 
   useEffect(() => {
     setImageError(false)
-  }, [selectedProject, currentMediaIndex])
+  }, [fullscreenOpen])
+
+  useEffect(() => {
+    const load = async () => {
+      const r = await fetch("/api/work/sections")
+      const data = r.ok ? await r.json() : { sections: [] }
+      const arr: Section[] = (data.sections || []).filter((s: any) => s && s.slug)
+      setSections(arr)
+      const slugs = arr.map((s) => s.slug)
+      if (!slugs.includes(activeWorkSubcategory)) {
+        if (slugs.length > 0) {
+          setActiveWorkSubcategory(slugs[0])
+        }
+      }
+    }
+    load()
+  }, [])
 
   useEffect(() => {
     const m = currentMedia[currentMediaIndex]
@@ -534,15 +560,15 @@ export default function WorkPage() {
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div className="text-xs font-medium tracking-wider">WORK</div>
               <div className="flex flex-wrap gap-2">
-                {(["paint", "prints", "mask", "carpet", "spare"] as const).map((cat) => (
+                {sections.map((s) => (
                   <button
-                    key={cat}
-                    onClick={() => setActiveWorkSubcategory(cat)}
+                    key={s.slug}
+                    onClick={() => setActiveWorkSubcategory(s.slug)}
                     className={`px-3 py-1 text-[11px] rounded-sm border ${
-                      activeWorkSubcategory === cat ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"
+                      activeWorkSubcategory === s.slug ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"
                     }`}
                   >
-                    {cat.toUpperCase()}
+                    {(s.name || s.slug).toUpperCase()}
                   </button>
                 ))}
               </div>

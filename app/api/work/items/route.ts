@@ -9,6 +9,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
     const sectionSlug = searchParams.get("section") || "paint"
+    const isAdmin = requireAdmin(req)
     const conn = await pool.getConnection()
     try {
       await conn.query(
@@ -21,7 +22,9 @@ export async function GET(req: Request) {
       if (!sections.length) return NextResponse.json({ items: [] })
       const section = sections[0]
       const [items]: any = await conn.query(
-        "SELECT * FROM WorkItem WHERE sectionId = ? AND published = 1 ORDER BY position ASC",
+        isAdmin
+          ? "SELECT * FROM WorkItem WHERE sectionId = ? ORDER BY position ASC"
+          : "SELECT * FROM WorkItem WHERE sectionId = ? AND published = 1 ORDER BY position ASC",
         [section.id]
       )
       const itemIds = items.map((i: any) => i.id)

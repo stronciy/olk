@@ -406,7 +406,7 @@ export default function AdminClient() {
               {items.map((i, idx) => (
                 <li
                   key={i.id}
-                  className="text-sm flex items-center justify-between"
+                  className={`text-sm flex items-center justify-between ${i.published ? "" : "opacity-60"}`}
                   draggable
                   onDragStart={() => setItemDragIndex(idx)}
                   onDragOver={(e) => e.preventDefault()}
@@ -414,7 +414,7 @@ export default function AdminClient() {
                 >
                   <div className="flex items-center gap-2">
                     <GripVertical className="w-4 h-4 text-neutral-400" />
-                    <button className="text-left" onClick={() => loadItem(i.id)}>{i.title}</button>
+                    <button className={`text-left ${i.published ? "" : "text-neutral-500"}`} onClick={() => loadItem(i.id)}>{i.title}</button>
                   </div>
                   <button onClick={() => setDeleteItemId(i.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
                 </li>
