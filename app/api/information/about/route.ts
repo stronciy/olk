@@ -30,11 +30,22 @@ export async function GET(req: Request) {
 export async function PUT(req: Request) {
   try {
     if (!requireAdmin(req)) return fail(req, 401, "UNAUTHORIZED", "Unauthorized", { type: "AuthenticationError" })
-    const body = await req.json()
-    const schema = z.object({ text: z.string().max(200000).default("") })
-    const parsed = schema.safeParse(body)
-    if (!parsed.success) return fail(req, 400, "VALIDATION_ERROR", "Invalid input", { type: "ValidationError", details: parsed.error.flatten() })
-    const { text } = parsed.data
+    const ct = req.headers.get("content-type") || ""
+    let incomingText = ""
+    if (ct.includes("application/json")) {
+      const body = await req.json().catch(() => ({}))
+      if (typeof body?.text === "string") incomingText = body.text
+      else if (typeof body?.content === "string") incomingText = body.content
+      else if (typeof body?.about === "string") incomingText = body.about
+      else if (typeof body?.data?.text === "string") incomingText = body.data.text
+      else incomingText = ""
+    } else {
+      incomingText = await req.text().catch(() => "")
+    }
+    if (typeof incomingText !== "string") incomingText = String(incomingText || "")
+    if (incomingText.length > 1_000_000) {
+      return fail(req, 400, "VALIDATION_ERROR", "Text is too long", { type: "ValidationError", details: [{ field: "text", message: "Max length 1,000,000" }] })
+    }
     const sanitize = (html: string) => {
       let s = String(html || "")
       s = s.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
@@ -46,7 +57,7 @@ export async function PUT(req: Request) {
       s = s.replace(/<object[\s\S]*?>[\s\S]*?<\/object>/gi, "")
       return s
     }
-    const safeText = sanitize(text)
+    const safeText = sanitize(incomingText)
     const conn = await pool.getConnection()
     try {
       await conn.query(
