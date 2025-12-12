@@ -11,11 +11,11 @@ export async function GET(req: Request) {
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text TEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text MEDIUMTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
       const [rows]: any = await conn.query("SELECT * FROM InformationAbout WHERE id = 1")
       if (!rows.length) {
-        await conn.query("INSERT INTO InformationAbout (id, text, updatedAt) VALUES (1, '', NOW())")
+        await conn.query("REPLACE INTO InformationAbout (id, text, updatedAt) VALUES (1, '', NOW())")
         return ok(req, { about: { text: "" } })
       }
       return ok(req, { about: { text: rows[0].text || "" } })
@@ -53,6 +53,12 @@ export async function PUT(req: Request) {
         "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text MEDIUMTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
       await conn.query("CREATE TABLE IF NOT EXISTS InformationAboutRevisions (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      const [cols]: any = await conn.query("SHOW COLUMNS FROM InformationAboutRevisions")
+      const idCol = (cols || []).find((c: any) => String(c.Field) === "id")
+      const autoInc = String(idCol?.Extra || "").includes("auto_increment")
+      if (!autoInc) {
+        await conn.query("ALTER TABLE InformationAboutRevisions MODIFY id INT AUTO_INCREMENT PRIMARY KEY")
+      }
       const [rows]: any = await conn.query("SELECT text FROM InformationAbout WHERE id = 1")
       if (rows?.length && typeof rows[0]?.text === "string") {
         await conn.query("INSERT INTO InformationAboutRevisions (text, createdAt) VALUES (?, NOW())", [rows[0].text])
