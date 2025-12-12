@@ -31,6 +31,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const enableVercelAnalytics = process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === "true"
   return (
     <html lang="en">
       <body className={`antialiased`}>
@@ -40,7 +41,7 @@ export default function RootLayout({
             Copyright (c) 2020-2025 Oksana Levchenya. All Rights Reserved.
           </div>
         </footer>
-        <Analytics />
+        {enableVercelAnalytics && <Analytics />}
       </body>
     </html>
   )
