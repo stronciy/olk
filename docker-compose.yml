@@ -1,7 +1,8 @@
 services:
   mariadb:
     image: mariadb:11.4
-    platform: linux/arm64/v8
+    #platform: linux/arm64/v8
+    platform: linux/amd64
     container_name: mariadb_local
     environment:
       MARIADB_ROOT_PASSWORD: Hslhvhkd22
