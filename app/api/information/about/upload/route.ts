@@ -21,8 +21,8 @@ export async function POST(req: Request) {
     const previewPath = path.join(uploadsDir, `${nameBase}-preview.${ext}`)
     await sharp(buf).resize({ width: 1920, withoutEnlargement: true }).toFile(fullPath)
     await sharp(buf).resize(300, 200, { fit: "cover" }).toFile(previewPath)
-    const fullUrl = `/uploads/about/${path.basename(fullPath)}`
-    const previewUrl = `/uploads/about/${path.basename(previewPath)}`
+    const fullUrl = `/api/information/about/file/${path.basename(fullPath)}`
+    const previewUrl = `/api/information/about/file/${path.basename(previewPath)}`
     const res = ok(req, { coverUrl: fullUrl, previewUrl }, "Uploaded", "SUCCESS", 201)
     res.headers.set("Cache-Control", "no-store")
     return res

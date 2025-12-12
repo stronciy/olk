@@ -309,7 +309,8 @@ export default function WorkPage() {
           }
           const j = await r.json().catch(() => ({}))
           const t = j?.data?.about?.text || j?.about?.text || ""
-          setAboutHtml(String(t))
+          const rewritten = String(t).replace(/src="\/uploads\/about\/([^"]+)"/g, 'src="/api/information/about/file/$1"')
+          setAboutHtml(rewritten)
         } catch (e: any) {
           setAboutError(typeof e?.message === "string" ? e.message : "Ошибка загрузки")
         } finally {
