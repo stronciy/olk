@@ -1,0 +1,807 @@
+{
+  "Users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "passwordHash": "$2b$10$tAs5Mh3dAqDfzIEZixjJdu7rJatA9lfMDJjVbedqOnhVl1Mj.jOfW",
+      "role": "admin",
+      "createdAt": "2025-12-11T15:06:46.000Z",
+      "updatedAt": "2025-12-12T13:56:11.000Z"
+    }
+  ],
+  "UserPasswordHistory": [
+    {
+      "id": 1,
+      "userId": 1,
+      "passwordHash": "$2b$10$v9eZYh2xyavSTlypmNpzo.Cp6IauL4EyQvNycC3SAXbIz87RaKB.2",
+      "createdAt": "2025-12-12T13:56:11.000Z"
+    }
+  ],
+  "PasswordChangeAttempts": [
+    {
+      "id": 1,
+      "userId": 1,
+      "ip": "::1",
+      "createdAt": "2025-12-12T13:56:11.000Z"
+    }
+  ],
+  "Address": [],
+  "InformationAbout": [
+    {
+      "id": 1,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p><em>Oksana Levchenya-Konstantinovska</em> was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s <strong>OLK MANUFACTORY,</strong> has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "updatedAt": "2025-12-12T13:49:40.000Z"
+    }
+  ],
+  "InformationAboutRevisions": [
+    {
+      "id": 1,
+      "text": "",
+      "createdAt": "2025-12-12T13:12:51.000Z"
+    },
+    {
+      "id": 2,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:12:56.000Z"
+    },
+    {
+      "id": 3,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><br></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:13:43.000Z"
+    },
+    {
+      "id": 4,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:16:56.000Z"
+    },
+    {
+      "id": 5,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:30.000Z"
+    },
+    {
+      "id": 6,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:33.000Z"
+    },
+    {
+      "id": 7,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:36.000Z"
+    },
+    {
+      "id": 8,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:38.000Z"
+    },
+    {
+      "id": 9,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at&nbsp;BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:39.000Z"
+    },
+    {
+      "id": 10,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:40.000Z"
+    },
+    {
+      "id": 11,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:44.000Z"
+    },
+    {
+      "id": 12,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;<br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:47.000Z"
+    },
+    {
+      "id": 13,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:17:53.000Z"
+    },
+    {
+      "id": 14,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:18:05.000Z"
+    },
+    {
+      "id": 15,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img style=\"float: left;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:18:25.000Z"
+    },
+    {
+      "id": 16,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img style=\"float: left;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:18:39.000Z"
+    },
+    {
+      "id": 17,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:18:41.000Z"
+    },
+    {
+      "id": 18,
+      "text": "<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p><br><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:18:59.000Z"
+    },
+    {
+      "id": 19,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:19:35.000Z"
+    },
+    {
+      "id": 20,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p><img src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\">The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:19:39.000Z"
+    },
+    {
+      "id": 21,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.<img style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\" src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\"></p>",
+      "createdAt": "2025-12-12T13:19:41.000Z"
+    },
+    {
+      "id": 22,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.<img style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; float: right;\" src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\"></p>",
+      "createdAt": "2025-12-12T13:19:45.000Z"
+    },
+    {
+      "id": 23,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p><img style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; float: right;\" src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\"></p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:19:48.000Z"
+    },
+    {
+      "id": 24,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p><img style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; float: right;\" src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\"></p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:19:58.000Z"
+    },
+    {
+      "id": 25,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p><img style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; float: right;\" src=\"/uploads/about/1765552768304-zzs9z0vtr8n.jpg\" alt=\"\" width=\"250\" height=\"369\"></p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:20:52.000Z"
+    },
+    {
+      "id": 26,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:20:52.000Z"
+    },
+    {
+      "id": 27,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s OLK MANUFACTORY, has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:25:55.000Z"
+    },
+    {
+      "id": 28,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p>Oksana Levchenya-Konstantinovska was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s <strong>OLK MANUFACTORY,</strong> has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:26:08.000Z"
+    },
+    {
+      "id": 29,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p><em>Oksana Levchenya-Konstantinovska</em> was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s <strong>OLK MANUFACTORY,</strong> has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:26:11.000Z"
+    },
+    {
+      "id": 30,
+      "text": "<p><img style=\"float: right;\" src=\"/uploads/about/1765552416489-jdyxzbxju3m.jpg\" alt=\"\" width=\"400\" height=\"600\"></p>\n<p><em>Oksana Levchenya-Konstantinovska</em> was born in 1975 in Bershad, Vinnitsa Region, Ukraine in a family where medical practice has been a tradition. Even so, from the very childhood Levchenya has started being interested in art through exploration of the home collection of books that has included the history of art and the works of successful artists.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>From the age of 17, however, for the sake of family legacy, she has begun to pursue the medical profession working as a junior nurse. In a few years later, Levchenya has&nbsp; moved to Kyiv, where she has entered A. A. Bogomolets National Medical University, and has taken a training route to become a surgeon. Yet, over the years of discovering&nbsp; who she really is, Levchenya has turned back to art and, in 2005, has graduated from the School of Architectural design in Kyiv.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>A turning point in Levchenya&rsquo;s artist career has been marked by the acquaintance with a renowned Kyiv city painter and graphic artist Alexandra Prakhova, member of the National Union of Artists of Ukraine. Sasha, as Alexandra Prakhova called herself, represented the dynasty of Prakhov in the fourth generation, has taught Levchenya the art of painting.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In 2009, Levchenya has been invited as a guest to the exhibition at Bereznytska &amp;&nbsp; Partners Art Gallery, at that time curated by the Australian artist Adam Nankervis, nomadic museum MuseumMAN, where she has showed her paintings to Adam. The artist has appreciated Levchenya&rsquo;s talent and has included her work to the exhibition&nbsp; Torn World that, later the same year, has been also exhibited in Ukrainian House in&nbsp; Kyiv, Ukraine. Since then, Levchenya&rsquo;s works have been seen around the world in such notable art venues as ArtByGeneva Fair in Geneva; National Cultural-Art&nbsp; Museum Complex Mystetskyi Arsenal, FineArt Gallery, Ukrainian House, Bereznytska&nbsp; &amp; Partners Art Gallery in Kyiv, Ukraine; Art gallery Sady Pobedy in Odesa, Ukraine; Art Southampton, New York; Gagliardi Gallery, London; ARTPALMBEACH-2012, Miami; Fondamenta degli Incurabili, Venice.</p>\n<p>&nbsp;</p>\n<p>In 2017, Levchenya was awarded a Special Mention for Excellence at the London Art Biennale. The same year, the artist&rsquo;s personal journey led her to another project that combined scientific approach and artistic thinking. Exhibition named Find your tribe and love them hard at Shcherbenko Art Center (Kyiv, Ukraine) is a manifest&nbsp; of social identity, first proposed by British psychologists Henri Tajfel and John Turner in 1979. The theory discusses a person's sense of belonging to a particular social group. Through the set of photographs, where Levchenya has worn ritual makeup of African, South African and Australian tribes, she has explored people&rsquo;s eagerness to classify&nbsp; themselves as a specific group member and to be equated to a particular nation, occupation and gender.&nbsp;&nbsp;</p>\n<p>&nbsp;</p>\n<p>For a while after, within the conceptual framework of anthropological approach of national cultural patterns, Levchenya has launched OLK MANUFACTORY. The Company produces traditional and modern hand-woven rugs and tapestries. OLK&rsquo;s manufacturing process preserves an extremely intricate manual weaving technique, ranging back to the 16th century.&nbsp;</p>\n<p>&nbsp;</p>\n<p>As well as earlier photography exhibition Find your tribe and love them hard, Levchenya&rsquo;s new solo exhibition Nonexistent Tribes, held in November 2018 at BURSA gallery, Kyiv, has demonstrated her continuing interest in exploring the theory of social identity. Represented costumes and masks embody a mythological image of&nbsp; a person who doesn&rsquo;t belong to any community, thus is released from stereotypes imposed by social principles. The most recent exhibition Totem of Recycling, which has begun around the same time as the previous, tackles the problem of over consumption and consumerist lifestyle of the modern society.&nbsp;</p>\n<p>&nbsp;</p>\n<p>In March 2019, a reimagined Ukrainian kilim Space Cossacks, created by Levchenya&rsquo;s <strong>OLK MANUFACTORY,</strong> has been shortlisted for the Arte Laguna Prize in the Design category.</p>\n<p>&nbsp;</p>\n<p>The artist extracted the ornaments from the regional folk kilims of the 19th century and redrew them, blurring the line between the past and the present.</p>",
+      "createdAt": "2025-12-12T13:49:40.000Z"
+    }
+  ],
+  "InformationNews": [
+    {
+      "id": 1,
+      "title": "test",
+      "date": "2025-12-12T10:57:00.000Z",
+      "text": "",
+      "content": "<p>test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test&nbsp;</p>\n<p>&nbsp;</p>\n<p>test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test&nbsp;</p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": "",
+      "previewUrl": "",
+      "position": 0,
+      "createdAt": "2025-12-12T11:00:02.000Z",
+      "updatedAt": "2025-12-12T12:31:18.000Z"
+    },
+    {
+      "id": 2,
+      "title": "пствпрпчврч",
+      "date": "2025-12-12T13:13:00.000Z",
+      "text": "",
+      "content": "<p>сптсптсптсптпст</p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": null,
+      "previewUrl": null,
+      "position": 1,
+      "createdAt": "2025-12-12T11:13:29.000Z",
+      "updatedAt": "2025-12-12T11:13:29.000Z"
+    },
+    {
+      "id": 3,
+      "title": "TEst 2 test2",
+      "date": "2025-12-12T12:12:00.000Z",
+      "text": "",
+      "content": "<p>Test two tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow test</p>\n<p>two tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow testtwo tow test</p>\n<p><img src=\"/uploads/news/1765548828700-4e7awufhmyh.jpg\" alt=\"\" width=\"250\" height=\"375\"></p>\n<p>asfafaw&nbsp;</p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": "",
+      "previewUrl": "",
+      "position": 2,
+      "createdAt": "2025-12-12T12:14:09.000Z",
+      "updatedAt": "2025-12-12T12:31:55.000Z"
+    },
+    {
+      "id": 4,
+      "title": "кецкеу",
+      "date": "2025-12-12T14:53:00.000Z",
+      "text": "укецуке цуке цукецук пцукп цуп",
+      "content": "<p>ывапывап укп йуцкпйуе пйуцеп</p>\n<p>укпцукпцйукпцуйкп<img src=\"/uploads/news/1765551252956-porj462zgh.jpg\" alt=\"\" width=\"275\" height=\"388\"></p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": null,
+      "previewUrl": null,
+      "position": 3,
+      "createdAt": "2025-12-12T12:54:29.000Z",
+      "updatedAt": "2025-12-12T12:54:29.000Z"
+    }
+  ],
+  "InformationNewsRevisions": [
+    {
+      "id": 1,
+      "newsId": 1,
+      "title": "ыфвафыва",
+      "date": "2025-12-11T22:00:00.000Z",
+      "text": "",
+      "content": "<p>фыва фыва фыва фыва</p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": null,
+      "previewUrl": null,
+      "createdAt": "2025-12-12T12:31:18.000Z"
+    },
+    {
+      "id": 2,
+      "newsId": 3,
+      "title": "asdfasdf",
+      "date": "2025-12-11T22:00:00.000Z",
+      "text": "",
+      "content": "<p>asdfasdfaf</p>\n<p><img src=\"/uploads/news/1765548828700-4e7awufhmyh.jpg\" alt=\"\" width=\"250\" height=\"375\"></p>\n<p>asfafaw&nbsp;</p>",
+      "summary": "",
+      "draft": 0,
+      "category": null,
+      "coverUrl": null,
+      "previewUrl": null,
+      "createdAt": "2025-12-12T12:31:55.000Z"
+    }
+  ],
+  "InformationNewsTrash": [
+    {
+      "newsId": 2,
+      "deletedAt": "2025-12-12T12:18:20.000Z"
+    }
+  ],
+  "InformationGroup": [
+    {
+      "id": 1,
+      "year": 2021,
+      "title": "Art Fashion Days, Avant-garden Gallery, Kyiv, Ukraine",
+      "position": 0,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 2,
+      "year": 2019,
+      "title": "Milan Design Week, Modern_ism, Milan, Italy. Ukrainian Object Design",
+      "position": 1,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 3,
+      "year": 2019,
+      "title": "Revelations, International Fine Craft and Creation Bienale, Grand Paleis, Paris, France. Textile, hand woven tapestry, objects.",
+      "position": 2,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 4,
+      "year": 2018,
+      "title": "Art Laguna Prize 13th edition, finalists show. \"Space cossaks\", Arsenale, Venice, Italy",
+      "position": 3,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 5,
+      "year": 2018,
+      "title": "Modern_ism, Dutch Design week, Eindhoven, Netherlands. Textile, handwoven kilims",
+      "position": 4,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 6,
+      "year": 2017,
+      "title": "Royal Arts Prize, Find Your Tribe And Love Them Hard, London, UK",
+      "position": 5,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 7,
+      "year": 2017,
+      "title": "Lost&Found at Fondamenta degli Incurabili, Venice, Italy",
+      "position": 6,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 8,
+      "year": 2017,
+      "title": "London Art Biennial 2017, Soul Searching, winner. Gagliardi Gallery, London, UK",
+      "position": 7,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 9,
+      "year": 2015,
+      "title": "Art Kyiv Contemporary Soul Searching, Mystetskiy Arsenal, Kyiv, Ukraine",
+      "position": 8,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 10,
+      "year": 2014,
+      "title": "Art Kyiv Contemporary project Greed, Mystetskiy Arsenal, Kyiv, Ukraine",
+      "position": 9,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 11,
+      "year": 2013,
+      "title": "Art Southampton, NY, USA",
+      "position": 10,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 12,
+      "year": 2013,
+      "title": "ARTPALMBEACH-2012, Miami, USA",
+      "position": 11,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 13,
+      "year": 2012,
+      "title": "Art Kyiv Contemporary, Mystetskiy Arsenal, Kyiv, Ukraine",
+      "position": 12,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 14,
+      "year": 2012,
+      "title": "Kyiv Biennial 2012 - Arsenale 2012, Mystetskiy Arsenal, Kyiv, Ukraine",
+      "position": 13,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 15,
+      "year": 2012,
+      "title": "Great expectations, FineArt Gallery, Kiev, Ukraine",
+      "position": 14,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 16,
+      "year": 2011,
+      "title": "Collider Art-Kiev, Arsenal, Kiev, Ukraine",
+      "position": 15,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 17,
+      "year": 2010,
+      "title": "Screenshot Art-Kiev Contemporary Fair, Arsenal, Kiev, Ukraine",
+      "position": 16,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 18,
+      "year": 2010,
+      "title": "Diktators for VogdeLenie, Ukrainian House, Kiev, Ukraine",
+      "position": 17,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 19,
+      "year": 2010,
+      "title": "Participate of \"Ukrainian paradox\", ArtByGeneva Fair, Geneva, Switzerland",
+      "position": 18,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 20,
+      "year": 2009,
+      "title": "Sotscapitalism Art Kiev, Ukrainian House, Kiev, Ukraine",
+      "position": 19,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 21,
+      "year": 2009,
+      "title": "Torn World project curated by Adam Nankervis, MuseumMAN, Bereznitska and Partners Gallery, Kiev, Ukraine",
+      "position": 20,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    }
+  ],
+  "InformationSolo": [
+    {
+      "id": 1,
+      "year": 2020,
+      "title": "Solo exhibition, on the occasion of the 27th Aniversary of the Independence of Ukraine. Gothic Hall, Brussel, Belgium",
+      "position": 0,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 2,
+      "year": 2018,
+      "title": "Non-existent tribes, Gallery Bursa, Kyiv, Ukraine. Textile sculptures, installations, video art",
+      "position": 1,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 3,
+      "year": 2017,
+      "title": "Find Your tribe and love them hard solo exhibition, Invogue Gallery, Odessa, Ukraine. Photo, textile art, tapestries",
+      "position": 2,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 4,
+      "year": 2017,
+      "title": "Art Ukraine Gallery “Quasi-Evolution”, Kyiv, Ukraine. Tapestries",
+      "position": 3,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 5,
+      "year": 2016,
+      "title": "Soul Searching, Bulgari, Kyiv, Ukraine",
+      "position": 4,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 6,
+      "year": 2016,
+      "title": "Soul Searching, Bogomolets National Medical University, Kyiv, Ukraine",
+      "position": 5,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 7,
+      "year": 2012,
+      "title": "Great expectations, FineArt Gallery, Kyiv, Ukraine",
+      "position": 6,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 8,
+      "year": 2011,
+      "title": "Warlike feminism, FineArt Gallery, Kyiv, Ukraine",
+      "position": 7,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 9,
+      "year": 2010,
+      "title": "Schastiye (Happiness) Luxury Gallery SadyPobedy, Odessa, Ukraine",
+      "position": 8,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 10,
+      "year": 2010,
+      "title": "Screenshot, Arsenal, Kyiv, Ukraine",
+      "position": 9,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    },
+    {
+      "id": 11,
+      "year": 2009,
+      "title": "SotsCapitalism, Ukrainian House, Kyiv, Ukraine",
+      "position": 10,
+      "updatedAt": "2025-12-12T00:07:20.000Z"
+    }
+  ],
+  "InformationAwards": [
+    {
+      "id": 25,
+      "year": 2019,
+      "title": "Elle Decoration International Design Award Ukraine – winner — “Floor covering”, Synchronicity carpet",
+      "position": 0,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 26,
+      "year": 2019,
+      "title": "Art Laguna Prize – Finalist",
+      "position": 1,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 27,
+      "year": 2017,
+      "title": "London Art Biennale – winner",
+      "position": 2,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 28,
+      "year": 2017,
+      "title": "Royal Arts Prize, Shortlisted Artists, London, UK – shortlisted",
+      "position": 3,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 29,
+      "year": 2017,
+      "title": "Royal Art Prize – shortlisted",
+      "position": 4,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 30,
+      "year": 2017,
+      "title": "London Art Biennale – winner",
+      "position": 5,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 31,
+      "year": 2016,
+      "title": "Art Laguna Prize – finalist",
+      "position": 6,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    },
+    {
+      "id": 32,
+      "year": 2016,
+      "title": "EDIDA – winner ",
+      "position": 7,
+      "updatedAt": "2025-12-12T08:53:48.000Z"
+    }
+  ],
+  "InformationFairs": [
+    {
+      "id": 41,
+      "year": 2025,
+      "title": "test",
+      "position": 0,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 42,
+      "year": 2022,
+      "title": "Phillips Auction London (Indigo Chief)",
+      "position": 1,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 43,
+      "year": 2022,
+      "title": "Sotheby’s Auction London (Collider 2011)",
+      "position": 2,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 44,
+      "year": 2022,
+      "title": "Homo Faber, Venice",
+      "position": 3,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 45,
+      "year": 2019,
+      "title": "Revelations, Grand Palais, Paris, France",
+      "position": 4,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 46,
+      "year": 2019,
+      "title": "Milan Design Week, “Modernism” (Creative Ukraine), Milan, Italy",
+      "position": 5,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    },
+    {
+      "id": 47,
+      "year": 2018,
+      "title": "Dutch Design Week, Eindhoven, Netherlands",
+      "position": 6,
+      "updatedAt": "2025-12-12T00:22:26.000Z"
+    }
+  ],
+  "InformationWebsites": [
+    {
+      "id": 36,
+      "url": "https://www.homofaber.com/en/ecollection/oksana-levchenya-207",
+      "label": "Home Faber",
+      "position": 0,
+      "updatedAt": "2025-12-12T08:36:50.000Z"
+    },
+    {
+      "id": 37,
+      "url": "https://www.1stdibs.com/dealers/olk-manufactory",
+      "label": "1stdibs",
+      "position": 1,
+      "updatedAt": "2025-12-12T08:36:50.000Z"
+    },
+    {
+      "id": 38,
+      "url": "https://archello.com/olk-manufactory",
+      "label": "archello",
+      "position": 2,
+      "updatedAt": "2025-12-12T08:36:50.000Z"
+    },
+    {
+      "id": 39,
+      "url": "https://artsy.net/artist/oksana-levchenya",
+      "label": "artsy.net/artist/oksana-levchenya ",
+      "position": 3,
+      "updatedAt": "2025-12-12T08:36:50.000Z"
+    },
+    {
+      "id": 40,
+      "url": "https://artsy.net/show/port-agency-totem-of-recycling-show-by-ukrainian-artist-oksana-levchenya",
+      "label": "artsy.net/show/port-agency-totem-of-recycling-show-by-ukrainian-artist-oksana-levchenya ",
+      "position": 4,
+      "updatedAt": "2025-12-12T08:36:50.000Z"
+    }
+  ],
+  "InformationContacts": [
+    {
+      "id": 1,
+      "email": "info@oksanalevchenya.com",
+      "phone": "+38 068 555 44 33 ",
+      "address": "Desatinna\n13\nKyiv, Ukraine",
+      "instagram": "https://www.instagram.com/olk_manufactory/",
+      "facebook": "https://www.facebook.com/oksana.levcena",
+      "website": "",
+      "updatedAt": "2025-12-12T09:26:47.000Z",
+      "addressLine1": "Desatinna",
+      "addressLine2": "13",
+      "addressLine3": "Kyiv, Ukraine"
+    }
+  ],
+  "WorkSection": [
+    {
+      "id": 1,
+      "slug": "paint",
+      "name": "PAINT",
+      "position": 0,
+      "visible": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "createdAt": "2025-12-11T14:58:58.913Z",
+      "updatedAt": null
+    },
+    {
+      "id": 2,
+      "slug": "prints",
+      "name": "PRINTS",
+      "position": 3,
+      "visible": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "createdAt": "2025-12-11T14:58:58.926Z",
+      "updatedAt": null
+    },
+    {
+      "id": 3,
+      "slug": "mask",
+      "name": "MASK",
+      "position": 1,
+      "visible": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "createdAt": "2025-12-11T14:58:58.932Z",
+      "updatedAt": null
+    },
+    {
+      "id": 4,
+      "slug": "carpet",
+      "name": "CARPET",
+      "position": 2,
+      "visible": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "createdAt": "2025-12-11T14:58:58.934Z",
+      "updatedAt": null
+    },
+    {
+      "id": 5,
+      "slug": "spare",
+      "name": "SPARE",
+      "position": 4,
+      "visible": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "createdAt": "2025-12-11T14:58:58.935Z",
+      "updatedAt": null
+    }
+  ],
+  "WorkItem": [
+    {
+      "id": 1,
+      "sectionId": 1,
+      "slug": "little-buddah",
+      "title": "Little Buddah",
+      "location": "",
+      "description": "",
+      "year": null,
+      "type": "",
+      "collaborators": "",
+      "position": 0,
+      "published": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "canonicalUrl": null,
+      "ogImageUrl": null,
+      "createdAt": "2025-12-12T14:20:54.000Z",
+      "updatedAt": "2025-12-12T14:20:54.000Z"
+    },
+    {
+      "id": 2,
+      "sectionId": 1,
+      "slug": "modern-cell",
+      "title": "MODERN CELL",
+      "location": "",
+      "description": "",
+      "year": null,
+      "type": "",
+      "collaborators": "",
+      "position": 1,
+      "published": 1,
+      "seoTitle": null,
+      "seoDescription": null,
+      "seoKeywords": null,
+      "canonicalUrl": null,
+      "ogImageUrl": null,
+      "createdAt": "2025-12-12T14:26:52.000Z",
+      "updatedAt": "2025-12-12T14:26:52.000Z"
+    }
+  ],
+  "WorkMedia": [
+    {
+      "id": 359,
+      "itemId": 1,
+      "type": "IMAGE",
+      "url": "/uploads/media_1765556637356_59cxsan8dz7.webp",
+      "thumbnail": "/uploads/thumbs/thumb_1765556637543_g0e14iatgyk.webp",
+      "caption": null,
+      "alt": null,
+      "position": 0,
+      "createdAt": "2025-12-12T14:23:57.000Z",
+      "updatedAt": "2025-12-12T14:23:57.000Z"
+    },
+    {
+      "id": 360,
+      "itemId": 2,
+      "type": "IMAGE",
+      "url": "/uploads/media_1765556823667_wk3ikxvey6o.webp",
+      "thumbnail": "/uploads/thumbs/thumb_1765556823798_brzro6hz3d.webp",
+      "caption": null,
+      "alt": null,
+      "position": 0,
+      "createdAt": "2025-12-12T14:27:03.000Z",
+      "updatedAt": "2025-12-12T14:27:03.000Z"
+    }
+  ],
+  "WorkTag": [],
+  "WorkItemTag": []
+}
