@@ -9,6 +9,7 @@ import { resizeAndCompressImage } from "@/lib/utils/image"
 import { ok, fail } from "@/lib/api"
 import ffmpegStatic from "ffmpeg-static"
 import { execFile } from "node:child_process"
+import { Readable } from "node:stream"
 
 export const runtime = "nodejs"
 
@@ -30,7 +31,11 @@ export async function POST(req: Request) {
         const file = form.get("file") as File | null
         if (!Number.isFinite(itemId)) return fail(req, 400, "VALIDATION_ERROR", "Invalid itemId", { type: "ValidationError" })
         if (!file) return fail(req, 400, "VALIDATION_ERROR", "File required", { type: "ValidationError" })
-        const bytes = Buffer.from(await file.arrayBuffer())
+        const maxVideoSizeBytes = 1024 * 1024 * 1024 // 1GB
+        if (type === "VIDEO" && typeof (file as any).size === "number" && (file as any).size > maxVideoSizeBytes) {
+          return fail(req, 413, "PAYLOAD_TOO_LARGE", "Video exceeds 1GB limit", { type: "ValidationError", details: [{ field: "file", message: "Max size 1GB" }] })
+        }
+        const bytes = type === "IMAGE" ? Buffer.from(await file.arrayBuffer()) : Buffer.alloc(0)
         const uploadsDir = path.join(process.cwd(), "public", "uploads")
         const thumbsDir = path.join(uploadsDir, "thumbs")
         if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
@@ -45,7 +50,19 @@ export async function POST(req: Request) {
           const ext = (file.name.split(".").pop() || "mp4").toLowerCase()
           name = `${nameBase}.${ext}`
           fullPath = path.join(uploadsDir, name)
-          fs.writeFileSync(fullPath, bytes)
+          const ws = fs.createWriteStream(fullPath)
+          const webStream = (file as any).stream?.()
+          if (webStream) {
+            await new Promise<void>((resolve, reject) => {
+              Readable.fromWeb(webStream as any).pipe(ws).on("finish", () => resolve()).on("error", (e) => reject(e))
+            })
+          } else {
+            const buf = Buffer.from(await file.arrayBuffer())
+            await new Promise<void>((resolve, reject) => {
+              ws.on("error", reject)
+              ws.end(buf, () => resolve())
+            })
+          }
         }
         const url = `/uploads/${name}`
         let thumbnail: string | null = null
