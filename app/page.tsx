@@ -167,6 +167,13 @@ export default function WorkPage() {
   const [aboutHtml, setAboutHtml] = useState("")
   const [aboutLoading, setAboutLoading] = useState(false)
   const [aboutError, setAboutError] = useState<string | null>(null)
+  const mobileThumbsRef = useRef<HTMLDivElement | null>(null)
+  const [mobileThumbCanScrollUp, setMobileThumbCanScrollUp] = useState(false)
+  const [mobileThumbCanScrollDown, setMobileThumbCanScrollDown] = useState(false)
+  const [loadedThumbs, setLoadedThumbs] = useState<Set<number>>(new Set())
+  const [mediaLoading, setMediaLoading] = useState(false)
+  const [visibleThumbs, setVisibleThumbs] = useState<Set<number>>(new Set())
+  const thumbObserversRef = useRef<Map<number, IntersectionObserver>>(new Map())
 
   const fetchWebsites = async () => {
     setWebsitesLoading(true)
@@ -247,6 +254,39 @@ export default function WorkPage() {
   useEffect(() => {
     setImageError(false)
   }, [fullscreenOpen])
+
+  useEffect(() => {
+    setMediaLoading(true)
+  }, [selectedProject, currentMediaIndex, activeWorkSubcategory])
+
+  const registerThumbRef = (idx: number) => (el: HTMLElement | null) => {
+    if (!el) return
+    const existing = thumbObserversRef.current.get(idx)
+    if (existing) {
+      try { existing.disconnect() } catch {}
+      thumbObserversRef.current.delete(idx)
+    }
+    const rootEl = mobileThumbsRef.current || null
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (entry && entry.isIntersecting) {
+          setVisibleThumbs((prev) => {
+            const next = new Set(prev)
+            next.add(idx)
+            if (idx > 0) next.add(idx - 1)
+            next.add(idx + 1)
+            return next
+          })
+        }
+      },
+      { root: rootEl, threshold: 0.1 }
+    )
+    obs.observe(el)
+    thumbObserversRef.current.set(idx, obs)
+  }
+
+  // moved below filteredProjects declaration to avoid using before declaration
 
   useEffect(() => {
     const load = async () => {
@@ -421,6 +461,35 @@ export default function WorkPage() {
     .map((p, idx) => ({ p, idx }))
     .filter(({ p }) => (searchQuery ? p.title.toLowerCase().includes(searchQuery.toLowerCase()) : true))
 
+  useEffect(() => {
+    return () => {
+      thumbObserversRef.current.forEach((o) => {
+        try { o.disconnect() } catch {}
+      })
+      thumbObserversRef.current.clear()
+    }
+  }, [filteredProjects.length, activeSection])
+
+  useEffect(() => {
+    const el = mobileThumbsRef.current
+    if (!el) return
+    const onScroll = () => {
+      const top = el.scrollTop
+      const max = el.scrollHeight - el.clientHeight
+      setMobileThumbCanScrollUp(top > 2)
+      setMobileThumbCanScrollDown(max - top > 2)
+    }
+    onScroll()
+    el.addEventListener("scroll", onScroll, { passive: true } as any)
+    const RZ = (typeof window !== "undefined" && (window as any).ResizeObserver) || null
+    const ro = RZ ? new RZ(onScroll) : null
+    if (ro) ro.observe(el)
+    return () => {
+      el.removeEventListener("scroll", onScroll)
+      if (ro) ro.disconnect()
+    }
+  }, [filteredProjects.length, activeSection])
+
   const openFullscreen = (mediaIndex: number) => {
     setCurrentMediaIndex(mediaIndex)
     setFullscreenOpen(true)
@@ -554,6 +623,64 @@ export default function WorkPage() {
         </nav>
       </header>
 
+      {activeSection === "work" && (
+        <div className="md:hidden fixed left-0 top-14 bottom-0 z-10 w-16">
+          <div className="relative h-full">
+            <div
+              ref={mobileThumbsRef}
+              className="h-full overflow-y-auto snap-y snap-mandatory scroll-smooth will-change-transform"
+            >
+              <div className="flex flex-col gap-2 py-2">
+                {filteredProjects.map(({ p: project, idx }) => (
+                  <button
+                    key={idx}
+                    ref={registerThumbRef(idx)}
+                    onClick={() => {
+                      setSelectedProject(idx)
+                      setDetailsOpen(true)
+                      document.getElementById("work-media-stage")?.scrollIntoView({ behavior: "smooth", block: "center" })
+                    }}
+                    className={`relative snap-start mx-1 aspect-[2/3] rounded-sm overflow-hidden transition-transform duration-150 active:scale-95 ${
+                      idx === selectedProject ? "ring-2 ring-yellow-400" : ""
+                    }`}
+                  >
+                    {!loadedThumbs.has(idx) && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
+                        <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
+                      </div>
+                    )}
+                    <img
+                      src={visibleThumbs.has(idx) ? (project.media[0]?.thumbnail || project.media[0]?.url || "/placeholder.svg") : "/placeholder.svg"}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
+                      }}
+                      onLoad={() => {
+                        setLoadedThumbs((prev) => {
+                          const next = new Set(prev)
+                          next.add(idx)
+                          return next
+                        })
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+            {mobileThumbCanScrollUp && (
+              <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent" />
+            )}
+            {mobileThumbCanScrollDown && (
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
+            )}
+          </div>
+        </div>
+      )}
+
       {mobileMenuOpen && activeSection === "work" && (
         <div className="md:hidden bg-white border-b border-neutral-200 p-4 text-xs text-neutral-500">
           Select subcategory in the content header below.
@@ -647,17 +774,32 @@ export default function WorkPage() {
                     {filteredProjects.map(({ p: project, idx }) => (
                       <button
                         key={idx}
+                        ref={registerThumbRef(idx)}
                         onClick={() => setSelectedProject(idx)}
                         className={`relative aspect-[4/3] rounded-sm overflow-hidden group ${
                           idx === selectedProject ? "ring-2 ring-yellow-400" : ""
                         }`}
                       >
+                        {!loadedThumbs.has(idx) && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
+                            <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
+                          </div>
+                        )}
                         <img
-                          src={project.media[0].thumbnail || "/placeholder.svg"}
+                          src={visibleThumbs.has(idx) ? (project.media[0].thumbnail || project.media[0]?.url || "/placeholder.svg") : "/placeholder.svg"}
                           alt={project.title}
                           className="w-full h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.currentTarget.src = "/placeholder.svg"
+                          }}
+                          onLoad={() => {
+                            setLoadedThumbs((prev) => {
+                              const next = new Set(prev)
+                              next.add(idx)
+                              return next
+                            })
                           }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex items-end p-1">
@@ -694,7 +836,7 @@ export default function WorkPage() {
         </nav>
       </aside>
 
-      <main className="flex-1 md:ml-48">
+      <main className="flex-1 md:ml-48 md:pl-0 pl-20">
         {activeSection === "work" ? (
           <div className="max-w-5xl mx-auto p-4 md:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -769,6 +911,11 @@ export default function WorkPage() {
                     handleStageClick(e)
                   }}
                 >
+                  {mediaLoading && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10">
+                      <div className="w-6 h-6 rounded-full border-2 border-neutral-300 border-t-transparent animate-spin" />
+                    </div>
+                  )}
                   <div className={`absolute inset-y-0 left-0 w-1/2 pointer-events-none transition-opacity duration-200 ${stageCursor === "w-resize" ? "opacity-40" : "opacity-0"} bg-gradient-to-r from-neutral-200/40 to-transparent`} />
                   <div className={`absolute inset-y-0 right-0 w-1/2 pointer-events-none transition-opacity duration-200 ${stageCursor === "e-resize" ? "opacity-40" : "opacity-0"} bg-gradient-to-l from-neutral-200/40 to-transparent`} />
                   <div className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 pointer-events-none transition-opacity duration-200 ${stageCursor === "w-resize" ? "opacity-100" : "opacity-0"}`}>
@@ -792,7 +939,10 @@ export default function WorkPage() {
                           src={currentMedia[currentMediaIndex]?.url}
                           alt=""
                           className="h-full w-auto object-contain"
+                          loading="eager"
+                          decoding="async"
                           onError={() => setImageError(true)}
+                          onLoad={() => setMediaLoading(false)}
                         />
                       )
                     ) : (
@@ -805,6 +955,7 @@ export default function WorkPage() {
                         preload="metadata"
                         ref={stageVideoRef}
                         className="max-h-full max-w-full object-contain"
+                        onLoadedData={() => setMediaLoading(false)}
                       />
                     )
                   ) : (
