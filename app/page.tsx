@@ -174,6 +174,7 @@ export default function WorkPage() {
   const [mediaLoading, setMediaLoading] = useState(false)
   const [visibleThumbs, setVisibleThumbs] = useState<Set<number>>(new Set())
   const thumbObserversRef = useRef<Map<number, IntersectionObserver>>(new Map())
+  const thumbElementsRef = useRef<Map<number, HTMLElement>>(new Map())
   const infoScrollRef = useRef<HTMLDivElement | null>(null)
   const [infoCanScrollUp, setInfoCanScrollUp] = useState(false)
   const [infoCanScrollDown, setInfoCanScrollDown] = useState(false)
@@ -288,6 +289,7 @@ export default function WorkPage() {
       try { existing.disconnect() } catch {}
       thumbObserversRef.current.delete(idx)
     }
+    thumbElementsRef.current.set(idx, el)
     const rootEl = mobileThumbsRef.current || null
     const obs = new IntersectionObserver(
       (entries) => {
@@ -512,6 +514,42 @@ export default function WorkPage() {
     }
   }, [filteredProjects.length, activeSection])
 
+  useEffect(() => {
+    const container = mobileThumbsRef.current
+    if (!container || activeSection !== "work") return
+    let timer: any
+    const focusNearest = () => {
+      const rect = container.getBoundingClientRect()
+      const centerY = rect.top + rect.height / 2
+      let bestIdx: number | null = null
+      let bestDist = Infinity
+      thumbElementsRef.current.forEach((el, idx) => {
+        const r = el.getBoundingClientRect()
+        const y = r.top + r.height / 2
+        const d = Math.abs(y - centerY)
+        if (d < bestDist) {
+          bestDist = d
+          bestIdx = idx
+        }
+      })
+      if (bestIdx !== null) {
+        const el = thumbElementsRef.current.get(bestIdx)
+        if (el) {
+          try { el.focus() } catch {}
+        }
+      }
+    }
+    const onScroll = () => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(focusNearest, 120)
+    }
+    container.addEventListener("scroll", onScroll, { passive: true } as any)
+    focusNearest()
+    return () => {
+      container.removeEventListener("scroll", onScroll)
+      if (timer) clearTimeout(timer)
+    }
+  }, [filteredProjects.length, activeSection])
   const openFullscreen = (mediaIndex: number) => {
     setCurrentMediaIndex(mediaIndex)
     setFullscreenOpen(true)
@@ -711,11 +749,12 @@ export default function WorkPage() {
                 <button
                   key={idx}
                   ref={registerThumbRef(idx)}
+                  tabIndex={0}
                   onClick={() => {
                     setSelectedProject(idx)
                     setFullscreenOpen(true)
                   }}
-                  className={`relative snap-start w-full transition-transform duration-150 active:scale-95 ${
+                  className={`relative snap-start w-full transition-transform duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
                     idx === selectedProject ? "" : ""
                   }`}
                 >
