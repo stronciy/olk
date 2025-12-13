@@ -698,7 +698,7 @@ export default function WorkPage() {
         </div>
       )}
       {activeSection === "work" && (
-        <div className="md:hidden border-b border-neutral-200 bg-white">
+        <div className="md:hidden sticky top-[56px] z-20 border-b border-neutral-200 bg-white">
           <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
             {sections.map((s) => (
               <button
@@ -724,7 +724,7 @@ export default function WorkPage() {
         <div className="md:hidden w-full">
           <div
             ref={mobileThumbsRef}
-            className="h-[calc(100vh-56px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
+            className="h-[calc(100vh-56px-44px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
             style={{
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
