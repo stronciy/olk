@@ -765,10 +765,10 @@ export default function WorkPage() {
               height: `calc(100vh - ${mobileHeaderHeight + mobileCategoriesHeight}px)`,
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
-              scrollPaddingTop: `calc(${mobileTopOffset}px + env(safe-area-inset-top))`,
+              scrollPaddingTop: "60px",
               } as any}
           >
-            <div className="flex flex-col gap-2 px-2 pb-0 md:pb-[300px]" style={{ paddingTop: `calc(${mobileTopOffset}px + env(safe-area-inset-top))` }}>
+            <div className="flex flex-col gap-2 px-2 pb-0 md:pb-[300px]" style={{ paddingTop: "60px" }}>
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
