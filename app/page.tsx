@@ -821,49 +821,7 @@ export default function WorkPage() {
         </div>
       )}
 
-      {mobileMenuOpen && activeSection === "work" && (
-        <div className="md:hidden bg-white border-b border-neutral-200 p-4 text-xs text-neutral-500">
-          Select subcategory in the content header below.
-        </div>
-      )}
-      {mobileMenuOpen && activeSection === "information" && (
-        <div className="md:hidden bg-white border-b border-neutral-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            <button
-              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
-              onClick={async () => {
-                setActiveSection("information")
-                setInfoCategory("about")
-                setMobileMenuOpen(false)
-                await fetchContacts()
-              }}
-            >
-              ABOUT
-            </button>
-            <button
-              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
-              onClick={async () => {
-                setActiveSection("information")
-                setInfoCategory("news")
-                setMobileMenuOpen(false)
-              }}
-            >
-              NEWS
-            </button>
-            <button
-              className="px-3 py-1 text-xs rounded-sm border bg-white hover:bg-neutral-100"
-              onClick={async () => {
-                setActiveSection("information")
-                setInfoCategory("contacts")
-                setMobileMenuOpen(false)
-                await fetchContacts()
-              }}
-            >
-              CONTACTS
-            </button>
-          </div>
-        </div>
-      )}
+      {/* mobile info hints removed per request */}
 
       <aside className="hidden md:flex w-48 bg-white border-r border-neutral-200 flex-col fixed h-full z-10">
         <div className="p-4 border-b border-neutral-200">
@@ -976,7 +934,7 @@ export default function WorkPage() {
         </nav>
       </aside>
 
-      <main className={`flex-1 md:ml-48 md:pl-0 ${activeSection === "information" ? "pl-0" : "pl-20"}`}>
+      <main className={`flex-1 md:ml-48 md:pl-0 ${activeSection === "information" ? "pl-0" : "pl-20"} ${activeSection === "work" ? "hidden md:block" : ""}`}>
         {activeSection === "work" ? (
           <div className="max-w-5xl mx-auto p-4 md:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
