@@ -453,66 +453,7 @@ export default function WorkPage() {
     }
   }, [activeSection])
 
-  useEffect(() => {
-    const container = mobileThumbsRef.current
-    if (!container) return
-    const debounce = (fn: () => void, delay: number) => {
-      let t: any
-      return {
-        handler: () => {
-          if (isAutoScrollingRef.current) return
-          if (t) clearTimeout(t)
-          t = setTimeout(fn, delay)
-        },
-        cancel: () => {
-          if (t) clearTimeout(t)
-        },
-      }
-    }
-    const run = () => {
-      const isMobile = typeof window !== "undefined" ? window.innerWidth <= 768 : true
-      if (!isMobile) return
-      const topBound = mobileHeaderHeight + mobileCategoriesHeight
-      const bottomBound = window.innerHeight
-      const availCenter = topBound + (bottomBound - topBound) / 2
-      let closestIdx = -1
-      let minDist = Infinity
-      thumbElementsRef.current.forEach((el, idx) => {
-        const rect = el.getBoundingClientRect()
-        const center = rect.top + rect.height / 2
-        const d = Math.abs(center - availCenter)
-        if (d < minDist) {
-          minDist = d
-          closestIdx = idx
-        }
-      })
-      if (closestIdx !== -1) {
-        const el = thumbElementsRef.current.get(closestIdx)
-        if (!el) return
-        const margin = 12
-        const desiredTop = topBound + margin
-        const elTopRelative = el.offsetTop
-        const elBottomRelative = el.offsetTop + el.offsetHeight
-        let target = elTopRelative - desiredTop + container.scrollTop
-        const maxVisibleBottom = bottomBound - margin
-        const elBottomViewport = elBottomRelative - container.scrollTop
-        if (elBottomViewport > maxVisibleBottom) {
-          target = elBottomRelative - maxVisibleBottom + container.scrollTop
-        }
-        isAutoScrollingRef.current = true
-        container.scrollTo({ top: target, behavior: "smooth" })
-        setTimeout(() => {
-          isAutoScrollingRef.current = false
-        }, 300)
-      }
-    }
-    const d = debounce(run, 120)
-    container.addEventListener("scroll", d.handler, { passive: true } as any)
-    return () => {
-      container.removeEventListener("scroll", d.handler as any)
-      d.cancel()
-    }
-  }, [mobileHeaderHeight, mobileCategoriesHeight])
+  // removed auto-positioning: natural scrolling behavior
 
   useEffect(() => {
     const m = currentMedia[currentMediaIndex]
@@ -822,15 +763,14 @@ export default function WorkPage() {
         <div className="md:hidden w/full">
           <div
             ref={mobileThumbsRef}
-            className="overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
+            className="overflow-x-auto scroll-smooth overscroll-contain"
             style={{
-              height: `calc(100vh - ${mobileHeaderHeight + mobileCategoriesHeight}px)`,
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
               scrollPaddingTop: "60px",
               } as any}
           >
-            <div className="flex flex-col gap-2 px-2 pb-0 md:pb-[300px]" style={{ paddingTop: "60px" }}>
+            <div className="flex flex-row flex-nowrap gap-2 px-2 pb-0 md:pb-[300px]" style={{ paddingTop: "60px" }}>
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
@@ -840,11 +780,11 @@ export default function WorkPage() {
                     setSelectedProject(idx)
                     setFullscreenOpen(true)
                   }}
-                  className={`relative snap-start w-full transition-transform duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+                  className={`relative w/full transition-transform duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
                     idx === selectedProject ? "" : ""
                   }`}
                 >
-                  <div className="relative w-[80%] mx-auto aspect-[2/3] rounded-sm overflow-hidden">
+                  <div className="relative w-[60vw] md:w-[300px] aspect-[2/3] rounded-sm overflow-hidden">
                     {!loadedThumbs.has(idx) && (
                       <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
                         <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
