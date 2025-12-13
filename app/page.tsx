@@ -739,11 +739,11 @@ export default function WorkPage() {
             <div className="mb-4">
               <div
                 id={"work-media-stage"}
-                className="relative bg-white rounded-sm overflow-hidden group h-[50vh] md:h-[60vh] flex items-center justify-center"
+                className="relative bg-transparent rounded-sm overflow-hidden group h-[50vh] md:h-[60vh] flex items-center justify-center"
                 onClick={handleStageClick}
               >
                 {currentMedia.length > 0 && currentMedia[currentMediaIndex]?.type === "image" && (
-                  <div id={"work-media-stage-overlay"} className="absolute inset-0 pointer-events-none overflow-hidden z-0 bg-white">
+                  <div id={"work-media-stage-overlay"} className="absolute inset-0 pointer-events-none overflow-hidden z-0 bg-transparent">
                     <div className="absolute inset-0 -rotate-45 origin-center">
                       {Array.from({ length: 192 }).map((_, rowIdx) => (
                         <div

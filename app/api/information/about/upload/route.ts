@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/auth"
 import path from "path"
 import fs from "fs/promises"
 import sharp from "sharp"
+import { resizeAndCompressImage } from "@/lib/utils/image"
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +20,8 @@ export async function POST(req: Request) {
     const ext = type === "image/png" ? "png" : type === "image/webp" ? "webp" : "jpg"
     const fullPath = path.join(uploadsDir, `${nameBase}.${ext}`)
     const previewPath = path.join(uploadsDir, `${nameBase}-preview.${ext}`)
-    await sharp(buf).resize({ width: 1920, withoutEnlargement: true }).toFile(fullPath)
+    const optimized = await resizeAndCompressImage(buf, type, 1024)
+    await fs.writeFile(fullPath, optimized)
     await sharp(buf).resize(300, 200, { fit: "cover" }).toFile(previewPath)
     const fullUrl = `/api/information/about/file/${path.basename(fullPath)}`
     const previewUrl = `/api/information/about/file/${path.basename(previewPath)}`

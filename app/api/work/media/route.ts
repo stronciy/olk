@@ -5,6 +5,7 @@ import { z } from "zod"
 import fs from "fs"
 import path from "path"
 import sharp from "sharp"
+import { resizeAndCompressImage } from "@/lib/utils/image"
 import { ok, fail } from "@/lib/api"
 import ffmpegStatic from "ffmpeg-static"
 import { execFile } from "node:child_process"
@@ -38,7 +39,8 @@ export async function POST(req: Request) {
         let name = `${nameBase}.webp`
         let fullPath = path.join(uploadsDir, name)
         if (type === "IMAGE") {
-          await sharp(bytes).webp({ quality: 90 }).toFile(fullPath)
+          const optimized = await resizeAndCompressImage(bytes, "image/webp", 1024)
+          await sharp(optimized).webp({ quality: 90 }).toFile(fullPath)
         } else {
           const ext = (file.name.split(".").pop() || "mp4").toLowerCase()
           name = `${nameBase}.${ext}`
