@@ -641,11 +641,11 @@ export default function WorkPage() {
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col md:flex-row">
       <header className="md:hidden bg-white border-b border-neutral-200 sticky top-0 z-20">
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between h-14 px-4">
           <h1 className="text-sm font-medium tracking-wide">Oksana Levchenya</h1>
         </div>
 
-        <nav className="flex border-t border-neutral-200">
+        <nav className="flex items-center h-11 border-t border-neutral-200">
           <button
             onClick={() => {
               setActiveSection("work")
@@ -672,7 +672,7 @@ export default function WorkPage() {
       </header>
 
       {activeSection === "information" && (
-        <div className="md:hidden sticky top-[56px] z-20 border-b border-neutral-200 bg-white">
+        <div className="md:hidden sticky top-[100px] z-20 border-b border-neutral-200 bg-white">
           <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
             {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (
               <button
@@ -698,7 +698,7 @@ export default function WorkPage() {
         </div>
       )}
       {activeSection === "work" && (
-        <div className="md:hidden sticky top-[56px] z-20 border-b border-neutral-200 bg-white">
+        <div className="md:hidden sticky top-[100px] z-20 border-b border-neutral-200 bg-white">
           <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
             {sections.map((s) => (
               <button
@@ -724,7 +724,7 @@ export default function WorkPage() {
         <div className="md:hidden w-full">
           <div
             ref={mobileThumbsRef}
-            className="h-[calc(100vh-56px-44px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
+            className="h-[calc(100vh-100px-44px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
             style={{
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
