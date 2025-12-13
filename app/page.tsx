@@ -785,6 +785,9 @@ export default function WorkPage() {
                   </div>
                 </button>
               ))}
+              <div className="relative snap-start w-full transition-transform duration-150" aria-hidden="true" role="presentation">
+                <div className="w-[80%] mx-auto aspect-[2/3] rounded-sm overflow-hidden bg-white border border-neutral-200" />
+              </div>
             </div>
           </div>
         </div>
