@@ -643,12 +643,6 @@ export default function WorkPage() {
       <header className="md:hidden bg-white border-b border-neutral-200 sticky top-0 z-20">
         <div className="flex items-center justify-between p-4">
           <h1 className="text-sm font-medium tracking-wide">Oksana Levchenya</h1>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 hover:bg-neutral-100 rounded-sm transition-colors"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
         </div>
 
         <nav className="flex border-t border-neutral-200">
@@ -673,12 +667,6 @@ export default function WorkPage() {
             }`}
           >
             INFORMATION
-          </button>
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="px-4 py-3 text-xs text-neutral-400 hover:text-neutral-600 transition-colors border-l border-neutral-200"
-          >
-            <Search className="w-4 h-4" />
           </button>
         </nav>
       </header>
@@ -968,48 +956,9 @@ export default function WorkPage() {
                 ))}
               </div>
             </div>
-            <div className="md:hidden mb-4">
-              <div className="grid grid-cols-3 gap-2">
-                {filteredProjects.map(({ p: project, idx }) => (
-                  <button
-                    key={idx}
-                    className={`relative aspect-[2/3] rounded-sm overflow-hidden transition-transform duration-150 active:scale-95 ${
-                      idx === selectedProject ? "ring-2 ring-yellow-400" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedProject(idx)
-                      openFullscreen(0)
-                    }}
-                  >
-                    {!loadedThumbs.has(idx) && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
-                        <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
-                      </div>
-                    )}
-                    <img
-                      src={project.media[0]?.thumbnail || project.media[0]?.url || "/placeholder.svg"}
-                      alt={project.title}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
-                      }}
-                      onLoad={() => {
-                        setLoadedThumbs((prev) => {
-                          const next = new Set(prev)
-                          next.add(idx)
-                          return next
-                        })
-                      }}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
             {projects.length > 0 ? (
               <>
-                <div className="mb-4 md:mb-8">
+                <div className="hidden md:block mb-4 md:mb-8">
                   <h2 className="text-xs md:text-sm font-medium tracking-wider mb-1">
                     {(projects[selectedProject]?.title || "").toUpperCase()} - {(projects[selectedProject]?.location || "").toUpperCase()}
                   </h2>
@@ -1155,22 +1104,24 @@ export default function WorkPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center mt-4 md:mt-6">
-              <button
-                onClick={handlePrevMedia}
-                disabled={currentMediaIndex === 0}
-                className="text-xs text-green-700 hover:text-green-800 transition-colors disabled:opacity-30"
-              >
-                ← PREVIOUS
-              </button>
-              <button
-                onClick={handleNextMedia}
-                disabled={currentMedia.length <= 1}
-                className="text-xs text-green-700 hover:text-green-800 transition-colors disabled:opacity-30"
-              >
-                NEXT →
-              </button>
-            </div>
+            {currentMedia.length > 1 && (
+              <div className="hidden md:flex justify-between items-center mt-4 md:mt-6">
+                <button
+                  onClick={handlePrevMedia}
+                  disabled={currentMediaIndex === 0}
+                  className="text-xs text-green-700 hover:text-green-800 transition-colors disabled:opacity-30"
+                >
+                  ← PREVIOUS
+                </button>
+                <button
+                  onClick={handleNextMedia}
+                  disabled={currentMedia.length <= 1}
+                  className="text-xs text-green-700 hover:text-green-800 transition-colors disabled:opacity-30"
+                >
+                  NEXT →
+                </button>
+              </div>
+            )}
               </>
             ) : (
               <div className="text-sm text-neutral-600">No works yet</div>
@@ -1438,19 +1389,22 @@ export default function WorkPage() {
             <X className="w-6 h-6" />
           </button>
 
-          <button
-            onClick={handlePrevMedia}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors z-10"
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-
-          <button
-            onClick={handleNextMedia}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors z-10"
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
+          {currentMedia.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevMedia}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors z-10"
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+              <button
+                onClick={handleNextMedia}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors z-10"
+              >
+                <ChevronRight className="w-8 h-8" />
+              </button>
+            </>
+          )}
 
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-sm z-10">
             {currentMediaIndex + 1} / {currentMedia.length}
@@ -1559,12 +1513,16 @@ export default function WorkPage() {
                 </div>
               </div>
             )}
-            <div className="absolute bottom-8 left-8 z-10">
-              <button onClick={handlePrevMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">← PREVIOUS</button>
-            </div>
-            <div className="absolute bottom-8 right-8 z-10">
-              <button onClick={handleNextMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">NEXT →</button>
-            </div>
+            {currentMedia.length > 1 && (
+              <>
+                <div className="absolute bottom-8 left-8 z-10">
+                  <button onClick={handlePrevMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">← PREVIOUS</button>
+                </div>
+                <div className="absolute bottom-8 right-8 z-10">
+                  <button onClick={handleNextMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">NEXT →</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
