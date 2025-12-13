@@ -699,9 +699,14 @@ export default function WorkPage() {
           <div
             ref={mobileThumbsRef}
             className="h-[calc(100vh-56px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
-            style={{ WebkitOverflowScrolling: "touch", willChange: "scroll-position" } as any}
+            style={{
+              WebkitOverflowScrolling: "touch",
+              willChange: "scroll-position",
+              scrollPaddingTop: "8px",
+              scrollPaddingBottom: "calc(env(safe-area-inset-bottom, 16px) + 32px)"
+            } as any}
           >
-            <div className="flex flex-col gap-2 p-2">
+            <div className="flex flex-col gap-2 p-2 pb-16">
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
