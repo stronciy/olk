@@ -729,10 +729,9 @@ export default function WorkPage() {
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
               scrollPaddingTop: "8px",
-              scrollPaddingBottom: "calc(env(safe-area-inset-bottom, 16px) + 32px)"
             } as any}
           >
-            <div className="flex flex-col gap-2 p-2 pb-[300px]">
+            <div className="flex flex-col gap-2 pt-2 px-2 pb-0 md:pb-[300px]">
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
@@ -754,6 +753,11 @@ export default function WorkPage() {
                     )}
                     <img
                       src={visibleThumbs.has(idx) ? (project.media[0]?.thumbnail || project.media[0]?.url || "/placeholder.svg") : "/placeholder.svg"}
+                      srcSet={
+                        `${visibleThumbs.has(idx) ? (project.media[0]?.thumbnail || project.media[0]?.url || "/placeholder.svg") : "/placeholder.svg"} 1x, ` +
+                        `${visibleThumbs.has(idx) ? (project.media[0]?.url || project.media[0]?.thumbnail || "/placeholder.svg") : "/placeholder.svg"} 2x`
+                      }
+                      sizes="(max-width: 768px) 80vw, 33vw"
                       alt={project.title}
                       loading="lazy"
                       decoding="async"
@@ -1489,6 +1493,8 @@ export default function WorkPage() {
                         {m.type === "image" ? (
                           <img
                             src={m.thumbnail || m.url || "/placeholder.svg"}
+                            srcSet={`${m.thumbnail || m.url || "/placeholder.svg"} 1x, ${m.url || m.thumbnail || "/placeholder.svg"} 2x`}
+                            sizes="(max-width: 768px) 20vw, 10vw"
                             alt=""
                             loading="lazy"
                             decoding="async"
