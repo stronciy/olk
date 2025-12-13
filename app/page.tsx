@@ -178,6 +178,11 @@ export default function WorkPage() {
   const infoScrollRef = useRef<HTMLDivElement | null>(null)
   const [infoCanScrollUp, setInfoCanScrollUp] = useState(false)
   const [infoCanScrollDown, setInfoCanScrollDown] = useState(false)
+  const mobileHeaderRef = useRef<HTMLElement | null>(null)
+  const mobileCatsRef = useRef<HTMLDivElement | null>(null)
+  const [mobileHeaderHeight, setMobileHeaderHeight] = useState(0)
+  const [mobileCategoriesHeight, setMobileCategoriesHeight] = useState(0)
+  const [mobileTopOffset, setMobileTopOffset] = useState(0)
 
   const fetchWebsites = async () => {
     setWebsitesLoading(true)
@@ -417,6 +422,37 @@ export default function WorkPage() {
   }, [activeSection, infoCategory])
 
   useEffect(() => {
+    const measure = () => {
+      const isMobile = typeof window !== "undefined" ? window.innerWidth <= 768 : true
+      if (!isMobile) {
+        setMobileHeaderHeight(0)
+        setMobileCategoriesHeight(0)
+        setMobileTopOffset(0)
+        return
+      }
+      const h = mobileHeaderRef.current?.clientHeight ?? 0
+      const c = mobileCatsRef.current?.clientHeight ?? 0
+      setMobileHeaderHeight(h)
+      setMobileCategoriesHeight(c)
+      setMobileTopOffset(h + c)
+    }
+    measure()
+    window.addEventListener("resize", measure)
+    window.addEventListener("orientationchange", measure)
+    const RZ = (typeof window !== "undefined" && (window as any).ResizeObserver) || null
+    const roH = RZ && mobileHeaderRef.current ? new RZ(measure) : null
+    const roC = RZ && mobileCatsRef.current ? new RZ(measure) : null
+    if (roH && mobileHeaderRef.current) roH.observe(mobileHeaderRef.current)
+    if (roC && mobileCatsRef.current) roC.observe(mobileCatsRef.current)
+    return () => {
+      window.removeEventListener("resize", measure)
+      window.removeEventListener("orientationchange", measure)
+      if (roH) roH.disconnect()
+      if (roC) roC.disconnect()
+    }
+  }, [activeSection])
+
+  useEffect(() => {
     const m = currentMedia[currentMediaIndex]
     if (m?.type === "video") {
       const v = fullscreenOpen ? fullscreenVideoRef.current : stageVideoRef.current
@@ -640,7 +676,7 @@ export default function WorkPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col md:flex-row">
-      <header className="md:hidden bg-white border-b border-neutral-200 sticky top-0 z-20">
+      <header ref={mobileHeaderRef} className="md:hidden bg-white border-b border-neutral-200 sticky top-0 z-20">
         <div className="flex items-center justify-between h-14 px-4">
           <h1 className="text-sm font-medium tracking-wide">Oksana Levchenya</h1>
         </div>
@@ -672,7 +708,7 @@ export default function WorkPage() {
       </header>
 
       {activeSection === "information" && (
-        <div className="md:hidden sticky top-[100px] z-20 border-b border-neutral-200 bg-white">
+        <div ref={mobileCatsRef} className="md:hidden sticky z-20 border-b border-neutral-200 bg-white" style={{ top: `calc(${mobileHeaderHeight}px + env(safe-area-inset-top))` }}>
           <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
             {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (
               <button
@@ -698,7 +734,7 @@ export default function WorkPage() {
         </div>
       )}
       {activeSection === "work" && (
-        <div className="md:hidden sticky top-[100px] z-20 border-b border-neutral-200 bg-white">
+        <div ref={mobileCatsRef} className="md:hidden sticky z-20 border-b border-neutral-200 bg-white" style={{ top: `calc(${mobileHeaderHeight}px + env(safe-area-inset-top))` }}>
           <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
             {sections.map((s) => (
               <button
@@ -721,17 +757,18 @@ export default function WorkPage() {
       )}
 
       {activeSection === "work" && (
-        <div className="md:hidden w-full">
+        <div className="md:hidden w/full">
           <div
             ref={mobileThumbsRef}
-            className="h-[calc(100vh-100px-44px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
+            className="overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
             style={{
+              height: `calc(100vh - ${mobileHeaderHeight + mobileCategoriesHeight}px)`,
               WebkitOverflowScrolling: "touch",
               willChange: "scroll-position",
-              scrollPaddingTop: "8px",
-            } as any}
+              scrollPaddingTop: `calc(${mobileTopOffset}px + env(safe-area-inset-top))`,
+              } as any}
           >
-            <div className="flex flex-col gap-2 pt-2 px-2 pb-0 md:pb-[300px]">
+            <div className="flex flex-col gap-2 px-2 pb-0 md:pb-[300px]" style={{ paddingTop: `calc(${mobileTopOffset}px + env(safe-area-inset-top))` }}>
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
