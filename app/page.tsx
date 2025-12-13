@@ -1416,15 +1416,17 @@ export default function WorkPage() {
             className="relative w-full h-full flex items-center justify-center p-8"
             ref={fullscreenContainerRef}
           >
-            <div
-              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-out will-change-transform"
-              style={{ opacity: fullscreenOpen ? 1 : 0, transform: fullscreenOpen ? "scale(1)" : "scale(0.96)" }}
-            >
+            {currentMedia[currentMediaIndex]?.type === "image" && (
               <div
-                className="pointer-events-none border-2 transition-transform duration-300 ease-out will-change-transform"
-                style={{ width: zoomOverlaySize, height: zoomOverlaySize, backgroundColor: zoomOverlayColor, borderColor: zoomOverlayColor === "white" ? "#e5e7eb" : "#111827", transform: fullscreenOpen ? "scale(1)" : "scale(0.98)" }}
-              />
-            </div>
+                className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-out will-change-transform"
+                style={{ opacity: fullscreenOpen ? 1 : 0, transform: fullscreenOpen ? "scale(1)" : "scale(0.96)" }}
+              >
+                <div
+                  className="pointer-events-none border-2 transition-transform duration-300 ease-out will-change-transform"
+                  style={{ width: zoomOverlaySize, height: zoomOverlaySize, backgroundColor: zoomOverlayColor, borderColor: zoomOverlayColor === "white" ? "#e5e7eb" : "#111827", transform: fullscreenOpen ? "scale(1)" : "scale(0.98)" }}
+                />
+              </div>
+            )}
             {currentMedia.length > 0 && currentMedia[currentMediaIndex]?.type === "image" && (
               <div id={"work-media-fullscreen-overlay"} className="absolute inset-0 pointer-events-none overflow-hidden z-0 bg-white">
                 <div className="absolute inset-0 -rotate-45 origin-center">
