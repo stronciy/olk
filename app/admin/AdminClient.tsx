@@ -1179,9 +1179,9 @@ export default function AdminClient() {
               <button onClick={openAddNewsModal} className="px-3 py-1 text-[11px] rounded-sm bg-blue-600 text-white hover:bg-blue-700">Add News</button>
             </div>
             {newsModalOpen && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center">
-                <div className="absolute inset-0 bg-black/30" onClick={cancelNewsModal} />
-                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-[95%] max-w-[640px]">
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div className="absolute inset-0 bg-black/50" onClick={cancelNewsModal} />
+                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-[95%] max-w-[640px] max-h-[85vh] overflow-y-auto">
                   <h4 className="text-sm font-medium mb-2">{newsModalMode === "add" ? "Add News" : "Edit News"}</h4>
                   {newsModalError && <div className="text-xs text-red-600 mb-2">{newsModalError}</div>}
                   <div className="mb-2">
