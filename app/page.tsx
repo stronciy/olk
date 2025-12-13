@@ -744,7 +744,7 @@ export default function WorkPage() {
               scrollPaddingBottom: "calc(env(safe-area-inset-bottom, 16px) + 32px)"
             } as any}
           >
-            <div className="flex flex-col gap-2 p-2 pb-16">
+            <div className="flex flex-col gap-2 p-2 pb-[300px]">
               {filteredProjects.map(({ p: project, idx }) => (
                 <button
                   key={idx}
@@ -785,9 +785,6 @@ export default function WorkPage() {
                   </div>
                 </button>
               ))}
-              <div className="relative snap-start w-full transition-transform duration-150" aria-hidden="true" role="presentation">
-                <div className="w-[80%] mx-auto aspect-[2/3] rounded-sm overflow-hidden bg-white border border-neutral-200" />
-              </div>
             </div>
           </div>
         </div>
