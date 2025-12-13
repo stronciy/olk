@@ -10,12 +10,13 @@ export async function GET(req: Request) {
   try {
     const conn = await pool.getConnection()
     try {
-      await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
-      )
-      const [rows]: any = await conn.query("SELECT * FROM InformationAbout WHERE id = 1")
+      await conn.query("CREATE TABLE IF NOT EXISTS `InformationAbout` (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `informationabout` (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `InformationAboutRevisions` (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `informationaboutrevisions` (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      const [rows]: any = await conn.query("SELECT * FROM `informationabout` WHERE id = 1")
       if (!rows.length) {
-        await conn.query("REPLACE INTO InformationAbout (id, text, updatedAt) VALUES (1, '', NOW())")
+        await conn.query("REPLACE INTO `informationabout` (id, text, updatedAt) VALUES (1, '', NOW())")
         const res = ok(req, { about: { text: "" } })
         res.headers.set("Cache-Control", "no-store")
         return res
@@ -64,22 +65,24 @@ export async function PUT(req: Request) {
     const safeText = sanitize(incomingText)
     const conn = await pool.getConnection()
     try {
-      await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
-      )
-      await conn.query("ALTER TABLE InformationAbout MODIFY text LONGTEXT")
-      await conn.query("CREATE TABLE IF NOT EXISTS InformationAboutRevisions (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
-      const [cols]: any = await conn.query("SHOW COLUMNS FROM InformationAboutRevisions")
-      const idCol = (cols || []).find((c: any) => String(c.Field) === "id")
-      const autoInc = String(idCol?.Extra || "").includes("auto_increment")
-      if (!autoInc) {
-        await conn.query("ALTER TABLE InformationAboutRevisions MODIFY id INT AUTO_INCREMENT PRIMARY KEY")
-      }
-      const [rows]: any = await conn.query("SELECT text FROM InformationAbout WHERE id = 1")
+      await conn.query("CREATE TABLE IF NOT EXISTS `InformationAbout` (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `informationabout` (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `InformationAboutRevisions` (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      await conn.query("CREATE TABLE IF NOT EXISTS `informationaboutrevisions` (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
+      try { await conn.query("ALTER TABLE `informationabout` MODIFY text LONGTEXT") } catch {}
+      try {
+        const [cols]: any = await conn.query("SHOW COLUMNS FROM `informationaboutrevisions`")
+        const idCol = (cols || []).find((c: any) => String(c.Field) === "id")
+        const autoInc = String(idCol?.Extra || "").includes("auto_increment")
+        if (!autoInc) {
+          await conn.query("ALTER TABLE `informationaboutrevisions` MODIFY id INT AUTO_INCREMENT PRIMARY KEY")
+        }
+      } catch {}
+      const [rows]: any = await conn.query("SELECT text FROM `informationabout` WHERE id = 1")
       if (rows?.length && typeof rows[0]?.text === "string") {
-        await conn.query("INSERT INTO InformationAboutRevisions (text, createdAt) VALUES (?, NOW())", [rows[0].text])
+        await conn.query("INSERT INTO `informationaboutrevisions` (text, createdAt) VALUES (?, NOW())", [rows[0].text])
       }
-      await conn.query("INSERT INTO InformationAbout (id, text, updatedAt) VALUES (1, ?, NOW()) ON DUPLICATE KEY UPDATE text = VALUES(text), updatedAt = NOW()", [safeText])
+      await conn.query("INSERT INTO `informationabout` (id, text, updatedAt) VALUES (1, ?, NOW()) ON DUPLICATE KEY UPDATE text = VALUES(text), updatedAt = NOW()", [safeText])
       return ok(req, { saved: true }, "Updated")
     } finally {
       conn.release()
