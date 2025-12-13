@@ -38,7 +38,7 @@ function loadEnv() {
 loadEnv()
 
 const parsed = parseDatabaseUrl(process.env.DATABASE_URL)
-const host = parsed?.host || process.env.HOST || "127.0.0.1"
+const host = parsed?.host || process.env.MARIADB_HOST || process.env.HOST || "127.0.0.1"
 const port = parsed?.port || Number(process.env.MARIADB_PORT || 3306)
 const user = parsed?.user || process.env.MARIADB_USER
 const password = parsed?.password || process.env.MARIADB_PASSWORD
@@ -51,15 +51,45 @@ async function main() {
     await conn.query("CREATE TABLE IF NOT EXISTS `information_about_revisions` (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
 
     const [tables] = await conn.query("SHOW TABLES")
-    const names = (tables || []).map((row) => Object.values(row)[0]?.toString().toLowerCase())
-    const legacy = names.includes("informationabout") ? "informationabout" : (names.includes("information_about") ? "information_about" : null)
-    const legacyRev = names.includes("informationaboutrevisions") ? "informationaboutrevisions" : (names.includes("information_about_revisions") ? "information_about_revisions" : null)
-
-    if (legacy && legacy !== "information_about") {
-      await conn.query(`RENAME TABLE \`${legacy}\` TO \`information_about\``)
+    const tableEntries = (tables || []).map((row) => {
+      const orig = Object.values(row)[0]?.toString()
+      return { orig, lower: orig?.toLowerCase() }
+    })
+    const findOriginal = (candidates) => {
+      const set = new Set(candidates.map((c) => c.toLowerCase()))
+      const found = tableEntries.find((t) => set.has(t.lower))
+      return found?.orig || null
     }
-    if (legacyRev && legacyRev !== "information_about_revisions") {
-      await conn.query(`RENAME TABLE \`${legacyRev}\` TO \`information_about_revisions\``)
+    const legacy = findOriginal(["informationabout", "InformationAbout"])
+    const legacyRev = findOriginal(["informationaboutrevisions", "InformationAboutRevisions"])
+    const canonical = tableEntries.find((t) => t.lower === "information_about")?.orig || null
+    const canonicalRev = tableEntries.find((t) => t.lower === "information_about_revisions")?.orig || null
+
+    if (legacy && !canonical) {
+      try { await conn.query(`RENAME TABLE \`${legacy}\` TO \`information_about\``) } catch {}
+    } else if (legacy && canonical) {
+      try {
+        const [srcRows] = await conn.query(`SELECT id, text, updatedAt FROM \`${legacy}\` ORDER BY updatedAt DESC`)
+        const [dstRows] = await conn.query("SELECT id FROM `information_about` LIMIT 1")
+        if (!(dstRows || []).length) {
+          const latest = (srcRows || [])[0]
+          if (latest) {
+            await conn.query("INSERT INTO `information_about` (id, text, updatedAt) VALUES (1, ?, NOW())", [latest.text || ""])
+          }
+        }
+        await conn.query(`DROP TABLE \`${legacy}\``)
+      } catch {}
+    }
+    if (legacyRev && !canonicalRev) {
+      try { await conn.query(`RENAME TABLE \`${legacyRev}\` TO \`information_about_revisions\``) } catch {}
+    } else if (legacyRev && canonicalRev) {
+      try {
+        const [srcRows] = await conn.query(`SELECT text, createdAt FROM \`${legacyRev}\` ORDER BY createdAt ASC`)
+        for (const r of srcRows || []) {
+          await conn.query("INSERT INTO `information_about_revisions` (text, createdAt) VALUES (?, ?)", [r.text || "", r.createdAt || null])
+        }
+        await conn.query(`DROP TABLE \`${legacyRev}\``)
+      } catch {}
     }
 
     await conn.query("ALTER TABLE `information_about` MODIFY id INT PRIMARY KEY")
@@ -80,7 +110,7 @@ async function main() {
       }
     }
 
-    console.log(JSON.stringify({ ok: true, message: "Migrated information_about", db: database }))
+    console.warn(JSON.stringify({ ok: true, message: "Migrated information_about", db: database }))
   } finally {
     await conn.end()
   }
