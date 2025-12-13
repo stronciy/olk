@@ -174,6 +174,9 @@ export default function WorkPage() {
   const [mediaLoading, setMediaLoading] = useState(false)
   const [visibleThumbs, setVisibleThumbs] = useState<Set<number>>(new Set())
   const thumbObserversRef = useRef<Map<number, IntersectionObserver>>(new Map())
+  const infoScrollRef = useRef<HTMLDivElement | null>(null)
+  const [infoCanScrollUp, setInfoCanScrollUp] = useState(false)
+  const [infoCanScrollDown, setInfoCanScrollDown] = useState(false)
 
   const fetchWebsites = async () => {
     setWebsitesLoading(true)
@@ -259,6 +262,25 @@ export default function WorkPage() {
     setMediaLoading(true)
   }, [selectedProject, currentMediaIndex, activeWorkSubcategory])
 
+  useEffect(() => {
+    const el = infoScrollRef.current
+    if (!el || activeSection !== "information") return
+    const onScroll = () => {
+      const top = el.scrollTop
+      const max = el.scrollHeight - el.clientHeight
+      setInfoCanScrollUp(top > 2)
+      setInfoCanScrollDown(max - top > 2)
+    }
+    onScroll()
+    el.addEventListener("scroll", onScroll, { passive: true } as any)
+    const RZ = (typeof window !== "undefined" && (window as any).ResizeObserver) || null
+    const ro = RZ ? new RZ(onScroll) : null
+    if (ro) ro.observe(el)
+    return () => {
+      el.removeEventListener("scroll", onScroll)
+      if (ro) ro.disconnect()
+    }
+  }, [activeSection, infoCategory, aboutHtml, newsItems.length, websites.length])
   const registerThumbRef = (idx: number) => (el: HTMLElement | null) => {
     if (!el) return
     const existing = thumbObserversRef.current.get(idx)
@@ -623,27 +645,76 @@ export default function WorkPage() {
         </nav>
       </header>
 
+      {activeSection === "information" && (
+        <div className="md:hidden sticky top-[56px] z-20 border-b border-neutral-200 bg-white">
+          <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
+            {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={async () => {
+                  setInfoCategory(cat as any)
+                  if (cat === "websites") {
+                    await fetchWebsites()
+                  } else if (cat === "contacts") {
+                    await fetchContacts()
+                  }
+                }}
+                className={`snap-start px-3 py-2 text-[11px] rounded-sm border transition-all ${
+                  infoCategory === cat
+                    ? "bg-yellow-400 text-neutral-900"
+                    : "bg-white text-neutral-700 hover:bg-neutral-100 active:scale-95"
+                }`}
+              >
+                {cat.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {activeSection === "work" && (
-        <div className="md:hidden fixed left-0 top-14 bottom-0 z-10 w-16">
-          <div className="relative h-full">
-            <div
-              ref={mobileThumbsRef}
-              className="h-full overflow-y-auto snap-y snap-mandatory scroll-smooth will-change-transform"
-            >
-              <div className="flex flex-col gap-2 py-2">
-                {filteredProjects.map(({ p: project, idx }) => (
-                  <button
-                    key={idx}
-                    ref={registerThumbRef(idx)}
-                    onClick={() => {
-                      setSelectedProject(idx)
-                      setDetailsOpen(true)
-                      document.getElementById("work-media-stage")?.scrollIntoView({ behavior: "smooth", block: "center" })
-                    }}
-                    className={`relative snap-start mx-1 aspect-[2/3] rounded-sm overflow-hidden transition-transform duration-150 active:scale-95 ${
-                      idx === selectedProject ? "ring-2 ring-yellow-400" : ""
-                    }`}
-                  >
+        <div className="md:hidden border-b border-neutral-200 bg-white">
+          <div className="flex overflow-x-auto gap-2 p-2 snap-x snap-mandatory scroll-smooth">
+            {sections.map((s) => (
+              <button
+                key={s.slug}
+                onClick={() => {
+                  setActiveWorkSubcategory(s.slug)
+                  setSelectedProject(0)
+                }}
+                className={`snap-start px-3 py-2 text-[11px] rounded-sm border transition-all ${
+                  activeWorkSubcategory === s.slug
+                    ? "bg-yellow-400 text-neutral-900"
+                    : "bg-white text-neutral-700 hover:bg-neutral-100 active:scale-95"
+                }`}
+              >
+                {String(s.name || s.slug).toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeSection === "work" && (
+        <div className="md:hidden w-full">
+          <div
+            ref={mobileThumbsRef}
+            className="h-[calc(100vh-56px)] overflow-y-scroll snap-y snap-mandatory scroll-smooth overscroll-contain"
+            style={{ WebkitOverflowScrolling: "touch", willChange: "scroll-position" } as any}
+          >
+            <div className="flex flex-col gap-2 p-2">
+              {filteredProjects.map(({ p: project, idx }) => (
+                <button
+                  key={idx}
+                  ref={registerThumbRef(idx)}
+                  onClick={() => {
+                    setSelectedProject(idx)
+                    setFullscreenOpen(true)
+                  }}
+                  className={`relative snap-start w-full transition-transform duration-150 active:scale-95 ${
+                    idx === selectedProject ? "" : ""
+                  }`}
+                >
+                  <div className="relative w-[80%] mx-auto aspect-[2/3] rounded-sm overflow-hidden">
                     {!loadedThumbs.has(idx) && (
                       <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
                         <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
@@ -667,16 +738,10 @@ export default function WorkPage() {
                         })
                       }}
                     />
-                  </button>
-                ))}
-              </div>
+                  </div>
+                </button>
+              ))}
             </div>
-            {mobileThumbCanScrollUp && (
-              <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent" />
-            )}
-            {mobileThumbCanScrollDown && (
-              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
-            )}
           </div>
         </div>
       )}
@@ -786,9 +851,9 @@ export default function WorkPage() {
                           </div>
                         )}
                         <img
-                          src={visibleThumbs.has(idx) ? (project.media[0].thumbnail || project.media[0]?.url || "/placeholder.svg") : "/placeholder.svg"}
+                          src={project.media[0].thumbnail || project.media[0]?.url || "/placeholder.svg"}
                           alt={project.title}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"
                           onError={(e) => {
@@ -836,7 +901,7 @@ export default function WorkPage() {
         </nav>
       </aside>
 
-      <main className="flex-1 md:ml-48 md:pl-0 pl-20">
+      <main className={`flex-1 md:ml-48 md:pl-0 ${activeSection === "information" ? "pl-0" : "pl-20"}`}>
         {activeSection === "work" ? (
           <div className="max-w-5xl mx-auto p-4 md:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -855,6 +920,45 @@ export default function WorkPage() {
                     }`}
                   >
                     {String(s.name || s.slug).toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="md:hidden mb-4">
+              <div className="grid grid-cols-3 gap-2">
+                {filteredProjects.map(({ p: project, idx }) => (
+                  <button
+                    key={idx}
+                    className={`relative aspect-[2/3] rounded-sm overflow-hidden transition-transform duration-150 active:scale-95 ${
+                      idx === selectedProject ? "ring-2 ring-yellow-400" : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedProject(idx)
+                      openFullscreen(0)
+                    }}
+                  >
+                    {!loadedThumbs.has(idx) && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
+                        <div className="w-5 h-5 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
+                      </div>
+                    )}
+                    <img
+                      src={project.media[0]?.thumbnail || project.media[0]?.url || "/placeholder.svg"}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
+                      }}
+                      onLoad={() => {
+                        setLoadedThumbs((prev) => {
+                          const next = new Set(prev)
+                          next.add(idx)
+                          return next
+                        })
+                      }}
+                    />
                   </button>
                 ))}
               </div>
@@ -881,7 +985,7 @@ export default function WorkPage() {
             <div className="mb-4">
               <div
                 id={"work-media-stage"}
-                className="relative bg-transparent rounded-sm overflow-hidden group h-[50vh] md:h-[60vh] flex items-center justify-center"
+                className="relative bg-transparent rounded-sm overflow-hidden group h-[50vh] md:h-[60vh] md:flex hidden items-center justify-center"
                 onClick={handleStageClick}
               >
                 {currentMedia.length > 0 && currentMedia[currentMediaIndex]?.type === "image" && (
@@ -902,7 +1006,7 @@ export default function WorkPage() {
                 <div
                   ref={mediaContainerRef}
                   id={`work-media-stage-${projects[selectedProject]?.id ?? "unknown"}-${currentMedia[currentMediaIndex]?.id ?? "unknown"}-container`}
-                  className="relative z-10 h-full flex items-center justify-center transition-[cursor] duration-150"
+                  className="relative z-10 h-full md:flex hidden items-center justify-center transition-[cursor] duration-150"
                   style={{ cursor: stageCursor }}
                   onMouseMove={handleStageMouseMove}
                   onMouseLeave={() => setStageCursor("zoom-in")}
@@ -1029,10 +1133,10 @@ export default function WorkPage() {
             )}
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto p-4 md:p-8">
+          <div ref={infoScrollRef} className="relative w-full px-4 md:px-8 pr-0 md:overflow-visible md:h-auto overflow-y-auto scroll-smooth h-[calc(100vh-56px-44px)]">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div className="text-xs font-medium tracking-wider">INFORMATION</div>
-              <div className="flex flex-wrap gap-2">
+              <div className="hidden md:flex flex-wrap gap-2">
                 {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (
                   <button
                     key={cat}
@@ -1054,6 +1158,9 @@ export default function WorkPage() {
                 ))}
               </div>
             </div>
+            {infoCanScrollUp && (
+              <div className="pointer-events-none absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-white to-transparent" />
+            )}
 
               {infoCategory === "fairs" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-2">
@@ -1074,6 +1181,9 @@ export default function WorkPage() {
                     </TableBody>
                   </Table>
                 </div>
+              )}
+              {infoCanScrollDown && (
+                <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent" />
               )}
               {infoCategory === "about" && (
                 <div className="bg-white border border-neutral-200 rounded-sm p-4">
@@ -1360,6 +1470,50 @@ export default function WorkPage() {
                 ref={fullscreenVideoRef}
                 className="max-w-full max-h-full object-contain"
               />
+            )}
+            {currentMedia.length > 1 && (
+              <div className="absolute left-0 right-0 bottom-0 z-10 p-2">
+                <div className="overflow-x-auto snap-x snap-mandatory scroll-smooth">
+                  <div className="flex gap-2">
+                    {currentMedia.map((m, i) => (
+                      <button
+                        key={m.id ?? i}
+                        className={`relative w-14 h-14 rounded-sm overflow-hidden snap-start transition-transform active:scale-95 ${
+                          i === currentMediaIndex ? "ring-2 ring-yellow-400" : ""
+                        }`}
+                        onClick={() => setCurrentMediaIndex(i)}
+                      >
+                        {!loadedThumbs.has(i) && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-neutral-200 animate-pulse">
+                            <div className="w-4 h-4 rounded-full border-2 border-neutral-400 border-t-transparent animate-spin" />
+                          </div>
+                        )}
+                        {m.type === "image" ? (
+                          <img
+                            src={m.thumbnail || m.url || "/placeholder.svg"}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover"
+                            onLoad={() => {
+                              setLoadedThumbs((prev) => {
+                                const next = new Set(prev)
+                                next.add(i)
+                                return next
+                              })
+                            }}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-black flex items-center justify-center text-[10px] text-white">VIDEO</div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
             <div className="absolute bottom-8 left-8 z-10">
               <button onClick={handlePrevMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">← PREVIOUS</button>
