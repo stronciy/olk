@@ -298,11 +298,11 @@ export default function WorkPage() {
         await fetchWebsites()
       } else if (infoCategory === "contacts" && contactsEmail === "" && contactsPhone === "" && contactsAddressLine1 === "" && contactsInstagram === "" && contactsWebsite === "") {
         await fetchContacts()
-      } else if (infoCategory === "about" && aboutHtml === "") {
+      } else if (infoCategory === "about") {
         setAboutLoading(true)
         setAboutError(null)
         try {
-          const r = await fetch("/api/information/about", { cache: "no-store" })
+          const r = await fetch(`/api/information/about?ts=${Date.now()}`, { cache: "no-store" })
           if (!r.ok) {
             const t = await r.text().catch(() => "")
             throw new Error(t || "Ошибка загрузки")

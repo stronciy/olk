@@ -11,14 +11,18 @@ export async function GET(req: Request) {
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text MEDIUMTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
       const [rows]: any = await conn.query("SELECT * FROM InformationAbout WHERE id = 1")
       if (!rows.length) {
         await conn.query("REPLACE INTO InformationAbout (id, text, updatedAt) VALUES (1, '', NOW())")
-        return ok(req, { about: { text: "" } })
+        const res = ok(req, { about: { text: "" } })
+        res.headers.set("Cache-Control", "no-store")
+        return res
       }
-      return ok(req, { about: { text: rows[0].text || "" } })
+      const res = ok(req, { about: { text: rows[0].text || "" } })
+      res.headers.set("Cache-Control", "no-store")
+      return res
     } finally {
       conn.release()
     }
@@ -43,8 +47,8 @@ export async function PUT(req: Request) {
       incomingText = await req.text().catch(() => "")
     }
     if (typeof incomingText !== "string") incomingText = String(incomingText || "")
-    if (incomingText.length > 1_000_000) {
-      return fail(req, 400, "VALIDATION_ERROR", "Text is too long", { type: "ValidationError", details: [{ field: "text", message: "Max length 1,000,000" }] })
+    if (incomingText.length > 5_000_000) {
+      return fail(req, 400, "VALIDATION_ERROR", "Text is too long", { type: "ValidationError", details: [{ field: "text", message: "Max length 5,000,000" }] })
     }
     const sanitize = (html: string) => {
       let s = String(html || "")
@@ -61,8 +65,9 @@ export async function PUT(req: Request) {
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text MEDIUMTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationAbout (id INT PRIMARY KEY, text LONGTEXT, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
+      await conn.query("ALTER TABLE InformationAbout MODIFY text LONGTEXT")
       await conn.query("CREATE TABLE IF NOT EXISTS InformationAboutRevisions (id INT AUTO_INCREMENT PRIMARY KEY, text MEDIUMTEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)")
       const [cols]: any = await conn.query("SHOW COLUMNS FROM InformationAboutRevisions")
       const idCol = (cols || []).find((c: any) => String(c.Field) === "id")
