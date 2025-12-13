@@ -183,6 +183,7 @@ export default function WorkPage() {
   const [mobileHeaderHeight, setMobileHeaderHeight] = useState(0)
   const [mobileCategoriesHeight, setMobileCategoriesHeight] = useState(0)
   const [mobileTopOffset, setMobileTopOffset] = useState(0)
+  const isAutoScrollingRef = useRef(false)
 
   const fetchWebsites = async () => {
     setWebsitesLoading(true)
@@ -451,6 +452,67 @@ export default function WorkPage() {
       if (roC) roC.disconnect()
     }
   }, [activeSection])
+
+  useEffect(() => {
+    const container = mobileThumbsRef.current
+    if (!container) return
+    const debounce = (fn: () => void, delay: number) => {
+      let t: any
+      return {
+        handler: () => {
+          if (isAutoScrollingRef.current) return
+          if (t) clearTimeout(t)
+          t = setTimeout(fn, delay)
+        },
+        cancel: () => {
+          if (t) clearTimeout(t)
+        },
+      }
+    }
+    const run = () => {
+      const isMobile = typeof window !== "undefined" ? window.innerWidth <= 768 : true
+      if (!isMobile) return
+      const topBound = mobileHeaderHeight + mobileCategoriesHeight
+      const bottomBound = window.innerHeight
+      const availCenter = topBound + (bottomBound - topBound) / 2
+      let closestIdx = -1
+      let minDist = Infinity
+      thumbElementsRef.current.forEach((el, idx) => {
+        const rect = el.getBoundingClientRect()
+        const center = rect.top + rect.height / 2
+        const d = Math.abs(center - availCenter)
+        if (d < minDist) {
+          minDist = d
+          closestIdx = idx
+        }
+      })
+      if (closestIdx !== -1) {
+        const el = thumbElementsRef.current.get(closestIdx)
+        if (!el) return
+        const margin = 12
+        const desiredTop = topBound + margin
+        const elTopRelative = el.offsetTop
+        const elBottomRelative = el.offsetTop + el.offsetHeight
+        let target = elTopRelative - desiredTop + container.scrollTop
+        const maxVisibleBottom = bottomBound - margin
+        const elBottomViewport = elBottomRelative - container.scrollTop
+        if (elBottomViewport > maxVisibleBottom) {
+          target = elBottomRelative - maxVisibleBottom + container.scrollTop
+        }
+        isAutoScrollingRef.current = true
+        container.scrollTo({ top: target, behavior: "smooth" })
+        setTimeout(() => {
+          isAutoScrollingRef.current = false
+        }, 300)
+      }
+    }
+    const d = debounce(run, 120)
+    container.addEventListener("scroll", d.handler, { passive: true } as any)
+    return () => {
+      container.removeEventListener("scroll", d.handler as any)
+      d.cancel()
+    }
+  }, [mobileHeaderHeight, mobileCategoriesHeight])
 
   useEffect(() => {
     const m = currentMedia[currentMediaIndex]
