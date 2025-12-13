@@ -254,12 +254,22 @@ export default function WorkPage() {
 
   const handleNextMedia = () => {
     const currentMedia = projects[selectedProject]?.media || []
-    setCurrentMediaIndex((prev) => (prev < currentMedia.length - 1 ? prev + 1 : 0))
+    setCurrentMediaIndex((prev) => (prev < currentMedia.length - 1 ? prev + 1 : prev))
   }
 
   useEffect(() => {
     setCurrentMediaIndex(0)
   }, [selectedProject])
+
+  useEffect(() => {
+    setSelectedProject(0)
+    setCurrentMediaIndex(0)
+    const el = mobileThumbsRef.current
+    if (el) {
+      el.scrollLeft = 0
+      el.scrollTop = 0
+    }
+  }, [activeWorkSubcategory])
 
   useEffect(() => {
     setImageError(false)
@@ -453,7 +463,7 @@ export default function WorkPage() {
     }
   }, [activeSection])
 
-  // removed auto-positioning: natural scrolling behavior
+  
 
   useEffect(() => {
     const m = currentMedia[currentMediaIndex]
