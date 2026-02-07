@@ -24,6 +24,7 @@ COPY . .
 
 # Generate Prisma Client
 ENV SKIP_ENV_VALIDATION=1
+ENV DATABASE_URL="mysql://dummy:dummy@localhost:3306/dummy"
 RUN npx prisma generate
 
 # Next.js collects completely anonymous telemetry data about general usage.
