@@ -3,6 +3,12 @@ const fs = require("fs")
 const path = require("path")
 const bcrypt = require("bcryptjs")
 const sharp = require("sharp")
+
+try {
+  require("dotenv/config")
+} catch (e) {
+  // dotenv is optional in production
+}
 //seed command here 
 function parseDatabaseUrl(url) {
   if (!url) return null

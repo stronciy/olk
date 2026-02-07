@@ -1,5 +1,9 @@
-require("dotenv/config")
 const mysql = require("mysql2/promise")
+try {
+  require("dotenv/config")
+} catch (e) {
+  // dotenv is optional in production if env vars are provided by the platform
+}
 
 function parseDatabaseUrl(url) {
   if (!url) return null
