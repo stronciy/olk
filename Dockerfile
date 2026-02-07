@@ -23,7 +23,6 @@ COPY . .
 
 # Generate Prisma Client
 ENV SKIP_ENV_VALIDATION=1
-ENV DATABASE_URL="mysql://root:33w5nei69tvuws7@srv-captain--levchenya-db:3306/levchenya"
 RUN npx prisma generate
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -58,6 +57,8 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+COPY --chown=nextjs:nodejs .env ./.env
 
 USER nextjs
 
