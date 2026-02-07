@@ -26,12 +26,14 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="max-w-sm mx-auto p-6">
-      <h2 className="text-xl font-medium tracking-wide mb-4">Admin Login</h2>
-      {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
-      <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-      <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-      <button onClick={submit} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Login</button>
+    <div className="flex min-h-screen items-center justify-center p-6">
+      <div className="w-full max-w-sm">
+        <h2 className="text-xl font-medium tracking-wide mb-4">Admin Login</h2>
+        {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
+        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+        <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+        <button onClick={submit} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Login</button>
+      </div>
     </div>
   )
 }

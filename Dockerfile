@@ -77,4 +77,4 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["sh", "-c", "node scripts/ensure-db.js && node scripts/seed.js && node server.js"]
+CMD ["sh", "-c", "node scripts/ensure-db.js && node server.js"]
