@@ -104,6 +104,9 @@ export default function AdminClient() {
   const [groupDragIndex, setGroupDragIndex] = useState<number | null>(null)
   const [passwordModalOpen, setPasswordModalOpen] = useState(false)
   const [manageAccordionOpen, setManageAccordionOpen] = useState(false)
+  const [editSectionId, setEditSectionId] = useState<number | null>(null)
+  const [editSectionName, setEditSectionName] = useState("")
+  const [newSectionName, setNewSectionName] = useState("")
 
   const tinyApiKey = process.env.NEXT_PUBLIC_TINYMCE_API_KEY || ""
 
@@ -1017,10 +1020,45 @@ export default function AdminClient() {
   }
 
   const deleteSection = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this section? All items in this section will also be deleted.")) return
     await fetch(`/api/work/sections/${id}`, { method: "DELETE" })
     const s = await fetch("/api/work/sections").then((r) => r.json())
     setSections(s.sections || [])
     if (active && !s.sections.find((x: Section) => x.slug === active)) setActive("paint")
+  }
+
+  const startEditSection = (s: Section) => {
+    setEditSectionId(s.id)
+    setEditSectionName(s.name)
+  }
+
+  const saveSectionName = async (id: number) => {
+    if (!editSectionName.trim()) return
+    await fetch(`/api/work/sections/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: editSectionName.trim() })
+    })
+    const s = await fetch("/api/work/sections").then((r) => r.json())
+    setSections(s.sections || [])
+    setEditSectionId(null)
+  }
+
+  const createSection = async () => {
+    if (!newSectionName.trim()) return
+    const slug = toSlug(newSectionName)
+    const res = await fetch("/api/work/sections", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newSectionName.trim(), slug, position: sections.length })
+    })
+    if (res.ok) {
+      const s = await fetch("/api/work/sections").then((r) => r.json())
+      setSections(s.sections || [])
+      setNewSectionName("")
+    } else {
+      alert("Failed to create section. Slug might be taken.")
+    }
   }
 
   const logout = async () => {
@@ -1076,7 +1114,7 @@ export default function AdminClient() {
             onClick={() => switchTab("work")}
             className={`px-3 py-1 text-[11px] rounded-sm border ${adminTab === "work" ? "bg-yellow-400" : "bg-white hover:bg-neutral-100"}`}
           >
-            WORK
+            WORKS
           </button>
           <button
             onClick={() => switchTab("information")}
@@ -1746,13 +1784,38 @@ export default function AdminClient() {
                 </Accordion.Header>
                 {manageAccordionOpen && (
                   <Accordion.Content className="mt-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <input
+                        value={newSectionName}
+                        onChange={(e) => setNewSectionName(e.target.value)}
+                        placeholder="New section name"
+                        className="border rounded-sm px-2 py-1 text-xs w-full"
+                        onKeyDown={(e) => { if (e.key === 'Enter') createSection() }}
+                      />
+                      <button onClick={createSection} className="px-3 py-1 text-[11px] rounded-sm bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">Add Section</button>
+                    </div>
                     <ul className="space-y-2">
                       {sections.map((s, idx) => (
                         <li key={s.id} className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <button onClick={() => moveSection(s.id, -1)} className="px-2 py-1 text-[11px] rounded-sm border">Up</button>
                             <button onClick={() => moveSection(s.id, 1)} className="px-2 py-1 text-[11px] rounded-sm border">Down</button>
-                            <span className="text-sm">{idx + 1}. {s.name}</span>
+                            {editSectionId === s.id ? (
+                              <div className="flex items-center gap-1">
+                                <input
+                                  value={editSectionName}
+                                  onChange={(e) => setEditSectionName(e.target.value)}
+                                  className="border rounded-sm px-1 py-0.5 text-sm w-24"
+                                />
+                                <button onClick={() => saveSectionName(s.id)} className="px-1 py-0.5 text-[10px] bg-green-100 border border-green-300 rounded-sm">OK</button>
+                                <button onClick={() => setEditSectionId(null)} className="px-1 py-0.5 text-[10px] bg-gray-100 border border-gray-300 rounded-sm">X</button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm">{idx + 1}. {s.name}</span>
+                                <button onClick={() => startEditSection(s)} className="px-1 py-0.5 text-[10px] border rounded-sm bg-gray-50">Edit</button>
+                              </div>
+                            )}
                           </div>
                           <button onClick={() => deleteSection(s.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
                         </li>
@@ -1822,7 +1885,7 @@ export default function AdminClient() {
       )}
       {createOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4">
+          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium">Create Item</h3>
               <button onClick={() => { setCreateOpen(false); console.warn("CreateItem: cancel") }} className="text-neutral-600 hover:text-neutral-900">✕</button>
@@ -1840,7 +1903,7 @@ export default function AdminClient() {
       )}
       {deleteItemId !== null && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4">
+          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium">Confirm deletion</h3>
               <button onClick={() => setDeleteItemId(null)} className="text-neutral-600 hover:text-neutral-900">✕</button>
@@ -1936,7 +1999,7 @@ export default function AdminClient() {
       )}
       {passwordModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4">
+          <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium">Change Password</h3>
               <button onClick={() => setPasswordModalOpen(false)} className="text-neutral-600 hover:text-neutral-900">✕</button>

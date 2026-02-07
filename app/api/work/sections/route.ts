@@ -7,19 +7,12 @@ export const runtime = "nodejs"
 
 export async function GET() {
   try {
-    const slugs = ["paint", "prints", "mask", "carpet", "spare"]
     const conn = await pool.getConnection()
     try {
       await conn.query(
         "CREATE TABLE IF NOT EXISTS WorkSection (id INT AUTO_INCREMENT PRIMARY KEY, slug VARCHAR(255) UNIQUE, name VARCHAR(255), position INT DEFAULT 0, visible BOOLEAN DEFAULT TRUE, seoTitle VARCHAR(255), seoDescription TEXT, seoKeywords TEXT, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
-      for (let i = 0; i < slugs.length; i++) {
-        const slug = slugs[i]
-        await conn.query(
-          "INSERT IGNORE INTO WorkSection (slug, name, position) VALUES (?, ?, ?)",
-          [slug, slug.toUpperCase(), i]
-        )
-      }
+      // Removed auto-seeding to allow deletion
       const [rows] = await conn.query("SELECT * FROM WorkSection ORDER BY position ASC")
       return NextResponse.json({ sections: rows })
     } finally {
