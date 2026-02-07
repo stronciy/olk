@@ -334,6 +334,69 @@ async function main() {
     } else {
       console.warn("catalog_seed.json not found at", jsonPath)
     }
+
+    // Seed from dump for requested tables (NEWS, CONTACTS, FAIRS, AWARDS, SOLO, GROUP, WEBSITES)
+    const dumpPath = path.join(process.cwd(), "data", "seed_dump.json")
+    if (fs.existsSync(dumpPath)) {
+      console.log("Found seed_dump.json, seeding requested tables...")
+      const dump = JSON.parse(fs.readFileSync(dumpPath, "utf8"))
+      
+      const tablesToSeed = [
+        {
+          name: "InformationNews",
+          create: "CREATE TABLE IF NOT EXISTS InformationNews (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), date DATETIME, text TEXT NOT NULL, content MEDIUMTEXT, summary TEXT, draft TINYINT DEFAULT 0, category VARCHAR(64), coverUrl VARCHAR(255), previewUrl VARCHAR(255), position INT DEFAULT 0, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationContacts",
+          create: "CREATE TABLE IF NOT EXISTS InformationContacts (id INT PRIMARY KEY, email VARCHAR(255), phone VARCHAR(255), address TEXT, addressLine1 VARCHAR(255), addressLine2 VARCHAR(255), addressLine3 VARCHAR(255), instagram VARCHAR(255), facebook VARCHAR(255), website VARCHAR(255), updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationFairs",
+          create: "CREATE TABLE IF NOT EXISTS InformationFairs (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationAwards",
+          create: "CREATE TABLE IF NOT EXISTS InformationAwards (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationSolo",
+          create: "CREATE TABLE IF NOT EXISTS InformationSolo (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationGroup",
+          create: "CREATE TABLE IF NOT EXISTS InformationGroup (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        },
+        {
+          name: "InformationWebsites",
+          create: "CREATE TABLE IF NOT EXISTS InformationWebsites (id INT AUTO_INCREMENT PRIMARY KEY, url TEXT, label VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        }
+      ]
+
+      for (const t of tablesToSeed) {
+        if (dump[t.name] && Array.isArray(dump[t.name])) {
+          await conn.query(t.create)
+          const rows = dump[t.name]
+          if (rows.length > 0) {
+             const keys = Object.keys(rows[0])
+             if (keys.length > 0) {
+               const placeholders = keys.map(() => '?').join(', ')
+               const columns = keys.map(k => `\`${k}\``).join(', ')
+               const sql = `INSERT IGNORE INTO \`${t.name}\` (${columns}) VALUES (${placeholders})`
+               let inserted = 0
+               for (const row of rows) {
+                 const values = keys.map(k => {
+                   const v = row[k]
+                   return v === undefined ? null : v
+                 })
+                 await conn.query(sql, values)
+                 inserted++
+               }
+               console.log(`Seeded ${inserted} rows into ${t.name}`)
+             }
+          }
+        }
+      }
+    }
   } finally {
     conn.release()
     await pool.end()
