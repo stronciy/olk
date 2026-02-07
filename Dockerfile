@@ -22,6 +22,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate Prisma Client
+ENV SKIP_ENV_VALIDATION=1
 RUN npx prisma generate
 
 # Next.js collects completely anonymous telemetry data about general usage.
