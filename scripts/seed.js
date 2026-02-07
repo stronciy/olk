@@ -1,8 +1,8 @@
-import mysql from "mysql2/promise"
-import fs from "fs"
-import path from "path"
-import bcrypt from "bcryptjs"
-import sharp from "sharp"
+const mysql = require("mysql2/promise")
+const fs = require("fs")
+const path = require("path")
+const bcrypt = require("bcryptjs")
+const sharp = require("sharp")
 
 function parseDatabaseUrl(url) {
   if (!url) return null

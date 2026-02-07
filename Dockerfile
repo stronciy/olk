@@ -49,7 +49,7 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -60,8 +60,8 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-COPY --chown=nextjs:nodejs .env ./.env
 COPY --chown=nextjs:nodejs scripts ./scripts
+COPY --chown=nextjs:nodejs data ./data
 
 USER nextjs
 
@@ -71,4 +71,4 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["sh", "-c", "node scripts/ensure-db.js && node server.js"]
+CMD ["sh", "-c", "node scripts/ensure-db.js && node scripts/seed.js && node server.js"]
