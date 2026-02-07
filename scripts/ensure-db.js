@@ -57,7 +57,7 @@ async function connectWithRetry(config, retries = 10) {
   }
 }
 
-async function main() {
+async function main() { 
   const url = process.env.DATABASE_URL
   if (!url) {
     console.log("No DATABASE_URL found, skipping DB creation check.")

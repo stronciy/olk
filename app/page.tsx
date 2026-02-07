@@ -1140,7 +1140,7 @@ export default function WorkPage() {
           </div>
         ) : (
           <div ref={infoScrollRef} className="relative w-full px-4 md:px-8 pr-0 md:overflow-visible md:h-auto overflow-y-auto scroll-smooth h-[calc(100vh-56px-44px)]">
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4 mt-6">
               <div className="text-xs font-medium tracking-wider">INFORMATION</div>
               <div className="hidden md:flex flex-wrap gap-2">
                 {(["about", "news", "contacts", "fairs", "awards", "solo", "group", "websites"] as const).map((cat) => (

@@ -102,7 +102,7 @@ async function main() {
       "CREATE TABLE IF NOT EXISTS Users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) UNIQUE, passwordHash VARCHAR(255), role VARCHAR(50), createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
     )
     const [u] = await conn.query("SELECT id FROM Users WHERE username = 'admin' LIMIT 1")
-    const hash = await bcrypt.hash("admin", 10)
+    const hash = await bcrypt.hash("test1234", 10)
     if (!(Array.isArray(u) && u.length)) {
       await conn.query(
         "INSERT INTO Users (username, passwordHash, role) VALUES (?, ?, ?)",
