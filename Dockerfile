@@ -63,7 +63,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # We need to install production dependencies for scripts (like mysql2)
 # because standalone build only includes dependencies used in the app code
 COPY package.json package-lock.json* ./
-RUN npm install mysql2 sharp bcryptjs --no-save
+RUN npm install mysql2 sharp bcryptjs dotenv --no-save && \
+    chown -R nextjs:nodejs node_modules
 
 COPY --chown=nextjs:nodejs scripts ./scripts
 COPY --chown=nextjs:nodejs data ./data

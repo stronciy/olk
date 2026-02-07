@@ -1,4 +1,24 @@
-const mysql = require("mysql2/promise")
+const fs = require("fs")
+let mysql
+try {
+  mysql = require("mysql2/promise")
+} catch (err) {
+  console.error("FATAL: Failed to load mysql2/promise:", err.message)
+  console.error("Current directory:", process.cwd())
+  try {
+    if (fs.existsSync("node_modules")) {
+      console.error("node_modules exists. Checking for mysql2...")
+      const hasMysql2 = fs.existsSync("node_modules/mysql2")
+      console.error("node_modules/mysql2 exists:", hasMysql2)
+    } else {
+      console.error("node_modules NOT found in current directory")
+    }
+  } catch (e) {
+    console.error("Error checking file system:", e.message)
+  }
+  process.exit(1)
+}
+
 try {
   require("dotenv/config")
 } catch (e) {
