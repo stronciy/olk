@@ -3,7 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const bcrypt = require("bcryptjs")
 const sharp = require("sharp")
-
+//seed command here 
 function parseDatabaseUrl(url) {
   if (!url) return null
   try {
