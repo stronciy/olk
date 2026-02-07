@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
+import UnderConstruction from "@/components/UnderConstruction"
 
 export const metadata: Metadata = {
   title: "Oksana Levchenya - Work",
@@ -21,6 +22,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   const enableVercelAnalytics = process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === "true"
+  
+  // Check if site should be visible. Default to true if not set.
+  // The user requested: "env visable=false" -> show under construction.
+  // We support SITE_VISIBLE=false or VISIBLE=false.
+  const isVisible = process.env.SITE_VISIBLE !== "false" && process.env.VISIBLE !== "false"
+
+  if (!isVisible) {
+    return (
+      <html lang="en">
+        <body className="antialiased">
+          <UnderConstruction />
+        </body>
+      </html>
+    )
+  }
+
   return (
     <html lang="en">
       <body className={`antialiased`}>
