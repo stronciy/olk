@@ -8,7 +8,7 @@ export const runtime = "nodejs"
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
-    const sectionSlug = searchParams.get("section") || "paint"
+    const sectionSlug = searchParams.get("section") || "all"
     const isAdmin = requireAdmin(req)
     const conn = await pool.getConnection()
     try {
@@ -18,15 +18,32 @@ export async function GET(req: Request) {
       await conn.query(
         "CREATE TABLE IF NOT EXISTS WorkMedia (id INT AUTO_INCREMENT PRIMARY KEY, itemId INT, type ENUM('IMAGE','VIDEO'), url TEXT, thumbnail TEXT, caption TEXT, alt TEXT, position INT DEFAULT 0, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
-      const [sections]: any = await conn.query("SELECT * FROM WorkSection WHERE slug = ? LIMIT 1", [sectionSlug])
-      if (!sections.length) return NextResponse.json({ items: [] })
-      const section = sections[0]
-      const [items]: any = await conn.query(
-        isAdmin
-          ? "SELECT * FROM WorkItem WHERE sectionId = ? ORDER BY position ASC"
-          : "SELECT * FROM WorkItem WHERE sectionId = ? AND published = 1 ORDER BY position ASC",
-        [section.id]
-      )
+
+      let items: any[] = []
+
+      if (sectionSlug === "all") {
+        // Fetch all items
+        const [rows]: any = await conn.query(
+          isAdmin
+            ? "SELECT * FROM WorkItem ORDER BY createdAt DESC, position ASC"
+            : "SELECT * FROM WorkItem WHERE published = 1 ORDER BY createdAt DESC, position ASC"
+        )
+        items = rows
+      } else {
+        // Fetch by section
+        const [sections]: any = await conn.query("SELECT * FROM WorkSection WHERE slug = ? LIMIT 1", [sectionSlug])
+        if (!sections.length) return NextResponse.json({ items: [] })
+        const section = sections[0];
+        
+        const [rows]: any = await conn.query(
+          isAdmin
+            ? "SELECT * FROM WorkItem WHERE sectionId = ? ORDER BY position ASC"
+            : "SELECT * FROM WorkItem WHERE sectionId = ? AND published = 1 ORDER BY position ASC",
+          [section.id]
+        )
+        items = rows
+      }
+
       const itemIds = items.map((i: any) => i.id)
       let mediaByItem: Record<number, any[]> = {}
       if (itemIds.length) {
@@ -45,6 +62,7 @@ export async function GET(req: Request) {
       conn.release()
     }
   } catch (_e) {
+    console.error(_e)
     return NextResponse.json({ items: [] })
   }
 }
