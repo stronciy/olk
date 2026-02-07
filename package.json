@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "node scripts/ensure-db.js && next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "node scripts/ensure-db.js && next start"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

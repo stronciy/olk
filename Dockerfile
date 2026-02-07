@@ -4,6 +4,7 @@ RUN apk add --no-cache libc6-compat openssl
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache python3 make g++
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -59,6 +60,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 COPY --chown=nextjs:nodejs .env ./.env
+COPY --chown=nextjs:nodejs scripts ./scripts
 
 USER nextjs
 
@@ -68,4 +70,4 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node scripts/ensure-db.js && node server.js"]
