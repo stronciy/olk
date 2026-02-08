@@ -5,15 +5,9 @@ import "./globals.css"
 import UnderConstruction from "@/components/UnderConstruction"
 
 export const metadata: Metadata = {
-  title: "Oksana Levchenya - Work",
-  description: "Portfolio of stage design and installation work",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
-    apple: "/apple-icon.png",
-  },
+  title: "Oksana Levchenya",
+  description: "Oksana Levchenys Personal Site",
+  generator: "ksherif",
 }
 
 export default function RootLayout({

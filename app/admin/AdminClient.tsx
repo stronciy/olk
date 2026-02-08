@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Editor } from "@tinymce/tinymce-react"
-import { GripVertical, CheckCircle, AlertCircle, Pencil, Trash } from "lucide-react"
+import { GripVertical, CheckCircle, AlertCircle, Pencil, Trash, UploadCloud, File as FileIcon, X } from "lucide-react"
 import * as Accordion from "@radix-ui/react-accordion"
 
 type Section = { id: number; slug: string; name: string; seoTitle?: string | null; seoDescription?: string | null; seoKeywords?: string | null }
-type Item = { id: number; title: string; slug: string; published?: number; position?: number }
+type Item = { id: number; title: string; slug: string; published?: number; position?: number; thumbnail?: string; sectionId?: number }
 type Media = { id: number; type: "IMAGE" | "VIDEO"; url: string; thumbnail?: string | null; caption?: string | null; alt?: string | null; position?: number }
 
 export default function AdminClient() {
@@ -33,7 +33,10 @@ export default function AdminClient() {
   const [mediaView, setMediaView] = useState<"list" | "thumbs">("list")
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [itemDragIndex, setItemDragIndex] = useState<number | null>(null)
+  const [sortMode, setSortMode] = useState(false)
+  const [sortSaving, setSortSaving] = useState(false)
   const [uploads, setUploads] = useState<{ name: string; progress: number; status: "pending" | "success" | "error"; message?: string }[]>([])
+  const [isDragging, setIsDragging] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
   const [newItemTitle, setNewItemTitle] = useState("")
   const [newItemSlug, setNewItemSlug] = useState("")
@@ -754,6 +757,8 @@ export default function AdminClient() {
         slug: String(x?.slug || ""),
         published: typeof x?.published === "number" ? x.published : (x?.published ? 1 : 0),
         position: typeof x?.position === "number" ? x.position : undefined,
+        thumbnail: x.media?.[0]?.thumbnail || x.media?.[0]?.url || "",
+        sectionId: x.sectionId
       }))
       setItems(list)
       setSelectedItem(null)
@@ -843,7 +848,21 @@ export default function AdminClient() {
     arr.splice(targetIdx, 0, it)
     setItems(arr)
     setItemDragIndex(null)
-    await persistItemOrder(arr)
+    if (!sortMode) {
+      await persistItemOrder(arr)
+    }
+  }
+
+  const saveGlobalOrder = async () => {
+    setSortSaving(true)
+    try {
+      await persistItemOrder(items)
+      showSuccess("Order saved successfully")
+    } catch {
+      showError("Failed to save order")
+    } finally {
+      setSortSaving(false)
+    }
   }
 
   const deleteItem = async (id: number) => {
@@ -861,10 +880,11 @@ export default function AdminClient() {
     }
   }
 
-  const loadItem = async (id: number) => {
+  const loadItem = async (id: number, keepUploads = false) => {
     const res = await fetch(`/api/work/items/${id}`)
     const r = res.ok ? await res.json() : { item: null }
     if (!r.item) return
+    if (!keepUploads) setUploads([])
     setSelectedItem(r.item)
     setTitle(r.item.title)
     setSlug(r.item.slug)
@@ -984,7 +1004,7 @@ export default function AdminClient() {
         xhr.send(fd)
       })
     }
-    await loadItem(selectedItem.id)
+    await loadItem(selectedItem.id, true)
   }
 
   const saveSectionSeo = async () => {
@@ -1760,12 +1780,18 @@ export default function AdminClient() {
             {sections.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setActive(s.slug)}
+                onClick={() => { setActive(s.slug); setSortMode(false); }}
                 className={`px-3 py-1 text-[11px] rounded-sm border ${active === s.slug ? "bg-yellow-400" : "bg-white"}`}
               >
                 {String(s.name)}
               </button>
             ))}
+            <button
+                onClick={() => { setActive("all"); setSortMode(true); }}
+                className={`px-3 py-1 text-[11px] rounded-sm border ${active === "all" ? "bg-black text-white border-black" : "bg-white hover:bg-neutral-50"}`}
+            >
+                Global Sort
+            </button>
           </div>
           <div className="bg-white border border-neutral-200 rounded-sm p-4 mb-4">
             <h3 className="text-sm font-medium mb-2">Account</h3>
@@ -1826,13 +1852,71 @@ export default function AdminClient() {
               </Accordion.Item>
             </Accordion.Root>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium">Items</h3>
-                <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
+          {active === "all" ? (
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 animate-in fade-in duration-300">
+              <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 py-2 border-b border-neutral-100">
+                <div>
+                  <h3 className="text-sm font-medium">Global Sort Order</h3>
+                  <div className="text-xs text-neutral-500">Drag and drop items to reorder. Changes affect "All Works" and all subcategories.</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={saveGlobalOrder} disabled={sortSaving} className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium bg-black text-white rounded-sm hover:bg-neutral-800 disabled:opacity-50 transition-colors">
+                    {sortSaving ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-3 h-3" />
+                        Save Order
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-          <div className="h-full overflow-y-auto">
+              <div className="grid grid-cols-7 gap-3">
+                {items.map((i, idx) => (
+                  <div
+                    key={i.id}
+                    draggable
+                    onDragStart={() => setItemDragIndex(idx)}
+                    onDragOver={(e) => { e.preventDefault(); }}
+                    onDrop={() => handleItemDropAt(idx)}
+                    className={`
+                      relative group aspect-square bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200 cursor-move
+                      ${itemDragIndex === idx ? "opacity-50 scale-95" : "hover:border-blue-500 hover:shadow-md transition-all duration-200"}
+                    `}
+                  >
+                    {i.thumbnail ? (
+                      <img src={i.thumbnail} alt={i.title} className="w-full h-full object-cover pointer-events-none" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-neutral-300">
+                        <FileIcon className="w-8 h-8" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                    <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/60 backdrop-blur-sm text-[10px] text-white truncate px-2">
+                      {i.title}
+                    </div>
+                    <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-1 rounded-sm shadow-sm">
+                      <GripVertical className="w-3 h-3 text-neutral-600" />
+                    </div>
+                    <div className="absolute top-1 left-1 bg-black/60 text-white text-[9px] px-1 rounded-sm backdrop-blur-sm">
+                      #{idx + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96 flex flex-col">
+            <div className="flex items-center justify-between mb-2 shrink-0">
+              <h3 className="text-sm font-medium">Items</h3>
+              <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0">
             <ul className="space-y-2">
               {items.map((i, idx) => (
                 <li
@@ -1854,12 +1938,12 @@ export default function AdminClient() {
             </ul>
           </div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
-          <h3 className="text-sm font-medium mb-2">Edit Item</h3>
+        <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96 flex flex-col">
+          <h3 className="text-sm font-medium mb-2 shrink-0">Edit Item</h3>
           {!selectedItem ? (
             <div className="text-sm text-neutral-600">Select an item to edit.</div>
           ) : (
-            <div className="h-full overflow-y-auto">
+            <div className="flex-1 overflow-y-auto min-h-0">
               <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
               <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="Slug" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
               <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
@@ -1879,7 +1963,6 @@ export default function AdminClient() {
               <button onClick={saveItem} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
             </div>
           )}
-        </div>
         </div>
         </div>
       )}
@@ -1925,27 +2008,59 @@ export default function AdminClient() {
             <input value={sectionSeoKeywords} onChange={(e) => setSectionSeoKeywords(e.target.value)} placeholder="SEO Keywords" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
             <button onClick={saveSectionSeo} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
           </div>
-          <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-white border border-neutral-200 rounded-sm p-4 h-[800px] flex flex-col">
+            <div className="flex items-center justify-between mb-4 shrink-0">
               <h3 className="text-sm font-medium">Media</h3>
               <div className="flex items-center gap-2">
                 <button onClick={() => setMediaView("list")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "list" ? "bg-yellow-400" : "bg-white"}`}>List</button>
                 <button onClick={() => setMediaView("thumbs")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "thumbs" ? "bg-yellow-400" : "bg-white"}`}>Thumbs</button>
               </div>
             </div>
-            <div className="h-full overflow-y-auto">
-              <div onDragOver={(e) => e.preventDefault()} onDrop={onDropFiles} className="border border-dashed rounded-sm p-4 mb-4 text-center text-xs text-neutral-600">Drop files here</div>
+            <div className="flex-1 overflow-y-auto min-h-0 pr-1">
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => { setIsDragging(false); onDropFiles(e); }}
+                className={`border border-dashed rounded-sm p-8 mb-6 text-center transition-all duration-200 ${isDragging ? "border-blue-500 bg-blue-50 scale-[1.02]" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"}`}
+              >
+                <UploadCloud className={`w-10 h-10 mx-auto mb-3 transition-colors ${isDragging ? "text-blue-500" : "text-neutral-300"}`} />
+                <div className="text-sm font-medium text-neutral-700 mb-1">Drop files here to upload</div>
+                <div className="text-xs text-neutral-400">Support for images and videos</div>
+              </div>
               {uploads.length > 0 && (
-                <div className="space-y-2 mb-4">
-                  {uploads.map((u, idx) => (
-                    <div key={`${u.name}-${idx}`} className="flex items-center gap-3">
-                      <span className="text-xs w-40 truncate">{u.name}</span>
-                      <div className="flex-1 h-1 bg-neutral-200 rounded-sm">
-                        <div className={`h-1 rounded-sm ${u.status === "error" ? "bg-red-500" : u.status === "success" ? "bg-green-500" : "bg-yellow-400"}`} style={{ width: `${u.progress}%` }} />
+                <div className="border rounded-sm mb-6 bg-white overflow-hidden shadow-sm">
+                  <div className="px-4 py-2 bg-neutral-50 border-b border-neutral-100 flex justify-between items-center">
+                    <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Upload Queue</span>
+                    <button onClick={() => setUploads([])} className="text-[10px] font-medium text-neutral-400 hover:text-red-600 flex items-center gap-1 transition-colors">
+                      <X className="w-3 h-3" /> Clear
+                    </button>
+                  </div>
+                  <div className="divide-y divide-neutral-100 max-h-60 overflow-y-auto">
+                    {uploads.map((u, idx) => (
+                      <div key={`${u.name}-${idx}`} className="px-4 py-3 flex items-center gap-3 hover:bg-neutral-50/50 transition-colors">
+                        <FileIcon className="w-4 h-4 text-neutral-400 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between text-xs mb-1.5">
+                            <span className="font-medium text-neutral-700 truncate pr-4">{u.name}</span>
+                            <span className={`shrink-0 font-medium ${u.status === "error" ? "text-red-600" : u.status === "success" ? "text-green-600" : "text-blue-600"}`}>
+                              {u.status === "success" ? "Complete" : u.status === "error" ? "Error" : `${u.progress}%`}
+                            </span>
+                          </div>
+                          <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden w-full">
+                            <div 
+                              className={`h-full transition-all duration-300 ease-out rounded-full ${u.status === "error" ? "bg-red-500" : u.status === "success" ? "bg-green-500" : "bg-blue-500"}`} 
+                              style={{ width: `${u.progress}%` }} 
+                            />
+                          </div>
+                          {u.message && u.status === "error" && <div className="text-[10px] text-red-500 mt-1 truncate">{u.message}</div>}
+                        </div>
+                        <div className="shrink-0 w-5 flex justify-center">
+                          {u.status === "success" && <CheckCircle className="w-4 h-4 text-green-500" />}
+                          {u.status === "error" && <AlertCircle className="w-4 h-4 text-red-500" />}
+                        </div>
                       </div>
-                      <span className={`text-[11px] ${u.status === "error" ? "text-red-600" : u.status === "success" ? "text-green-600" : "text-neutral-600"}`}>{u.status === "pending" ? `${u.progress}%` : u.status === "success" ? "Success" : "Error"}</span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
               <div className="space-y-2 mb-4">
@@ -1982,7 +2097,7 @@ export default function AdminClient() {
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={() => handleDropAt(idx)}
                       >
-                        <img src={m.thumbnail || m.url} alt={m.alt || ""} className="w-full h-auto object-cover border rounded-sm" />
+                        <img src={m.thumbnail || m.url} alt={m.alt || ""} className="w-full aspect-square object-cover border rounded-sm" />
                         <button onClick={() => deleteMedia(m.id)} className="absolute top-1 right-1 px-2 py-1 text-[11px] rounded-sm border bg-white">Delete</button>
                       </div>
                     ))}
@@ -2016,5 +2131,7 @@ export default function AdminClient() {
         </div>
       )}
     </div>
+  )}
+</div>
   )
 }

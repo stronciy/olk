@@ -25,8 +25,8 @@ export async function GET(req: Request) {
         // Fetch all items
         const [rows]: any = await conn.query(
           isAdmin
-            ? "SELECT * FROM WorkItem ORDER BY createdAt DESC, position ASC"
-            : "SELECT * FROM WorkItem WHERE published = 1 ORDER BY createdAt DESC, position ASC"
+            ? "SELECT * FROM WorkItem ORDER BY position ASC, createdAt DESC"
+            : "SELECT * FROM WorkItem WHERE published = 1 ORDER BY position ASC, createdAt DESC"
         )
         items = rows
       } else {
@@ -118,9 +118,10 @@ export async function PATCH(req: Request) {
         ids
       )
       if (rows.length !== ids.length) return NextResponse.json({ error: "Some items not found" }, { status: 404 })
-      const sectionId = rows[0].sectionId
-      const sameSection = rows.every((r: any) => r.sectionId === sectionId)
-      if (!sameSection) return NextResponse.json({ error: "Items must belong to the same section" }, { status: 400 })
+      // Allow reordering across different sections
+      // const sectionId = rows[0].sectionId
+      // const sameSection = rows.every((r: any) => r.sectionId === sectionId)
+      // if (!sameSection) return NextResponse.json({ error: "Items must belong to the same section" }, { status: 400 })
       for (let i = 0; i < ids.length; i++) {
         await conn.query("UPDATE WorkItem SET position = ?, updatedAt = NOW() WHERE id = ?", [i, ids[i]])
       }
