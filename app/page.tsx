@@ -184,7 +184,8 @@ export default function HomePage() {
       {/* Top Navigation Bar */}
       <header className="fixed top-0 left-0 right-0 h-auto bg-white z-50 flex flex-col px-4 md:px-8 border-b border-gray-100 pb-2">
         <div className="flex items-center gap-4 h-16">
-          <h1 className="text-lg md:text-xl font-bold tracking-wider uppercase cursor-pointer" onClick={() => setActiveCategory("all")}>
+          <h1 className="text-lg md:text-xl font-bold tracking-wider uppercase cursor-pointer flex items-center gap-3" onClick={() => setActiveCategory("all")}>
+            <img src="/icon0.svg" alt="" className="h-[1em] w-auto" />
             OKSANA LEVCHENYA
           </h1>
           

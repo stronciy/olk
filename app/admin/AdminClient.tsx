@@ -4,12 +4,30 @@ import { useEffect, useRef, useState } from "react"
 import { Editor } from "@tinymce/tinymce-react"
 import { GripVertical, CheckCircle, AlertCircle, Pencil, Trash, UploadCloud, File as FileIcon, X } from "lucide-react"
 import * as Accordion from "@radix-ui/react-accordion"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 type Section = { id: number; slug: string; name: string; seoTitle?: string | null; seoDescription?: string | null; seoKeywords?: string | null }
 type Item = { id: number; title: string; slug: string; published?: number; position?: number; thumbnail?: string; sectionId?: number }
 type Media = { id: number; type: "IMAGE" | "VIDEO"; url: string; thumbnail?: string | null; caption?: string | null; alt?: string | null; position?: number }
 
+const mapResponseToItems = (rawItems: any[]): Item[] => {
+  return (rawItems || []).map((x: any) => {
+    const media = Array.isArray(x.media) ? x.media : []
+    return {
+      id: Number(x?.id ?? 0),
+      title: String(x?.title || ""),
+      slug: String(x?.slug || ""),
+      published: typeof x?.published === "number" ? x.published : (x?.published ? 1 : 0),
+      position: typeof x?.position === "number" ? x.position : undefined,
+      thumbnail: media[0]?.thumbnail || media[0]?.url || "",
+      sectionId: x.sectionId
+    }
+  })
+}
+
 export default function AdminClient() {
+  const { toast } = useToast()
   const [adminTab, setAdminTab] = useState<"work" | "information">("work")
   const [infoMenu, setInfoMenu] = useState<"about" | "news" | "contacts" | "fairs" | "awards" | "solo" | "group" | "websites">("about")
   const [viewLoading, setViewLoading] = useState(false)
@@ -97,10 +115,7 @@ export default function AdminClient() {
   const [websiteFilter, setWebsiteFilter] = useState("")
   const [websitePage, setWebsitePage] = useState(1)
   const [websitePageSize, setWebsitePageSize] = useState(10)
-  const [noticeOpen, setNoticeOpen] = useState(false)
-  const [noticeType, setNoticeType] = useState<"success" | "error" | null>(null)
-  const [noticeMessage, setNoticeMessage] = useState("")
-  const noticeTimerRef = useRef<number | null>(null)
+
   const debounceRef = useRef<number | null>(null)
   const [awardDragIndex, setAwardDragIndex] = useState<number | null>(null)
   const [soloDragIndex, setSoloDragIndex] = useState<number | null>(null)
@@ -116,34 +131,20 @@ export default function AdminClient() {
  
 
   const showSuccess = (message = "Данные успешно сохранены") => {
-    if (noticeTimerRef.current) {
-      window.clearTimeout(noticeTimerRef.current)
-      noticeTimerRef.current = null
-    }
-    setNoticeType("success")
-    setNoticeMessage(message)
-    setNoticeOpen(true)
-    noticeTimerRef.current = window.setTimeout(() => {
-      setNoticeOpen(false)
-      setNoticeType(null)
-      setNoticeMessage("")
-      noticeTimerRef.current = null
-    }, 4000)
+    toast({
+      title: "Success",
+      description: message,
+      className: "bg-green-50 border-green-200 text-green-800",
+      duration: 3000,
+    })
   }
   const showError = (message = "Ошибка сохранения") => {
-    if (noticeTimerRef.current) {
-      window.clearTimeout(noticeTimerRef.current)
-      noticeTimerRef.current = null
-    }
-    setNoticeType("error")
-    setNoticeMessage(message)
-    setNoticeOpen(true)
-    noticeTimerRef.current = window.setTimeout(() => {
-      setNoticeOpen(false)
-      setNoticeType(null)
-      setNoticeMessage("")
-      noticeTimerRef.current = null
-    }, 4500)
+    toast({
+      title: "Error",
+      description: message,
+      variant: "destructive",
+      duration: 3000,
+    })
   }
 
   const formatDateForView = (s: string) => {
@@ -749,18 +750,9 @@ export default function AdminClient() {
 
   useEffect(() => {
     const load = async () => {
-      const rRes = await fetch(`/api/work/items?section=${active}`)
+      const rRes = await fetch(`/api/work/items?section=${active}`, { cache: "no-store" })
       const r = rRes.ok ? await rRes.json() : { items: [] }
-      const list = (r.items || []).map((x: any) => ({
-        id: Number(x?.id ?? 0),
-        title: String(x?.title || ""),
-        slug: String(x?.slug || ""),
-        published: typeof x?.published === "number" ? x.published : (x?.published ? 1 : 0),
-        position: typeof x?.position === "number" ? x.position : undefined,
-        thumbnail: x.media?.[0]?.thumbnail || x.media?.[0]?.url || "",
-        sectionId: x.sectionId
-      }))
-      setItems(list)
+      setItems(mapResponseToItems(r.items))
       setSelectedItem(null)
       setDescription("")
       setYear("")
@@ -816,8 +808,8 @@ export default function AdminClient() {
         return
       }
       const created = await res.json().catch(() => ({}))
-      const r = await fetch(`/api/work/items?section=${active}`).then((x) => x.json())
-      setItems(r.items || [])
+      const r = await fetch(`/api/work/items?section=${active}`, { cache: "no-store" }).then((x) => x.json())
+      setItems(mapResponseToItems(r.items))
       const id = created?.item?.id
       if (id) await loadItem(Number(id))
       setCreateOpen(false)
@@ -837,8 +829,8 @@ export default function AdminClient() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids }),
     })
-    const r = await fetch(`/api/work/items?section=${active}`).then((x) => x.json())
-    setItems(r.items || [])
+    const r = await fetch(`/api/work/items?section=${active}`, { cache: "no-store" }).then((x) => x.json())
+    setItems(mapResponseToItems(r.items))
   }
 
   const handleItemDropAt = async (targetIdx: number) => {
@@ -872,8 +864,8 @@ export default function AdminClient() {
       if (selectedItem?.id === id) {
         setSelectedItem(null)
       }
-      const r = await fetch(`/api/work/items?section=${active}`).then((x) => x.json())
-      setItems(r.items || [])
+      const r = await fetch(`/api/work/items?section=${active}`, { cache: "no-store" }).then((x) => x.json())
+      setItems(mapResponseToItems(r.items))
     } finally {
       setDeleting(false)
       setDeleteItemId(null)
@@ -916,8 +908,8 @@ export default function AdminClient() {
       }),
     })
     await loadItem(selectedItem.id)
-    const r = await fetch(`/api/work/items?section=${active}`).then((x) => x.json())
-    setItems(r.items || [])
+    const r = await fetch(`/api/work/items?section=${active}`, { cache: "no-store" }).then((x) => x.json())
+    setItems(mapResponseToItems(r.items))
   }
 
   const addMedia = async () => {
@@ -1126,7 +1118,7 @@ export default function AdminClient() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 pb-20">
+    <div className="w-full px-6 pb-20">
       <h2 className="text-xl font-medium tracking-wide mb-4">Admin</h2>
       <div className="flex items-center justify-between border-b border-neutral-200 pb-2 mb-4">
         <div className="flex items-center gap-2">
@@ -1182,24 +1174,12 @@ export default function AdminClient() {
                   value={aboutText}
                   onEditorChange={(val) => {
                     setAboutText(val)
-                    setNoticeType("success")
-                    setNoticeMessage("Saving…")
-                    setNoticeOpen(true)
                     window.clearTimeout(debounceRef.current || undefined as unknown as number)
                     debounceRef.current = window.setTimeout(async () => {
                       try {
-                        const r = await fetch("/api/information/about", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: val }) })
-                        if (!r.ok) {
-                          const t = await r.text().catch(() => "")
-                          setNoticeType("error")
-                          setNoticeMessage(t || "Ошибка сохранения")
-                          return
-                        }
-                        setNoticeType("success")
-                        setNoticeMessage("Saved")
+                        await fetch("/api/information/about", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: val }) })
                       } catch {
-                        setNoticeType("error")
-                        setNoticeMessage("Ошибка сети")
+                        // ignore
                       }
                     }, 1000)
                   }}
@@ -1225,7 +1205,7 @@ export default function AdminClient() {
                 />
               </div>
               <div className="flex items-center justify-between">
-                <div className={`text-xs ${noticeType === "error" ? "text-red-600" : "text-neutral-500"}`}>{noticeOpen ? noticeMessage : ""}</div>
+                <div />
                 <button onClick={saveAbout} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
               </div>
             </div>
@@ -1239,7 +1219,7 @@ export default function AdminClient() {
             {newsModalOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/50" onClick={cancelNewsModal} />
-                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-[95%] max-w-[640px] max-h-[85vh] overflow-y-auto">
+                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl">
                   <h4 className="text-sm font-medium mb-2">{newsModalMode === "add" ? "Add News" : "Edit News"}</h4>
                   {newsModalError && <div className="text-xs text-red-600 mb-2">{newsModalError}</div>}
                   <div className="mb-2">
@@ -1761,18 +1741,7 @@ export default function AdminClient() {
               </div>
             </div>
           )}
-          {noticeOpen && noticeType && (
-            <div className={`fixed left-1/2 -translate-x-1/2 bottom-4 z-50 w-[calc(100%-2rem)] max-w-sm sm:max-w-md md:max-w-lg shadow-lg rounded-sm border ${noticeType === "success" ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
-              <div className="flex items-center gap-2 px-3 py-2">
-                {noticeType === "success" ? (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-red-600" />
-                )}
-                <div className={`text-sm ${noticeType === "success" ? "text-green-800" : "text-red-800"}`}>{noticeMessage}</div>
-              </div>
-            </div>
-          )}
+
         </div>
           ) : (
         <div>
@@ -1910,62 +1879,181 @@ export default function AdminClient() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96 flex flex-col">
-            <div className="flex items-center justify-between mb-2 shrink-0">
-              <h3 className="text-sm font-medium">Items</h3>
-              <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
-            </div>
-            <div className="flex-1 overflow-y-auto min-h-0">
-            <ul className="space-y-2">
-              {items.map((i, idx) => (
-                <li
-                  key={i.id}
-                  className={`text-sm flex items-center justify-between cursor-pointer transition-colors px-2 py-1 rounded-sm ${i.published ? "" : "opacity-60"} ${selectedItem?.id === i.id ? "active bg-yellow-50 border border-yellow-300" : "hover:bg-neutral-50"}`}
-                  draggable
-                  onDragStart={() => setItemDragIndex(idx)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => handleItemDropAt(idx)}
-                  onClick={() => { selectedItem?.id === i.id ? setSelectedItem(null) : loadItem(i.id) }}
-                >
-                  <div className="flex items-center gap-2">
-                    <GripVertical className="w-4 h-4 text-neutral-400" />
-                    <button className={`text-left cursor-pointer ${i.published ? "" : "text-neutral-500"}`} onClick={() => loadItem(i.id)}>{String(i.title)}</button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)]">
+              <div className="bg-white border border-neutral-200 rounded-sm p-4 h-full flex flex-col">
+                <div className="flex items-center justify-between mb-2 shrink-0">
+                  <h3 className="text-sm font-medium">Items</h3>
+                  <button onClick={() => { setCreateOpen(true); console.warn("CreateItem: open modal") }} className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add new item</button>
+                </div>
+                <div className="flex-1 overflow-y-auto min-h-0">
+                  <ul className="space-y-2">
+                    {items.map((i, idx) => (
+                      <li
+                        key={i.id}
+                        className={`text-sm flex items-center justify-between cursor-pointer transition-colors px-2 py-1 rounded-sm ${i.published ? "" : "opacity-60"} ${selectedItem?.id === i.id ? "active bg-yellow-50 border border-yellow-300" : "hover:bg-neutral-50"}`}
+                        draggable
+                        onDragStart={() => setItemDragIndex(idx)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleItemDropAt(idx)}
+                        onClick={() => { selectedItem?.id === i.id ? setSelectedItem(null) : loadItem(i.id) }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <GripVertical className="w-4 h-4 text-neutral-400" />
+                          <button className={`text-left cursor-pointer ${i.published ? "" : "text-neutral-500"}`} onClick={() => loadItem(i.id)}>{String(i.title)}</button>
+                        </div>
+                        <button onClick={() => setDeleteItemId(i.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4 h-full min-h-0">
+                <div className="bg-white border border-neutral-200 rounded-sm p-4 flex flex-col flex-1 min-h-0">
+                  <h3 className="text-sm font-medium mb-2 shrink-0">Edit Item</h3>
+                  {!selectedItem ? (
+                    <div className="text-sm text-neutral-600">Select an item to edit.</div>
+                  ) : (
+                    <div className="flex-1 overflow-y-auto min-h-0">
+                      <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                      <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="Slug" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                      <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <input value={year} onChange={(e) => setYear(e.target.value === "" ? "" : Number(e.target.value))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                        <input value={typeVal} onChange={(e) => setTypeVal(e.target.value)} placeholder="Type" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                        <input value={collaborators} onChange={(e) => setCollaborators(e.target.value)} placeholder="Collaborators" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                      </div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <label className="text-sm">Published</label>
+                        <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
+                        <input value={position} onChange={(e) => setPosition(e.target.value === "" ? "" : Number(e.target.value))} placeholder="Position" className="border rounded-sm px-2 py-1 text-sm w-24" />
+                      </div>
+                      <button onClick={saveItem} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
+                    </div>
+                  )}
+                </div>
+                {selectedItem && (
+                  <div className="bg-white border border-neutral-200 rounded-sm p-4 shrink-0">
+                    <h3 className="text-sm font-medium mb-2">Section SEO</h3>
+                    <input value={sectionSeoTitle} onChange={(e) => setSectionSeoTitle(e.target.value)} placeholder="SEO Title" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                    <textarea value={sectionSeoDescription} onChange={(e) => setSectionSeoDescription(e.target.value)} placeholder="SEO Description" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                    <input value={sectionSeoKeywords} onChange={(e) => setSectionSeoKeywords(e.target.value)} placeholder="SEO Keywords" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                    <button onClick={saveSectionSeo} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
                   </div>
-                  <button onClick={() => setDeleteItemId(i.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="bg-white border border-neutral-200 rounded-sm p-4 h-96 flex flex-col">
-          <h3 className="text-sm font-medium mb-2 shrink-0">Edit Item</h3>
-          {!selectedItem ? (
-            <div className="text-sm text-neutral-600">Select an item to edit.</div>
-          ) : (
-            <div className="flex-1 overflow-y-auto min-h-0">
-              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="Slug" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <div className="grid grid-cols-2 gap-2 mb-2">
-                <input value={year} onChange={(e) => setYear(e.target.value === "" ? "" : Number(e.target.value))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={typeVal} onChange={(e) => setTypeVal(e.target.value)} placeholder="Type" className="border rounded-sm px-2 py-1 text-sm w-full" />
+                )}
               </div>
-              <div className="grid grid-cols-2 gap-2 mb-2">
-                <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={collaborators} onChange={(e) => setCollaborators(e.target.value)} placeholder="Collaborators" className="border rounded-sm px-2 py-1 text-sm w-full" />
+
+              <div className="h-full min-h-0">
+                {selectedItem && (
+                  <div className="bg-white border border-neutral-200 rounded-sm p-4 h-full flex flex-col">
+                    <div className="flex items-center justify-between mb-4 shrink-0">
+                      <h3 className="text-sm font-medium">Media</h3>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => setMediaView("list")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "list" ? "bg-yellow-400" : "bg-white"}`}>List</button>
+                        <button onClick={() => setMediaView("thumbs")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "thumbs" ? "bg-yellow-400" : "bg-white"}`}>Thumbs</button>
+                      </div>
+                    </div>
+                    <div className="flex-1 overflow-y-auto min-h-0 pr-1">
+                      <div
+                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                        onDragLeave={() => setIsDragging(false)}
+                        onDrop={(e) => { setIsDragging(false); onDropFiles(e); }}
+                        className={`border border-dashed rounded-sm p-8 mb-6 text-center transition-all duration-200 ${isDragging ? "border-blue-500 bg-blue-50 scale-[1.02]" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"}`}
+                      >
+                        <UploadCloud className={`w-10 h-10 mx-auto mb-3 transition-colors ${isDragging ? "text-blue-500" : "text-neutral-300"}`} />
+                        <div className="text-sm font-medium text-neutral-700 mb-1">Drop files here to upload</div>
+                        <div className="text-xs text-neutral-400">Support for images and videos</div>
+                      </div>
+                      {uploads.length > 0 && (
+                        <div className="border rounded-sm mb-6 bg-white overflow-hidden shadow-sm">
+                          <div className="px-4 py-2 bg-neutral-50 border-b border-neutral-100 flex justify-between items-center">
+                            <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Upload Queue</span>
+                            <button onClick={() => setUploads([])} className="text-[10px] font-medium text-neutral-400 hover:text-red-600 flex items-center gap-1 transition-colors">
+                              <X className="w-3 h-3" /> Clear
+                            </button>
+                          </div>
+                          <div className="divide-y divide-neutral-100 max-h-60 overflow-y-auto">
+                            {uploads.map((u, idx) => (
+                              <div key={`${u.name}-${idx}`} className="px-4 py-3 flex items-center gap-3 hover:bg-neutral-50/50 transition-colors">
+                                <FileIcon className="w-4 h-4 text-neutral-400 shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex justify-between text-xs mb-1.5">
+                                    <span className="font-medium text-neutral-700 truncate pr-4">{u.name}</span>
+                                    <span className={`shrink-0 font-medium ${u.status === "error" ? "text-red-600" : u.status === "success" ? "text-green-600" : "text-blue-600"}`}>
+                                      {u.status === "success" ? "Complete" : u.status === "error" ? "Error" : `${u.progress}%`}
+                                    </span>
+                                  </div>
+                                  <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden w-full">
+                                    <div 
+                                      className={`h-full transition-all duration-300 ease-out rounded-full ${u.status === "error" ? "bg-red-500" : u.status === "success" ? "bg-green-500" : "bg-blue-500"}`} 
+                                      style={{ width: `${u.progress}%` }} 
+                                    />
+                                  </div>
+                                  {u.message && u.status === "error" && <div className="text-[10px] text-red-500 mt-1 truncate">{u.message}</div>}
+                                </div>
+                                <div className="shrink-0 w-5 flex justify-center">
+                                  {u.status === "success" && <CheckCircle className="w-4 h-4 text-green-500" />}
+                                  {u.status === "error" && <AlertCircle className="w-4 h-4 text-red-500" />}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <div className="space-y-2 mb-4">
+                        {mediaView === "list" && media.map((m, idx) => (
+                          <div
+                            key={m.id}
+                            className="flex items-center justify-between"
+                            draggable
+                            onDragStart={() => setDragIndex(idx)}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={() => handleDropAt(idx)}
+                          >
+                            <div className="flex items-center gap-2">
+                              <GripVertical className="w-4 h-4 text-neutral-400" />
+                              <span className="text-sm">
+                                {(() => {
+                                  const u = m.url || ""
+                                  const last = u.split("/").pop() || u
+                                  return (last || "").split("?")[0]
+                                })()}
+                              </span>
+                            </div>
+                            <button onClick={() => deleteMedia(m.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                          </div>
+                        ))}
+                        {mediaView === "thumbs" && (
+                          <div className="grid grid-cols-3 gap-2">
+                            {media.map((m, idx) => (
+                              <div
+                                key={m.id}
+                                className="relative"
+                                draggable
+                                onDragStart={() => setDragIndex(idx)}
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={() => handleDropAt(idx)}
+                              >
+                                <img src={m.thumbnail || m.url} alt={m.alt || ""} className="w-full aspect-square object-cover border rounded-sm" />
+                                <button onClick={() => deleteMedia(m.id)} className="absolute top-1 right-1 px-2 py-1 text-[11px] rounded-sm border bg-white">Delete</button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <input type="file" onChange={(e) => setMediaFile(e.target.files?.[0] || null)} className="border rounded-sm px-2 py-1 text-sm w-full my-2" />
+                      <input value={mediaAlt} onChange={(e) => setMediaAlt(e.target.value)} placeholder="Alt" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                      <input value={mediaCaption} onChange={(e) => setMediaCaption(e.target.value)} placeholder="Caption" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
+                      <button onClick={addMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add Media</button>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-2 mb-2">
-                <label className="text-sm">Published</label>
-                <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
-                <input value={position} onChange={(e) => setPosition(e.target.value === "" ? "" : Number(e.target.value))} placeholder="Position" className="border rounded-sm px-2 py-1 text-sm w-24" />
-              </div>
-              <button onClick={saveItem} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
             </div>
           )}
-        </div>
-        </div>
-      )}
       {createOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4 max-h-[90vh] overflow-y-auto">
@@ -1999,119 +2087,6 @@ export default function AdminClient() {
           </div>
         </div>
       )}
-      {selectedItem && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div className="bg-white border border-neutral-200 rounded-sm p-4">
-            <h3 className="text-sm font-medium mb-2">Section SEO</h3>
-            <input value={sectionSeoTitle} onChange={(e) => setSectionSeoTitle(e.target.value)} placeholder="SEO Title" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-            <textarea value={sectionSeoDescription} onChange={(e) => setSectionSeoDescription(e.target.value)} placeholder="SEO Description" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-            <input value={sectionSeoKeywords} onChange={(e) => setSectionSeoKeywords(e.target.value)} placeholder="SEO Keywords" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-            <button onClick={saveSectionSeo} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save</button>
-          </div>
-          <div className="bg-white border border-neutral-200 rounded-sm p-4 h-[800px] flex flex-col">
-            <div className="flex items-center justify-between mb-4 shrink-0">
-              <h3 className="text-sm font-medium">Media</h3>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setMediaView("list")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "list" ? "bg-yellow-400" : "bg-white"}`}>List</button>
-                <button onClick={() => setMediaView("thumbs")} className={`px-2 py-1 text-[11px] rounded-sm border ${mediaView === "thumbs" ? "bg-yellow-400" : "bg-white"}`}>Thumbs</button>
-              </div>
-            </div>
-            <div className="flex-1 overflow-y-auto min-h-0 pr-1">
-              <div
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => { setIsDragging(false); onDropFiles(e); }}
-                className={`border border-dashed rounded-sm p-8 mb-6 text-center transition-all duration-200 ${isDragging ? "border-blue-500 bg-blue-50 scale-[1.02]" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"}`}
-              >
-                <UploadCloud className={`w-10 h-10 mx-auto mb-3 transition-colors ${isDragging ? "text-blue-500" : "text-neutral-300"}`} />
-                <div className="text-sm font-medium text-neutral-700 mb-1">Drop files here to upload</div>
-                <div className="text-xs text-neutral-400">Support for images and videos</div>
-              </div>
-              {uploads.length > 0 && (
-                <div className="border rounded-sm mb-6 bg-white overflow-hidden shadow-sm">
-                  <div className="px-4 py-2 bg-neutral-50 border-b border-neutral-100 flex justify-between items-center">
-                    <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Upload Queue</span>
-                    <button onClick={() => setUploads([])} className="text-[10px] font-medium text-neutral-400 hover:text-red-600 flex items-center gap-1 transition-colors">
-                      <X className="w-3 h-3" /> Clear
-                    </button>
-                  </div>
-                  <div className="divide-y divide-neutral-100 max-h-60 overflow-y-auto">
-                    {uploads.map((u, idx) => (
-                      <div key={`${u.name}-${idx}`} className="px-4 py-3 flex items-center gap-3 hover:bg-neutral-50/50 transition-colors">
-                        <FileIcon className="w-4 h-4 text-neutral-400 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between text-xs mb-1.5">
-                            <span className="font-medium text-neutral-700 truncate pr-4">{u.name}</span>
-                            <span className={`shrink-0 font-medium ${u.status === "error" ? "text-red-600" : u.status === "success" ? "text-green-600" : "text-blue-600"}`}>
-                              {u.status === "success" ? "Complete" : u.status === "error" ? "Error" : `${u.progress}%`}
-                            </span>
-                          </div>
-                          <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden w-full">
-                            <div 
-                              className={`h-full transition-all duration-300 ease-out rounded-full ${u.status === "error" ? "bg-red-500" : u.status === "success" ? "bg-green-500" : "bg-blue-500"}`} 
-                              style={{ width: `${u.progress}%` }} 
-                            />
-                          </div>
-                          {u.message && u.status === "error" && <div className="text-[10px] text-red-500 mt-1 truncate">{u.message}</div>}
-                        </div>
-                        <div className="shrink-0 w-5 flex justify-center">
-                          {u.status === "success" && <CheckCircle className="w-4 h-4 text-green-500" />}
-                          {u.status === "error" && <AlertCircle className="w-4 h-4 text-red-500" />}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              <div className="space-y-2 mb-4">
-                {mediaView === "list" && media.map((m, idx) => (
-                  <div
-                    key={m.id}
-                    className="flex items-center justify-between"
-                    draggable
-                    onDragStart={() => setDragIndex(idx)}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => handleDropAt(idx)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <GripVertical className="w-4 h-4 text-neutral-400" />
-                      <span className="text-sm">
-                        {(() => {
-                          const u = m.url || ""
-                          const last = u.split("/").pop() || u
-                          return (last || "").split("?")[0]
-                        })()}
-                      </span>
-                    </div>
-                    <button onClick={() => deleteMedia(m.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
-                  </div>
-                ))}
-                {mediaView === "thumbs" && (
-                  <div className="grid grid-cols-3 gap-2">
-                    {media.map((m, idx) => (
-                      <div
-                        key={m.id}
-                        className="relative"
-                        draggable
-                        onDragStart={() => setDragIndex(idx)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={() => handleDropAt(idx)}
-                      >
-                        <img src={m.thumbnail || m.url} alt={m.alt || ""} className="w-full aspect-square object-cover border rounded-sm" />
-                        <button onClick={() => deleteMedia(m.id)} className="absolute top-1 right-1 px-2 py-1 text-[11px] rounded-sm border bg-white">Delete</button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <input type="file" onChange={(e) => setMediaFile(e.target.files?.[0] || null)} className="border rounded-sm px-2 py-1 text-sm w-full my-2" />
-              <input value={mediaAlt} onChange={(e) => setMediaAlt(e.target.value)} placeholder="Alt" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <input value={mediaCaption} onChange={(e) => setMediaCaption(e.target.value)} placeholder="Caption" className="border rounded-sm px-2 py-1 text-sm w-full mb-2" />
-              <button onClick={addMedia} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Add Media</button>
-            </div>
-          </div>
-        </div>
-      )}
       {passwordModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-sm border border-neutral-200 w-full max-w-sm p-4 max-h-[90vh] overflow-y-auto">
@@ -2132,6 +2107,7 @@ export default function AdminClient() {
       )}
     </div>
   )}
+  <Toaster />
 </div>
   )
 }
