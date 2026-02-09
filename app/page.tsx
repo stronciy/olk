@@ -23,6 +23,11 @@ type WorkItem = {
   id: number
   title: string
   slug: string
+  description?: string
+  year?: number
+  type?: string
+  location?: string
+  collaborators?: string
   media: Media[]
 }
 
@@ -53,6 +58,7 @@ export default function HomePage() {
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryImages, setGalleryImages] = useState<Media[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [activeGalleryItem, setActiveGalleryItem] = useState<WorkItem | null>(null)
 
   // Fetch sections on mount
   useEffect(() => {
@@ -143,31 +149,11 @@ export default function HomePage() {
 
   // Gallery Logic
   const openGallery = (item: WorkItem) => {
-    // Strategy: If the clicked item has multiple images, show them.
-    // If it has only 1 image, maybe the user wants to browse the whole category?
-    // Let's implement a hybrid approach:
-    // 1. Collect all media from all items in the current category into a flat list
-    // 2. Find the index of the clicked item's first image
-    
-    // Flatten all media from all items
-    const allMedia: Media[] = []
-    let startingIndex = 0
-    let found = false
-
-    workItems.forEach(w => {
-        if (w.id === item.id && !found) {
-            startingIndex = allMedia.length
-            found = true
-        }
-        if (w.media && w.media.length > 0) {
-            allMedia.push(...w.media)
-        }
-    })
-
-    if (allMedia.length > 0) {
-        setGalleryImages(allMedia)
-        setCurrentImageIndex(startingIndex)
-        setGalleryOpen(true)
+    if (item.media && item.media.length > 0) {
+      setGalleryImages(item.media)
+      setCurrentImageIndex(0)
+      setActiveGalleryItem(item)
+      setGalleryOpen(true)
     }
   }
 
@@ -461,6 +447,35 @@ export default function HomePage() {
                 <ChevronRight size={32} className="text-gray-600 group-hover:text-black" />
               </button>
             </>
+          )}
+
+          {/* Item Info */}
+          {activeGalleryItem && (
+            <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8 z-50 max-w-md text-left pointer-events-auto bg-white/80 p-4 backdrop-blur-sm rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold uppercase tracking-widest mb-1">{activeGalleryItem.title}</h2>
+                
+                {activeGalleryItem.description && (
+                    <p className="text-sm text-gray-600 mb-2 leading-relaxed">{activeGalleryItem.description}</p>
+                )}
+
+                <div className="flex flex-col gap-1 text-xs text-gray-500 uppercase tracking-wider">
+                    {(activeGalleryItem.year || activeGalleryItem.type) && (
+                        <div>
+                            {activeGalleryItem.year && <span>{activeGalleryItem.year}</span>}
+                            {activeGalleryItem.year && activeGalleryItem.type && <span> / </span>}
+                            {activeGalleryItem.type && <span>{activeGalleryItem.type}</span>}
+                        </div>
+                    )}
+                    
+                    {(activeGalleryItem.location || activeGalleryItem.collaborators) && (
+                        <div>
+                            {activeGalleryItem.location && <span>{activeGalleryItem.location}</span>}
+                            {activeGalleryItem.location && activeGalleryItem.collaborators && <span> / </span>}
+                            {activeGalleryItem.collaborators && <span>{activeGalleryItem.collaborators}</span>}
+                        </div>
+                    )}
+                </div>
+            </div>
           )}
 
           {/* Main Image Container */}
