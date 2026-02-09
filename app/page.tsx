@@ -287,7 +287,7 @@ export default function HomePage() {
                         className="group cursor-pointer flex flex-col gap-2"
                         onClick={() => openGallery(item)}
                       >
-                        <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+                        <div className="aspect-square overflow-hidden bg-gray-100 relative">
                           {item.media[0] ? (
                             <img
                               src={item.media[0].url}
