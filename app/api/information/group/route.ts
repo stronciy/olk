@@ -10,8 +10,14 @@ export async function GET(req: Request) {
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationGroup (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationGroup (id INT AUTO_INCREMENT PRIMARY KEY, year VARCHAR(255), title TEXT, position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
+      // Migration for existing table
+      try {
+        await conn.query("ALTER TABLE InformationGroup MODIFY year VARCHAR(255)")
+        await conn.query("ALTER TABLE InformationGroup MODIFY title TEXT")
+      } catch {}
+
       const [rows]: any = await conn.query("SELECT * FROM InformationGroup ORDER BY position ASC, id ASC")
       if (!rows.length) {
         const seed: Array<{ year: string; title: string }> = [
@@ -39,9 +45,8 @@ export async function GET(req: Request) {
         ]
         for (let i = 0; i < seed.length; i++) {
           const it = seed[i]
-          const y = Number(it.year)
           await conn.query("INSERT INTO InformationGroup (year, title, position, updatedAt) VALUES (?, ?, ?, NOW())", [
-            Number.isFinite(y) ? y : null,
+            it.year,
             it.title,
             i,
           ])
@@ -63,7 +68,7 @@ export async function PUT(req: Request) {
     if (!requireAdmin(req)) return fail(req, 401, "UNAUTHORIZED", "Unauthorized", { type: "AuthenticationError" })
     const body = await req.json()
     const schema = z.object({
-      group: z.array(z.object({ year: z.union([z.number().int().min(0), z.null()]), title: z.string().min(1), position: z.number().int().nonnegative().optional() })),
+      group: z.array(z.object({ year: z.string().nullable().optional(), title: z.string().min(1), position: z.number().int().nonnegative().optional() })),
     })
     const parsed = schema.safeParse(body)
     if (!parsed.success) return fail(req, 400, "VALIDATION_ERROR", "Invalid input", { type: "ValidationError", details: parsed.error.flatten() })
@@ -71,7 +76,7 @@ export async function PUT(req: Request) {
     const conn = await pool.getConnection()
     try {
       await conn.query(
-        "CREATE TABLE IF NOT EXISTS InformationGroup (id INT AUTO_INCREMENT PRIMARY KEY, year INT, title VARCHAR(255), position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+        "CREATE TABLE IF NOT EXISTS InformationGroup (id INT AUTO_INCREMENT PRIMARY KEY, year VARCHAR(255), title TEXT, position INT DEFAULT 0, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
       )
       await conn.beginTransaction()
       await conn.query("DELETE FROM InformationGroup")

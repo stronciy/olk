@@ -633,7 +633,7 @@ export default function AdminClient() {
   }
 
   const addGroup = () => {
-    const y = newGroupYear.replace(/\D/g, "")
+    const y = newGroupYear.trim()
     if (y === "" || !newGroupTitle.trim()) return
     setGroup((prev) => [...prev, { year: y, title: newGroupTitle.trim() }])
     setNewGroupYear("")
@@ -644,7 +644,7 @@ export default function AdminClient() {
       const res = await fetch("/api/information/group", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ group: group.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+        body: JSON.stringify({ group: group.map((n, i) => ({ year: n.year, title: n.title, position: i })) }),
       })
       if (!res.ok) {
         let msg = "Ошибка сохранения"
@@ -666,7 +666,7 @@ export default function AdminClient() {
     await fetch("/api/information/group", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ group: arr.map((n, i) => ({ year: n.year === "" ? null : Number(n.year), title: n.title, position: i })) }),
+      body: JSON.stringify({ group: arr.map((n, i) => ({ year: n.year, title: n.title, position: i })) }),
     })
   }
   const handleGroupDropAt = async (targetIdx: number) => {
