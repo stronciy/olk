@@ -84,9 +84,26 @@ export default function HomePage() {
     fetch(`/api/work/items?section=${activeCategory}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!ignore && data.items) {
-          setWorkItems(data.items)
-        }
+        if (ignore || !data.items) return
+        const mapped: WorkItem[] = (data.items as any[]).map((i: any) => ({
+          id: Number(i?.id ?? 0),
+          title: String(i?.title || ""),
+          slug: String(i?.slug || ""),
+          description: typeof i?.description === "string" ? i.description : undefined,
+          year: typeof i?.year === "number" ? i.year : undefined,
+          type: typeof i?.type === "string" ? i.type : undefined,
+          location: typeof i?.location === "string" ? i.location : undefined,
+          collaborators: typeof i?.collaborators === "string" ? i.collaborators : undefined,
+          media: Array.isArray(i?.media)
+            ? i.media.map((m: any) => ({
+                id: Number(m?.id ?? 0),
+                type: String(m?.type).toLowerCase() === "video" ? "video" : "image",
+                url: String(m?.url || ""),
+                thumbnail: typeof m?.thumbnail === "string" ? m.thumbnail : null,
+              }))
+            : [],
+        }))
+        setWorkItems(mapped)
       })
       .catch((err) => {
         if (!ignore) console.error("Failed to fetch items:", err)
@@ -293,7 +310,7 @@ export default function HomePage() {
                         <div className="aspect-square overflow-hidden bg-gray-100 relative">
                           {item.media[0] ? (
                             <img
-                              src={item.media[0].url}
+                              src={item.media[0].thumbnail || item.media[0].url}
                               alt={item.title}
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                               loading="lazy"
@@ -558,15 +575,23 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Main Image Container */}
+          {/* Main Media Container */}
           <div className="relative w-full h-full max-w-7xl max-h-screen p-4 md:p-12 flex items-center justify-center pointer-events-none">
             <div className="relative pointer-events-auto">
-               {/* Current Image */}
-               <img
-                 src={galleryImages[currentImageIndex].url}
-                 alt={`Gallery image ${currentImageIndex + 1}`}
-                 className="max-w-full max-h-[85vh] object-contain shadow-2xl"
-               />
+               {galleryImages[currentImageIndex]?.type === "video" ? (
+                 <video
+                   src={galleryImages[currentImageIndex].url}
+                   className="max-w-full max-h-[85vh] object-contain shadow-2xl"
+                   controls
+                   autoPlay
+                 />
+               ) : (
+                 <img
+                   src={galleryImages[currentImageIndex].url}
+                   alt={`Gallery image ${currentImageIndex + 1}`}
+                   className="max-w-full max-h-[85vh] object-contain shadow-2xl"
+                 />
+               )}
                
                {/* Image Counter (Optional but nice) */}
                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-gray-500 text-sm tracking-widest">

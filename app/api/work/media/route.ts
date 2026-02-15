@@ -31,6 +31,18 @@ export async function POST(req: Request) {
         const file = form.get("file") as File | null
         if (!Number.isFinite(itemId)) return fail(req, 400, "VALIDATION_ERROR", "Invalid itemId", { type: "ValidationError" })
         if (!file) return fail(req, 400, "VALIDATION_ERROR", "File required", { type: "ValidationError" })
+        const ext = (file.name.split(".").pop() || "").toLowerCase()
+        if (type === "VIDEO") {
+          const mime = (file as any).type || ""
+          const isMp4Mime = typeof mime === "string" && mime.toLowerCase() === "video/mp4"
+          const isMp4Ext = ext === "mp4"
+          if (!isMp4Mime && !isMp4Ext) {
+            return fail(req, 400, "VALIDATION_ERROR", "Only MP4 videos are allowed", {
+              type: "ValidationError",
+              details: [{ field: "file", message: "Only MP4 videos are allowed" }],
+            })
+          }
+        }
         const maxVideoSizeBytes = 1024 * 1024 * 1024 // 1GB
         if (type === "VIDEO" && typeof (file as any).size === "number" && (file as any).size > maxVideoSizeBytes) {
           return fail(req, 413, "PAYLOAD_TOO_LARGE", "Video exceeds 1GB limit", { type: "ValidationError", details: [{ field: "file", message: "Max size 1GB" }] })
@@ -47,8 +59,8 @@ export async function POST(req: Request) {
           const optimized = await resizeAndCompressImage(bytes, "image/webp", 1024)
           await sharp(optimized).webp({ quality: 90 }).toFile(fullPath)
         } else {
-          const ext = (file.name.split(".").pop() || "mp4").toLowerCase()
-          name = `${nameBase}.${ext}`
+          const videoExt = ext || "mp4"
+          name = `${nameBase}.${videoExt}`
           fullPath = path.join(uploadsDir, name)
           const ws = fs.createWriteStream(fullPath)
           const webStream = (file as any).stream?.()

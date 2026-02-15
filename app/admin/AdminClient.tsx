@@ -980,16 +980,28 @@ export default function AdminClient() {
   const addMedia = async () => {
     if (!selectedItem) return
     if (mediaFile) {
+      const isVideo = mediaFile.type && mediaFile.type.startsWith("video")
+      const isMp4Video =
+        isVideo &&
+        (mediaFile.type === "video/mp4" || (mediaFile.name || "").toLowerCase().endsWith(".mp4"))
+      if (isVideo && !isMp4Video) {
+        showError("Разрешены только видео в формате MP4")
+        return
+      }
       const fd = new FormData()
       fd.set("itemId", String(selectedItem.id))
-      const t = mediaFile.type && mediaFile.type.startsWith("video") ? "VIDEO" : "IMAGE"
+      const t = isVideo ? "VIDEO" : "IMAGE"
       fd.set("type", t)
       fd.set("caption", mediaCaption)
       fd.set("alt", mediaAlt)
       const base = media?.length ? Number(media.length) : 0
       fd.set("position", String(base))
       fd.set("file", mediaFile)
-      await fetch(`/api/work/media`, { method: "POST", body: fd })
+      const res = await fetch(`/api/work/media`, { method: "POST", body: fd })
+      if (!res.ok) {
+        const text = await res.text().catch(() => "")
+        showError(text || "Ошибка загрузки медиа")
+      }
     }
     setMediaFile(null)
     setMediaCaption("")
@@ -1032,9 +1044,21 @@ export default function AdminClient() {
     const base = media?.length || 0
     for (let i = 0; i < files.length; i++) {
       const f = files[i]
+      const isVideo = f.type && f.type.startsWith("video")
+      const isMp4Video =
+        isVideo && (f.type === "video/mp4" || (f.name || "").toLowerCase().endsWith(".mp4"))
+      if (isVideo && !isMp4Video) {
+        setUploads((prev) =>
+          prev.map((u, idx) =>
+            idx === i ? { ...u, status: "error", progress: 0, message: "Only MP4 videos are allowed" } : u
+          )
+        )
+        showError("Разрешены только видео в формате MP4")
+        continue
+      }
       const fd = new FormData()
       fd.set("itemId", String(selectedItem.id))
-      const t = f.type && f.type.startsWith("video") ? "VIDEO" : "IMAGE"
+      const t = isVideo ? "VIDEO" : "IMAGE"
       fd.set("type", t)
       fd.set("caption", "")
       fd.set("alt", "")
@@ -1284,7 +1308,7 @@ export default function AdminClient() {
             {newsModalOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/50" onClick={cancelNewsModal} />
-                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl">
+                <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-xl">
                   <h4 className="text-sm font-medium mb-2">{newsModalMode === "add" ? "Add News" : "Edit News"}</h4>
                   {newsModalError && <div className="text-xs text-red-600 mb-2">{newsModalError}</div>}
                   <div className="mb-2">
@@ -2130,7 +2154,7 @@ export default function AdminClient() {
                       >
                         <UploadCloud className={`w-10 h-10 mx-auto mb-3 transition-colors ${isDragging ? "text-blue-500" : "text-neutral-300"}`} />
                         <div className="text-sm font-medium text-neutral-700 mb-1">Drop files here to upload</div>
-                        <div className="text-xs text-neutral-400">Support for images and videos</div>
+                        <div className="text-xs text-neutral-400">Support for images and MP4 videos only</div>
                       </div>
                       {uploads.length > 0 && (
                         <div className="border rounded-sm mb-6 bg-white overflow-hidden shadow-sm">
