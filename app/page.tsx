@@ -54,6 +54,9 @@ export default function HomePage() {
   const [infoData, setInfoData] = useState<any>(null)
   const [loadingInfo, setLoadingInfo] = useState(false)
 
+  const [newsModalOpen, setNewsModalOpen] = useState(false)
+  const [activeNewsItem, setActiveNewsItem] = useState<any | null>(null)
+
   // Gallery state
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryImages, setGalleryImages] = useState<Media[]>([])
@@ -334,19 +337,44 @@ export default function HomePage() {
                 {activeInfoSection === "NEWS" && infoData?.news && (
                   <div className="flex flex-col gap-16">
                     {infoData.news.map((item: any) => (
-                      <div key={item.id} className="flex flex-col gap-6">
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveNewsItem(item)
+                          setNewsModalOpen(true)
+                        }}
+                        className="flex flex-col gap-6 text-left group"
+                      >
                         {item.coverUrl && (
                           <div className="w-full aspect-video overflow-hidden bg-gray-50">
-                             <img src={item.coverUrl} alt={item.title} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                            <img
+                              src={item.coverUrl}
+                              alt={item.title}
+                              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            />
                           </div>
                         )}
-                        <div className="flex flex-col gap-2">
-                          <span className="text-xs text-gray-400 uppercase tracking-widest">{new Date(item.date).toLocaleDateString()}</span>
-                          <h3 className="text-2xl font-light uppercase tracking-wide">{item.title}</h3>
-                          {item.summary && <p className="text-gray-600 font-light leading-relaxed">{item.summary}</p>}
-                          {item.text && !item.summary && <div className="text-gray-600 font-light leading-relaxed line-clamp-4" dangerouslySetInnerHTML={{ __html: item.text }} />}
+                        <div className="flex flex-col gap-2 cursor-pointer">
+                          <span className="text-xs text-gray-400 uppercase tracking-widest">
+                            {new Date(item.date).toLocaleDateString()}
+                          </span>
+                          <h3 className="text-2xl font-light uppercase tracking-wide group-hover:text-gray-700 transition-colors">
+                            {item.title}
+                          </h3>
+                          {item.summary && (
+                            <p className="text-gray-600 font-light leading-relaxed">
+                              {item.summary}
+                            </p>
+                          )}
+                          {item.text && !item.summary && (
+                            <div
+                              className="text-gray-600 font-light leading-relaxed line-clamp-4"
+                              dangerouslySetInnerHTML={{ __html: item.text }}
+                            />
+                          )}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -382,7 +410,10 @@ export default function HomePage() {
                       {infoData[activeInfoSection.toLowerCase()].map((item: any, idx: number) => (
                         <div key={idx} className="flex gap-8 border-b border-gray-50 pb-4 items-baseline">
                             <span className="text-gray-400 font-mono w-16 shrink-0 text-sm">{item.year}</span>
-                            <span className="font-light text-lg leading-relaxed">{item.title}</span>
+                            <span
+                              className="font-light text-lg leading-relaxed"
+                              dangerouslySetInnerHTML={{ __html: String(item.title || "") }}
+                            />
                         </div>
                       ))}
                       {infoData[activeInfoSection.toLowerCase()].length === 0 && (
@@ -409,6 +440,55 @@ export default function HomePage() {
           </div>
         )}
       </main>
+
+      {newsModalOpen && activeNewsItem && (
+        <div className="fixed inset-0 z-[90] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg shadow-xl">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-gray-400 uppercase tracking-widest">
+                  {new Date(activeNewsItem.date).toLocaleDateString()}
+                </span>
+                <h2 className="text-lg md:text-xl font-light uppercase tracking-wide">
+                  {activeNewsItem.title}
+                </h2>
+              </div>
+              <button
+                onClick={() => {
+                  setNewsModalOpen(false)
+                  setActiveNewsItem(null)
+                }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            {activeNewsItem.coverUrl && (
+              <div className="w-full aspect-video bg-gray-100 overflow-hidden">
+                <img
+                  src={activeNewsItem.coverUrl}
+                  alt={activeNewsItem.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="px-4 py-6 text-sm text-gray-700">
+              {activeNewsItem.summary && (
+                <p className="mb-4 font-light leading-relaxed">
+                  {activeNewsItem.summary}
+                </p>
+              )}
+              <div
+                className="prose prose-gray max-w-none font-light leading-relaxed"
+                dangerouslySetInnerHTML={{
+                  __html: activeNewsItem.content || activeNewsItem.text || "",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Full Screen Gallery */}
       {galleryOpen && galleryImages.length > 0 && (

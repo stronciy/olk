@@ -116,6 +116,12 @@ export default function AdminClient() {
   const [websitePage, setWebsitePage] = useState(1)
   const [websitePageSize, setWebsitePageSize] = useState(10)
 
+  const [infoTextModalOpen, setInfoTextModalOpen] = useState(false)
+  const [infoTextSection, setInfoTextSection] = useState<"fairs" | "awards" | "solo" | "group" | null>(null)
+  const [infoTextIndex, setInfoTextIndex] = useState<number | null>(null)
+  const [infoTextValue, setInfoTextValue] = useState("")
+  const [infoTextError, setInfoTextError] = useState("")
+
   const debounceRef = useRef<number | null>(null)
   const [awardDragIndex, setAwardDragIndex] = useState<number | null>(null)
   const [soloDragIndex, setSoloDragIndex] = useState<number | null>(null)
@@ -171,6 +177,65 @@ export default function AdminClient() {
     if (!dt) return ""
     const base = dt.replace("T", " ")
     return base.length === 16 ? `${base}:00` : base
+  }
+
+  const getPlainText = (html: string) => {
+    if (!html) return ""
+    return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+  }
+
+  const openInfoTextEditor = (section: "fairs" | "awards" | "solo" | "group", index: number | null, initial: string) => {
+    setInfoTextSection(section)
+    setInfoTextIndex(index)
+    setInfoTextValue(initial || "")
+    setInfoTextError("")
+    setInfoTextModalOpen(true)
+  }
+
+  const closeInfoTextEditor = () => {
+    setInfoTextModalOpen(false)
+    setInfoTextSection(null)
+    setInfoTextIndex(null)
+    setInfoTextError("")
+  }
+
+  const handleInfoTextChange = (val: string) => {
+    const plain = getPlainText(val)
+    if (plain.length > 400) {
+      setInfoTextError("Превышен лимит 400 символов (максимум 400)")
+      return
+    }
+    setInfoTextValue(val)
+    setInfoTextError("")
+  }
+
+  const handleInfoTextSave = () => {
+    if (!infoTextSection) return
+    const plain = getPlainText(infoTextValue)
+    if (plain.length > 400) {
+      setInfoTextError("Превышен лимит 400 символов (максимум 400)")
+      return
+    }
+    if (infoTextIndex === null) {
+      if (infoTextSection === "fairs") setNewFairTitle(infoTextValue)
+      if (infoTextSection === "awards") setNewAwardTitle(infoTextValue)
+      if (infoTextSection === "solo") setNewSoloTitle(infoTextValue)
+      if (infoTextSection === "group") setNewGroupTitle(infoTextValue)
+    } else {
+      if (infoTextSection === "fairs") {
+        setFairs((prev) => prev.map((x, j) => (j === infoTextIndex ? { ...x, title: infoTextValue } : x)))
+      }
+      if (infoTextSection === "awards") {
+        setAwards((prev) => prev.map((x, j) => (j === infoTextIndex ? { ...x, title: infoTextValue } : x)))
+      }
+      if (infoTextSection === "solo") {
+        setSolo((prev) => prev.map((x, j) => (j === infoTextIndex ? { ...x, title: infoTextValue } : x)))
+      }
+      if (infoTextSection === "group") {
+        setGroup((prev) => prev.map((x, j) => (j === infoTextIndex ? { ...x, title: infoTextValue } : x)))
+      }
+    }
+    closeInfoTextEditor()
   }
 
   useEffect(() => {
@@ -494,7 +559,7 @@ export default function AdminClient() {
   const addFair = () => {
     const y = newFairYear.replace(/\D/g, "")
     if (y === "" || !newFairTitle.trim()) return
-    setFairs((prev) => [...prev, { year: y, title: newFairTitle.trim() }])
+    setFairs((prev) => [{ year: y, title: newFairTitle.trim() }, ...prev])
     setNewFairYear("")
     setNewFairTitle("")
   }
@@ -541,7 +606,7 @@ export default function AdminClient() {
   const addAward = () => {
     const y = newAwardYear.replace(/\D/g, "")
     if (y === "" || !newAwardTitle.trim()) return
-    setAwards((prev) => [...prev, { year: y, title: newAwardTitle.trim() }])
+    setAwards((prev) => [{ year: y, title: newAwardTitle.trim() }, ...prev])
     setNewAwardYear("")
     setNewAwardTitle("")
   }
@@ -588,7 +653,7 @@ export default function AdminClient() {
   const addSolo = () => {
     const y = newSoloYear.replace(/\D/g, "")
     if (y === "" || !newSoloTitle.trim()) return
-    setSolo((prev) => [...prev, { year: y, title: newSoloTitle.trim() }])
+    setSolo((prev) => [{ year: y, title: newSoloTitle.trim() }, ...prev])
     setNewSoloYear("")
     setNewSoloTitle("")
   }
@@ -635,7 +700,7 @@ export default function AdminClient() {
   const addGroup = () => {
     const y = newGroupYear.trim()
     if (y === "" || !newGroupTitle.trim()) return
-    setGroup((prev) => [...prev, { year: y, title: newGroupTitle.trim() }])
+    setGroup((prev) => [{ year: y, title: newGroupTitle.trim() }, ...prev])
     setNewGroupYear("")
     setNewGroupTitle("")
   }
@@ -1378,14 +1443,15 @@ export default function AdminClient() {
                           />
                         </td>
                         <td className="px-2 py-1">
-                          <input
-                            value={row.title}
-                            onChange={(e) =>
-                              setFairs((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
-                            }
-                            placeholder="Event"
-                            className="border rounded-sm px-2 py-1 text-sm w-full"
-                          />
+                          <button
+                            type="button"
+                            onClick={() => openInfoTextEditor("fairs", idx, row.title)}
+                            className="border rounded-sm px-2 py-1 text-sm w-full text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                          >
+                            {getPlainText(row.title) || (
+                              <span className="text-neutral-400">Нажмите для ввода текста</span>
+                            )}
+                          </button>
                         </td>
                         <td className="px-2 py-1 text-right">
                           <button
@@ -1401,8 +1467,21 @@ export default function AdminClient() {
                 </table>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                <input value={newFairYear} onChange={(e) => setNewFairYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={newFairTitle} onChange={(e) => setNewFairTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+                <input
+                  value={newFairYear}
+                  onChange={(e) => setNewFairYear(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Year"
+                  className="border rounded-sm px-2 py-1 text-sm w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => openInfoTextEditor("fairs", null, newFairTitle)}
+                  className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2 text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                >
+                  {getPlainText(newFairTitle) || (
+                    <span className="text-neutral-400">Нажмите для ввода текста</span>
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={addFair} disabled={newFairYear.trim() === "" || !newFairTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newFairYear.trim() === "" || !newFairTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
@@ -1453,14 +1532,15 @@ export default function AdminClient() {
                           />
                         </td>
                         <td className="px-2 py-1">
-                          <input
-                            value={row.title}
-                            onChange={(e) =>
-                              setAwards((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
-                            }
-                            placeholder="Title"
-                            className="border rounded-sm px-2 py-1 text-sm w-full"
-                          />
+                          <button
+                            type="button"
+                            onClick={() => openInfoTextEditor("awards", idx, row.title)}
+                            className="border rounded-sm px-2 py-1 text-sm w-full text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                          >
+                            {getPlainText(row.title) || (
+                              <span className="text-neutral-400">Нажмите для ввода текста</span>
+                            )}
+                          </button>
                         </td>
                         <td className="px-2 py-1 text-right">
                           <button
@@ -1476,8 +1556,21 @@ export default function AdminClient() {
                 </table>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                <input value={newAwardYear} onChange={(e) => setNewAwardYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={newAwardTitle} onChange={(e) => setNewAwardTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+                <input
+                  value={newAwardYear}
+                  onChange={(e) => setNewAwardYear(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Year"
+                  className="border rounded-sm px-2 py-1 text-sm w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => openInfoTextEditor("awards", null, newAwardTitle)}
+                  className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2 text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                >
+                  {getPlainText(newAwardTitle) || (
+                    <span className="text-neutral-400">Нажмите для ввода текста</span>
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={addAward} disabled={newAwardYear.trim() === "" || !newAwardTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newAwardYear.trim() === "" || !newAwardTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
@@ -1528,14 +1621,15 @@ export default function AdminClient() {
                           />
                         </td>
                         <td className="px-2 py-1">
-                          <input
-                            value={row.title}
-                            onChange={(e) =>
-                              setSolo((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
-                            }
-                            placeholder="Title"
-                            className="border rounded-sm px-2 py-1 text-sm w-full"
-                          />
+                          <button
+                            type="button"
+                            onClick={() => openInfoTextEditor("solo", idx, row.title)}
+                            className="border rounded-sm px-2 py-1 text-sm w-full text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                          >
+                            {getPlainText(row.title) || (
+                              <span className="text-neutral-400">Нажмите для ввода текста</span>
+                            )}
+                          </button>
                         </td>
                         <td className="px-2 py-1 text-right">
                           <button
@@ -1551,8 +1645,21 @@ export default function AdminClient() {
                 </table>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                <input value={newSoloYear} onChange={(e) => setNewSoloYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={newSoloTitle} onChange={(e) => setNewSoloTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+                <input
+                  value={newSoloYear}
+                  onChange={(e) => setNewSoloYear(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Year"
+                  className="border rounded-sm px-2 py-1 text-sm w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => openInfoTextEditor("solo", null, newSoloTitle)}
+                  className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2 text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                >
+                  {getPlainText(newSoloTitle) || (
+                    <span className="text-neutral-400">Нажмите для ввода текста</span>
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={addSolo} disabled={newSoloYear.trim() === "" || !newSoloTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newSoloYear.trim() === "" || !newSoloTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
@@ -1603,14 +1710,15 @@ export default function AdminClient() {
                           />
                         </td>
                         <td className="px-2 py-1">
-                          <input
-                            value={row.title}
-                            onChange={(e) =>
-                              setGroup((prev) => prev.map((x, j) => (j === idx ? { ...x, title: e.target.value } : x)))
-                            }
-                            placeholder="Title"
-                            className="border rounded-sm px-2 py-1 text-sm w-full"
-                          />
+                          <button
+                            type="button"
+                            onClick={() => openInfoTextEditor("group", idx, row.title)}
+                            className="border rounded-sm px-2 py-1 text-sm w-full text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                          >
+                            {getPlainText(row.title) || (
+                              <span className="text-neutral-400">Нажмите для ввода текста</span>
+                            )}
+                          </button>
                         </td>
                         <td className="px-2 py-1 text-right">
                           <button
@@ -1626,8 +1734,21 @@ export default function AdminClient() {
                 </table>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                <input value={newGroupYear} onChange={(e) => setNewGroupYear(e.target.value.replace(/\D/g, ""))} placeholder="Year" className="border rounded-sm px-2 py-1 text-sm w-full" />
-                <input value={newGroupTitle} onChange={(e) => setNewGroupTitle(e.target.value)} placeholder="Title" className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2" />
+                <input
+                  value={newGroupYear}
+                  onChange={(e) => setNewGroupYear(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Year"
+                  className="border rounded-sm px-2 py-1 text-sm w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => openInfoTextEditor("group", null, newGroupTitle)}
+                  className="border rounded-sm px-2 py-1 text-sm w-full col-span-2 md:col-span-2 text-left hover:bg-neutral-50 min-h-[2.25rem]"
+                >
+                  {getPlainText(newGroupTitle) || (
+                    <span className="text-neutral-400">Нажмите для ввода текста</span>
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={addGroup} disabled={newGroupYear.trim() === "" || !newGroupTitle.trim()} className={`px-3 py-1 text-[11px] rounded-sm border ${newGroupYear.trim() === "" || !newGroupTitle.trim() ? "opacity-50" : "bg-white hover:bg-neutral-100"}`}>Add</button>
@@ -1738,6 +1859,50 @@ export default function AdminClient() {
               </div>
               <div className="flex items-center gap-2 mt-3">
                 <button onClick={saveWebsites} className="px-3 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100">Save All</button>
+              </div>
+            </div>
+          )}
+
+          {infoTextModalOpen && (
+            <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/50" onClick={closeInfoTextEditor} />
+              <div className="relative bg-white border border-neutral-200 rounded-sm p-4 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-xl">
+                <h4 className="text-sm font-medium mb-2">Редактор текста</h4>
+                {infoTextError && <div className="text-xs text-red-600 mb-2">{infoTextError}</div>}
+                <div className="mb-2">
+                  <div className="border rounded-sm">
+                    <Editor
+                      tinymceScriptSrc="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
+                      apiKey={tinyApiKey || undefined}
+                      value={infoTextValue}
+                      onEditorChange={handleInfoTextChange}
+                      init={{
+                        height: 220,
+                        menubar: false,
+                        plugins: ["link", "lists", "code", "quickbars"],
+                        toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link | code",
+                        convert_urls: false,
+                      }}
+                    />
+                  </div>
+                  <div className="text-[11px] text-neutral-500 mt-1">
+                    {getPlainText(infoTextValue).length}/400 символов
+                  </div>
+                </div>
+                <div className="flex items-center justify-end gap-2 mt-3">
+                  <button
+                    onClick={closeInfoTextEditor}
+                    className="px-3 py-1 text-[11px] rounded-sm border bg-neutral-100 hover:bg-neutral-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleInfoTextSave}
+                    className="px-3 py-1 text-[11px] rounded-sm bg-green-600 text-white hover:bg-green-700"
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           )}

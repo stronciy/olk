@@ -9,9 +9,7 @@ const formatDateForView = (s: string) => {
   const dd = String(d.getDate()).padStart(2, "0")
   const mm = String(d.getMonth() + 1).padStart(2, "0")
   const yyyy = String(d.getFullYear())
-  const hh = String(d.getHours()).padStart(2, "0")
-  const mi = String(d.getMinutes()).padStart(2, "0")
-  return `${dd}.${mm}.${yyyy} ${hh}:${mi}`
+  return `${dd}.${mm}.${yyyy}`
 }
 
 const extractFirstImageSrc = (html: string) => {
@@ -82,55 +80,67 @@ export default async function NewsItemPage({ params }: { params: { id: string } 
   const shortText = String(n?.text || "")
   const content = String(n?.content || "")
   const previewUrl = String(n?.previewUrl || extractFirstImageSrc(content) || PLACEHOLDER_IMG)
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ""}/news/${id}`
-  const shareTitle = encodeURIComponent(title)
-  const shareLink = encodeURIComponent(shareUrl)
+
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <main className="max-w-3xl mx-auto p-4 md:p-8">
-        <div className="mb-4">
-          <Link href="/news" className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100">← Back to News</Link>
-        </div>
+    <div className="min-h-screen bg-white text-black">
+      <main className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-16">
+        <header className="flex items-center justify-between mb-10 text-[11px] tracking-[0.2em] uppercase">
+          <Link href="/" className="hover:text-gray-500">
+            Oksana Levchenya
+          </Link>
+          <nav className="flex gap-4">
+            <Link href="/" className="hover:text-gray-500">
+              Work
+            </Link>
+            <Link href="/news" className="hover:text-gray-500 font-semibold">
+              News
+            </Link>
+            <Link href="/contacts" className="hover:text-gray-500">
+              Contacts
+            </Link>
+          </nav>
+        </header>
+
         {n ? (
-          <article className="bg-white border border-neutral-200 rounded-sm overflow-hidden">
-            <img
-              src={previewUrl}
-              alt={title}
-              loading="lazy"
-              className="w-full object-cover aspect-[4/3]"
-              onError={(e) => ((e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG)}
+          <article className="flex flex-col gap-8">
+            <div className="w-full aspect-video bg-gray-100 overflow-hidden">
+              <img
+                src={previewUrl}
+                alt={title}
+                loading="lazy"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  ;(e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <span className="text-xs text-gray-400 uppercase tracking-widest">
+                {formatDateForView(date)}
+              </span>
+              <h1 className="text-3xl md:text-4xl font-light uppercase tracking-wide">
+                {title}
+              </h1>
+              {shortText && (
+                <p className="text-gray-600 font-light leading-relaxed">
+                  {shortText}
+                </p>
+              )}
+            </div>
+
+            <div
+              className="prose prose-gray max-w-none font-light leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: content || summary }}
             />
-            <div className="p-4">
-          <div className="text-xs text-green-600">{formatDateForView(date)}</div>
-          <h1 className="text-lg font-medium text-green-700 mt-1">{title}</h1>
-          {shortText && <p className="text-sm text-green-700 mt-2">{shortText}</p>}
-          <div className="text-sm text-green-700 mt-3" dangerouslySetInnerHTML={{ __html: content || summary }} />
-              <div className="mt-4 flex flex-wrap gap-2">
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100"
-                >
-                  Share Facebook
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${shareLink}&text=${shareTitle}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100"
-                >
-                  Share Twitter
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs px-3 py-1 rounded-sm border bg-white hover:bg-neutral-100"
-                >
-                  Share LinkedIn
-                </a>
-              </div>
+
+            <div>
+              <Link
+                href="/news"
+                className="text-xs tracking-[0.2em] uppercase border-b border-gray-300 pb-1 hover:text-gray-600"
+              >
+                Back to all news
+              </Link>
             </div>
           </article>
         ) : (
