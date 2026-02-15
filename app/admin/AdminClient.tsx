@@ -93,6 +93,7 @@ export default function AdminClient() {
   const [newsModalOpen, setNewsModalOpen] = useState(false)
   const [newsModalSaving, setNewsModalSaving] = useState(false)
   const [newsModalError, setNewsModalError] = useState("")
+  const [posterUploadingId, setPosterUploadingId] = useState<number | null>(null)
   const [newsModalMode, setNewsModalMode] = useState<"add" | "edit">("add")
   const [newNewsDateTime, setNewNewsDateTime] = useState("")
   const [fairs, setFairs] = useState<{ year: string; title: string }[]>([])
@@ -1007,6 +1008,29 @@ export default function AdminClient() {
     setMediaCaption("")
     setMediaAlt("")
     await loadItem(selectedItem.id)
+  }
+
+  const uploadVideoThumbnail = async (mediaId: number, file: File) => {
+    if (!file.type.startsWith("image/")) {
+      showError("Можно загрузить только изображение для превью")
+      return
+    }
+    setPosterUploadingId(mediaId)
+    try {
+      const fd = new FormData()
+      fd.set("mediaId", String(mediaId))
+      fd.set("file", file)
+      const res = await fetch("/api/work/media/thumbnail-upload", { method: "POST", body: fd })
+      if (!res.ok) {
+        const text = await res.text().catch(() => "")
+        showError(text || "Ошибка загрузки превью")
+        return
+      }
+      showSuccess("Превью видео обновлено")
+      if (selectedItem) await loadItem(selectedItem.id, true)
+    } finally {
+      setPosterUploadingId(null)
+    }
   }
 
   const deleteMedia = async (id: number) => {
@@ -2196,7 +2220,7 @@ export default function AdminClient() {
                         {mediaView === "list" && media.map((m, idx) => (
                           <div
                             key={m.id}
-                            className="flex items-center justify-between"
+                            className="flex items-center justify-between gap-3"
                             draggable
                             onDragStart={() => setDragIndex(idx)}
                             onDragOver={(e) => e.preventDefault()}
@@ -2211,8 +2235,30 @@ export default function AdminClient() {
                                   return (last || "").split("?")[0]
                                 })()}
                               </span>
+                              {m.type === "VIDEO" && (
+                                <span className="text-[10px] uppercase tracking-widest px-1.5 py-0.5 border rounded-sm text-blue-700 border-blue-200 bg-blue-50">
+                                  Video
+                                </span>
+                              )}
                             </div>
-                            <button onClick={() => deleteMedia(m.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                            <div className="flex items-center gap-2">
+                              {m.type === "VIDEO" && (
+                                <label className="px-2 py-1 text-[11px] rounded-sm border bg-white hover:bg-neutral-100 cursor-pointer">
+                                  {posterUploadingId === m.id ? "Uploading…" : "Set Poster"}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0]
+                                      if (file) uploadVideoThumbnail(m.id, file)
+                                      e.target.value = ""
+                                    }}
+                                  />
+                                </label>
+                              )}
+                              <button onClick={() => deleteMedia(m.id)} className="px-2 py-1 text-[11px] rounded-sm border">Delete</button>
+                            </div>
                           </div>
                         ))}
                         {mediaView === "thumbs" && (

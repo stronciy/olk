@@ -92,18 +92,18 @@ export async function POST(req: Request) {
           if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
           const snapName = `snap_${Date.now()}_${Math.random().toString(36).slice(2)}.png`
           const snapPath = path.join(tmpDir, snapName)
-          const avifName = `thumb_${Date.now()}_${Math.random().toString(36).slice(2)}.avif`
-          const avifPath = path.join(thumbsDir, avifName)
+          const thumbName = `thumb_${Date.now()}_${Math.random().toString(36).slice(2)}.webp`
+          const thumbPath = path.join(thumbsDir, thumbName)
           try {
             await new Promise<void>((resolve, reject) => {
               execFile(
                 FFMPEG_BIN,
-                ["-y", "-ss", "00:00:01", "-i", fullPath, "-frames:v", "1", "-vf", "scale=320:-1", snapPath],
+                ["-y", "-ss", "00:00:03", "-i", fullPath, "-frames:v", "1", "-vf", "scale=320:-1", snapPath],
                 (err) => (err ? reject(err) : resolve())
               )
             })
-            await sharp(snapPath).avif({ quality: 60 }).toFile(avifPath)
-            thumbnail = `/uploads/thumbs/${avifName}`
+            await sharp(snapPath).webp({ quality: 80 }).toFile(thumbPath)
+            thumbnail = `/uploads/thumbs/${thumbName}`
           } catch {
             thumbnail = null
           } finally {
